@@ -1,0 +1,19 @@
+{
+  "name": "alayout",
+  "url": "https://github.com/pecheny/alayout",
+  "license": "MIT",
+  "tags": [
+    "layout",
+    "ui",
+    "gui"
+  ],
+  "description": "Library for laying something out",
+  "version": "0.0.0-alpha",
+  "releasenote": "Initial release. ",
+  "classPath": "src",
+  "contributors": [
+    "pecheny"
+  ]
+
+}
+ 
