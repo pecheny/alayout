@@ -1,11 +1,8 @@
 package al.view;
+import al.ec.Entity.Component;
 import al.view.OpenflViewAdapter.ViewAdapter;
-import ec.Entity.Component;
 class ViewAdapterBase extends Component {
-    public static inline var TYPE = "ViewAdapter";
-    public function new() {
-        super(TYPE);
-    }
+    public function new() {}
 }
 interface ViewContainer {
     function addChild(view:ViewAdapter):Void;

@@ -1,4 +1,5 @@
 package al;
+import al.ec.Entity.Component;
 import al.appliers.ContainerRefresher;
 import al.core.AxisState;
 import openfl.geom.Rectangle;
@@ -79,7 +80,7 @@ class Builder {
     }
 
     public static function weight(comp:Component, val:Float) {
-        var w:Widget2D = cast comp.entity.getComponentSelf(Widget2D.TYPE);
+        var w:Widget2D = comp.entity.getComponent(Widget2D);
         w.axisStates[alongsideAxis].size.setWeight(val);
         return w;
     }
@@ -87,8 +88,8 @@ class Builder {
 
     public static function addWidget(wc:Widget2DContainer, w:Widget2D) {
         wc.entity.addChild(w.entity);
-        var doContatiner:ViewAdapter = wc.entity.getComponentSelf(ViewAdapterBase.TYPE);
-        var doChild:ViewAdapter = w.entity.getComponentSelf(ViewAdapterBase.TYPE);
+        var doContatiner:ViewAdapter = wc.entity.getComponent(ViewAdapter);
+        var doChild:ViewAdapter = w.entity.getComponent(ViewAdapter);
         doContatiner.addChild(doChild);
         wc.addChild(w);
     }
