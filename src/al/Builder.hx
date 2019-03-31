@@ -25,18 +25,17 @@ using al.Builder;
 using al.Builder.ViewBuilderStaticWrapper;
 
 class Builder {
-//    var alongsideLayout:AxisLayout;
-//    var crossideLayout:AxisLayout;
-    static var alongsideAxis:Axis2D = Axis2D.horizontal;
+//    var alongsideAxis:Axis2D = Axis2D.horizontal;
+    var alignStack:Array<Axis2D> = [];
 
-//    public function new() {
-//    }
+    public function new() {}
 
-    public static function setDirection(d:Axis2D) {
-        alongsideAxis = d;
+    public function align(d:Axis2D) {
+        alignStack.push(d);
+        return this;
     }
 
-    public static function createEmptyWidget() {
+    public function empty() {
         var entity = new Entity();
         var axisStates = new Map();
         for (a in Axis2D.keys)
@@ -46,7 +45,7 @@ class Builder {
         return w;
     }
 
-    static function addView(w:Widget2D, v:DisplayObjectContainer) {
+    function addView(w:Widget2D, v:DisplayObjectContainer) {
         var adapter = new ViewAdapter(w, v);
         w.entity.addComponent(adapter);
         w.axisStates[Axis2D.horizontal].addPosApplier(new DOXPropertySetter(v));
@@ -54,7 +53,7 @@ class Builder {
         return adapter;
     }
 
-    static function makeContainer(w:Widget2D, children:Array<Widget2D>) {
+    function makeContainer(w:Widget2D, children:Array<Widget2D>) {
         var wc = new Widget2DContainer(w);
         for (a in Axis2D.keys) {
             w.axisStates[a].addSizeApplier(new ContainerRefresher(wc));
@@ -66,8 +65,7 @@ class Builder {
         return wc;
     }
 
-    public static function align(wc:Widget2DContainer, align:Axis2D) {
-        setDirection(align);
+    function alignContainer(wc:Widget2DContainer, align:Axis2D) {
         for (axis in Axis2D.keys) {
             wc.setLayout(axis,
             if (axis == align)
@@ -79,14 +77,14 @@ class Builder {
         return wc;
     }
 
-    public static function weight(comp:Component, val:Float) {
-        var w:Widget2D = comp.entity.getComponent(Widget2D);
-        w.axisStates[alongsideAxis].size.setWeight(val);
+    public function weight(val:Float, w:Widget2D) {
+        var axis = alignStack[alignStack.length - 1];
+        w.axisStates[axis].size.setWeight(val);
         return w;
     }
 
 
-    public static function addWidget(wc:Widget2DContainer, w:Widget2D) {
+    public function addWidget(wc:Widget2DContainer, w:Widget2D) {
         wc.entity.addChild(w.entity);
         var doContatiner:ViewAdapter = wc.entity.getComponent(ViewAdapter);
         var doChild:ViewAdapter = w.entity.getComponent(ViewAdapter);
@@ -94,12 +92,16 @@ class Builder {
         wc.addChild(w);
     }
 
-    public static function container(children:Array<Widget2D>, align:Axis2D) {
-        var w = createEmptyWidget();
-        var last = alongsideAxis;
-        setDirection(align);
-        var wc = makeContainer(w, children).align(alongsideAxis);
-        setDirection(last);
+    public function container(children:Array<Widget2D>) {
+        var w = empty();
+        var wc = makeContainer(w, children);
+        alignContainer(wc,
+            if(alignStack.length > 0) {
+                alignStack.pop();
+            } else {
+                trace("Warn: empty align stack");
+                Axis2D.horizontal;
+            });
         return w;
     }
 
@@ -127,15 +129,13 @@ interface ViewFactory {
 class ViewBuilderStaticWrapper {
     public static var instance:ViewBuilder;
 
-    public static function sprite(sid:String) {
-        var w = Builder.createEmptyWidget();
+    public static function sprite(w:Widget2D, sid:String) {
         instance.sprite(w, sid);
         return w;
     }
 
-    public static function rect() {
+    public static function rect(w:Widget2D) {
         var view = new ColoredRect(Std.int(Math.random() * 0xffffff));
-        var w = Builder.createEmptyWidget();
         var entity = w.entity;
         var appliers = new DisplayObjectScalerApplierFactory(view);
         for (a in Axis2D.keys) {
