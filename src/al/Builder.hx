@@ -1,7 +1,7 @@
 package al;
-import al.al2d.Widget2DContainer;
-import al.al2d.Widget2D;
 import al.al2d.Axis2D;
+import al.al2d.Widget2D;
+import al.al2d.Widget2DContainer;
 import al.appliers.ContainerRefresher;
 import al.appliers.PropertyAccessors.DOXPropertySetter;
 import al.appliers.PropertyAccessors.DOYPropertySetter;
@@ -59,12 +59,12 @@ class Builder {
         addView(w, new Sprite());
         w.entity.addComponent(wc);
         alignContainer(wc,
-            if(alignStack.length > 0) {
-                alignStack.pop();
-            } else {
-                trace("Warn: empty align stack");
-                Axis2D.horizontal;
-            });
+        if (alignStack.length > 0) {
+            alignStack.pop();
+        } else {
+            trace("Warn: empty align stack");
+            Axis2D.horizontal;
+        });
         for (ch in children)
             addWidget(wc, ch);
         return wc;
@@ -166,6 +166,20 @@ class ViewBuilder {
         trace(r);
         return {x:r.x, y:r.y};
     }
+
+    public function rect(w:Widget2D) {
+        var view = new ColoredRect(Std.int(Math.random() * 0xffffff));
+        var entity = w.entity;
+        var appliers = new DisplayObjectScalerApplierFactory(view);
+        for (a in Axis2D.keys) {
+            w.axisStates[a].addSizeApplier(appliers.getSizeApplier(a));
+            w.axisStates[a].addPosApplier(appliers.getPosApplier(a));
+        }
+        var adapter = new ViewAdapter(w, view);
+        entity.addComponent(adapter);
+        return w;
+    }
+
 
     public function sprite(w:Widget2D, sourceId:String) {
         var dobj:DisplayObjectContainer = null;
