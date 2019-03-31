@@ -1,25 +1,23 @@
 package al;
-import al.ec.Entity.Component;
+import al.al2d.Widget2DContainer;
+import al.al2d.Widget2D;
+import al.al2d.Axis2D;
 import al.appliers.ContainerRefresher;
-import al.core.AxisState;
-import openfl.geom.Rectangle;
-import ec.Entity;
 import al.appliers.PropertyAccessors.DOXPropertySetter;
 import al.appliers.PropertyAccessors.DOYPropertySetter;
 import al.appliers.PropertyAccessors.FloatPropertyAccessor;
 import al.appliers.PropertyAccessors.StoreApplier;
-import al.core.Widget2D;
-import al.core.Widget2DContainer;
-import al.layouts.data.LayoutData.Axis2D;
+import al.core.AxisState;
 import al.layouts.PortionLayout;
 import al.layouts.WholefillLayout;
 import al.view.AspectKeeper;
 import al.view.ColoredRect.DisplayObjectScalerApplierFactory;
 import al.view.ColoredRect;
 import al.view.OpenflViewAdapter;
-import al.view.ViewAdapterBase;
+import ec.Entity;
 import openfl.display.DisplayObjectContainer;
 import openfl.display.Sprite;
+import openfl.geom.Rectangle;
 import sxui.properties.accessors.StatelessPropertyAccessor.StatefullPropertyAccessor;
 using al.Builder;
 using al.Builder.ViewBuilderStaticWrapper;
@@ -60,6 +58,13 @@ class Builder {
         }
         addView(w, new Sprite());
         w.entity.addComponent(wc);
+        alignContainer(wc,
+            if(alignStack.length > 0) {
+                alignStack.pop();
+            } else {
+                trace("Warn: empty align stack");
+                Axis2D.horizontal;
+            });
         for (ch in children)
             addWidget(wc, ch);
         return wc;
@@ -95,13 +100,6 @@ class Builder {
     public function container(children:Array<Widget2D>) {
         var w = empty();
         var wc = makeContainer(w, children);
-        alignContainer(wc,
-            if(alignStack.length > 0) {
-                alignStack.pop();
-            } else {
-                trace("Warn: empty align stack");
-                Axis2D.horizontal;
-            });
         return w;
     }
 

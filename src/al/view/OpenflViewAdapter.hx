@@ -1,6 +1,6 @@
 package al.view;
+import al.al2d.Widget2D;
 import al.view.ViewAdapterBase.ViewContainer;
-import al.core.Widget2D;
 import openfl.display.DisplayObjectContainer;
 class OpenflViewAdapter extends ViewAdapterBase implements ViewContainer{
     public var view:DisplayObjectContainer;

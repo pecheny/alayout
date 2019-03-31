@@ -1,12 +1,12 @@
 package al.view;
-import al.appliers.PropertyAccessors.Target2D;
-import l.Main.ApplierFactory;
-import al.appliers.PropertyAccessors.DOYPropertySetter;
-import al.appliers.PropertyAccessors.DOXPropertySetter;
-import al.layouts.data.LayoutData.Axis2D;
-import al.appliers.PropertyAccessors.FloatPropertyAccessor;
+import al.appliers.ApplierFactory;
+import al.al2d.Axis2D;
 import al.appliers.PropertyAccessors.DOHeightPropertySetter;
 import al.appliers.PropertyAccessors.DOWidthPropertySetter;
+import al.appliers.PropertyAccessors.DOXPropertySetter;
+import al.appliers.PropertyAccessors.DOYPropertySetter;
+import al.appliers.PropertyAccessors.FloatPropertyAccessor;
+import al.appliers.PropertyAccessors.Target2D;
 import openfl.display.Sprite;
 class ColoredRect extends Sprite {
     public function new(c) {

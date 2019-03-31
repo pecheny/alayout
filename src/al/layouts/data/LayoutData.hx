@@ -72,8 +72,4 @@ class Size extends FloatValue {
     var range = "range";
 }
 
-@:enum abstract Axis2D(String) to String {
-    public static var keys = [horizontal, vertical];
-    var horizontal = "horizontal";
-    var vertical = "vertical";
-}
+

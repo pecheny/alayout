@@ -1,6 +1,6 @@
 package al.appliers;
+import al.al2d.Widget2DContainer;
 import al.appliers.PropertyAccessors.FloatPropertyAccessor;
-import al.core.Widget2DContainer;
 class ContainerRefresher implements FloatPropertyAccessor {
     var container:Widget2DContainer;
 
