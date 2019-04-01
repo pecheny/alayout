@@ -1,4 +1,5 @@
 package al;
+import al.appliers.PropertyAccessors.PropertyAccessor;
 import al.al2d.Axis2D;
 import al.al2d.Widget2D;
 import al.al2d.Widget2DContainer;
@@ -18,7 +19,6 @@ import ec.Entity;
 import openfl.display.DisplayObjectContainer;
 import openfl.display.Sprite;
 import openfl.geom.Rectangle;
-import sxui.properties.accessors.StatelessPropertyAccessor.StatefullPropertyAccessor;
 using al.Builder;
 using al.Builder.ViewBuilderStaticWrapper;
 
@@ -82,6 +82,10 @@ class Builder {
         return wc;
     }
 
+    public function gap(wg:Float){
+        return weight(wg, empty());
+    }
+
     public function weight(val:Float, w:Widget2D) {
         var axis = alignStack[alignStack.length - 1];
         w.axisStates[axis].size.setWeight(val);
@@ -93,7 +97,8 @@ class Builder {
         wc.entity.addChild(w.entity);
         var doContatiner:ViewAdapter = wc.entity.getComponent(ViewAdapter);
         var doChild:ViewAdapter = w.entity.getComponent(ViewAdapter);
-        doContatiner.addChild(doChild);
+        if (doChild != null)
+            doContatiner.addChild(doChild);
         wc.addChild(w);
     }
 
@@ -181,7 +186,7 @@ class ViewBuilder {
     }
 
 
-    public function sprite(w:Widget2D, sourceId:String) {
+    public function sprite(w:Widget2D, sourceId:String, r:Rectangle = null) {
         var dobj:DisplayObjectContainer = null;
         for (fac in factories) {
             dobj = fac.createView(sourceId);
@@ -197,7 +202,9 @@ class ViewBuilder {
         var adapter = new ViewAdapter(w, prx);
         w.entity.addComponent(adapter);
         var offset = calculateOffset(dobj);
-        var aspectKeeper = new AspectKeeper<DisplayObjectContainer>(dobj, new Rectangle(-86, -20, 160, 196));
+        if (r==null)
+            r = dobj.getBounds(dobj);
+        var aspectKeeper = new AspectKeeper<DisplayObjectContainer>(dobj, r);
         w.axisStates[Axis2D.horizontal].addSizeApplier(new WidgetWidthApplier(aspectKeeper));
         w.axisStates[Axis2D.vertical].addSizeApplier(new WidgetHeightApplier(aspectKeeper));
         w.axisStates[Axis2D.horizontal].addPosApplier(new DOXPropertySetter(prx));
@@ -205,5 +212,5 @@ class ViewBuilder {
         return w;
     }
 }
-@:property("widgetWidth") class WidgetWidthApplier<T:WidgetSizeApplier> implements StatefullPropertyAccessor<Float> implements FloatPropertyAccessor {}
-@:property("widgetHeight") class WidgetHeightApplier<T:WidgetSizeApplier> implements StatefullPropertyAccessor<Float> implements FloatPropertyAccessor {}
+@:property("widgetWidth") class WidgetWidthApplier<T:WidgetSizeApplier> implements PropertyAccessor<Float> implements FloatPropertyAccessor {}
+@:property("widgetHeight") class WidgetHeightApplier<T:WidgetSizeApplier> implements PropertyAccessor<Float> implements FloatPropertyAccessor {}
