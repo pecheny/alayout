@@ -2,12 +2,14 @@ package al.view;
 //import openfl.display.DisplayObject;
 //@:generic
 
+import openfl.display.DisplayObject;
 import openfl.geom.Rectangle;
 interface WidgetSizeApplier {
     var widgetWidth(default, set):Float;
     var widgetHeight(default, set):Float;
 }
-class AspectKeeper<T:{x:Float, y:Float, width:Float, height:Float, scaleX:Float, scaleY:Float}> implements WidgetSizeApplier {
+typedef Target2D = DisplayObject;//{x:Float, y:Float, width:Float, height:Float, scaleX:Float, scaleY:Float}
+class AspectKeeper<T:Target2D> implements WidgetSizeApplier {
     var child:T;
     var aspect:Float;
     @:isVar public var widgetWidth(default, set):Float;
