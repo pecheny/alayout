@@ -11,7 +11,6 @@ interface WidgetSizeApplier {
 typedef Target2D = DisplayObject;//{x:Float, y:Float, width:Float, height:Float, scaleX:Float, scaleY:Float}
 class AspectKeeper<T:Target2D> implements WidgetSizeApplier {
     var child:T;
-    var aspect:Float;
     @:isVar public var widgetWidth(default, set):Float;
     @:isVar public var widgetHeight(default, set):Float;
     var bounds:Rectangle;
@@ -19,7 +18,6 @@ class AspectKeeper<T:Target2D> implements WidgetSizeApplier {
     public function new(child:T, bounds:Rectangle) {
         this.bounds = bounds;
         this.child = child;
-        aspect = child.width / child.height;
     }
 
     public function refresh() {
@@ -89,6 +87,56 @@ class WidthBasedAspectKeeper<T:{x:Float, y:Float, width:Float, height:Float, sca
             child.height = height;
             child.x = offsetX * child.scaleX;
             child.y = offsetY * child.scaleX + freeHeight / 2;
+        }
+    }
+
+    function set_widgetHeight(value:Float):Float {
+        this.widgetHeight = value;
+        refresh();
+        return value;
+    }
+
+    function set_widgetWidth(value:Float):Float {
+        this.widgetWidth = value;
+        refresh();
+        return value;
+    }
+}
+
+interface Viewportable {
+    function setViewport(x:Int, y:Int, w:Int, h:Int):Void;
+}
+class ViewportAspectKeeper implements WidgetSizeApplier {
+    var child:Viewportable;
+    var aspect:Float;
+    var offsetX:Int = 0;
+    var offsetY:Int = 0;
+    @:isVar public var widgetWidth(default, set):Float;
+    @:isVar public var widgetHeight(default, set):Float;
+
+    public function new(child, aspect = 1, offsetX:Int = 0, offsetY:Int = 0) {
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
+        this.child = child;
+        this.aspect = aspect;
+    }
+
+    public function refresh() {
+        var widgetAspect = widgetWidth / widgetHeight;
+        if (widgetAspect > aspect) {
+            var height = Std.int(widgetHeight);
+            var width = Std.int(height * aspect);
+            var freeWidth = Std.int(widgetWidth - width);
+            var x = Std.int(freeWidth / 2 + offsetX) ;
+            var y = offsetY ;
+            child.setViewport(x,y,width,height);
+        } else {
+            var width = Std.int(widgetWidth);
+            var height = Std.int(width / aspect);
+            var freeHeight = Std.int(widgetHeight - height);
+            var x = offsetX ;
+            var y = Std.int(offsetY + freeHeight / 2);
+            child.setViewport(x,y,width,height);
         }
     }
 
