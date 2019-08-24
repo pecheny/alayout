@@ -1,14 +1,13 @@
 package al.view;
-import openfl.display.Stage;
+import al.al2d.Axis2D;
+import al.al2d.Widget2D;
 import al.al2d.Widget2DContainer;
 import al.appliers.ContainerRefresher;
 import al.layouts.WholefillLayout;
-import openfl.events.Event;
-import openfl.display.Sprite;
-import openfl.display.DisplayObjectContainer;
-import al.al2d.Widget2D;
 import al.view.OpenflViewAdapter.ViewAdapter;
-import al.al2d.Axis2D;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
+import openfl.display.Stage;
 class Root2D {
     var w:Widget2D;
     var wc:Widget2DContainer;
@@ -24,8 +23,6 @@ class Root2D {
             wc.setLayout(a, WholefillLayout.instance);
         }
         stage = openfl.Lib.current.stage;
-        stage.addEventListener(Event.RESIZE, updateRootSize);
-        updateRootSize(null);
         rootView = new Sprite();
         addView(w, rootView);
     }
@@ -45,8 +42,6 @@ class Root2D {
         wc.refresh();
     }
 
-    function updateRootSize(e) {
-        w.axisStates[Axis2D.horizontal].applySize(stage.stageWidth);
-        w.axisStates[Axis2D.vertical].applySize(stage.stageHeight);
-    }
+    public function getWidget()
+        return w;
 }
