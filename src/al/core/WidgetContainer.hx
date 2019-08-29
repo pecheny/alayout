@@ -1,8 +1,9 @@
 package al.core;
-import al.layouts.AxisLayout;
 import al.ec.Entity.Component;
+import al.layouts.AxisLayout;
+import haxe.ds.ReadOnlyArray;
 using Lambda;
-class WidgetContainer<TAxis:String> extends Component {
+class WidgetContainer<TAxis:String> extends Component implements Refreshable {
     var holder:Widget<TAxis>;
     var children:Array<Widget<TAxis>> = [];
     var layoutMap:Map<TAxis, AxisLayout> = new Map<TAxis, AxisLayout>();
@@ -31,8 +32,18 @@ class WidgetContainer<TAxis:String> extends Component {
         }
     }
 
-    public function refresh() {
-        for (axis in layoutMap.keys())
-            layoutMap[axis].arrange(holder.axisStates[axis], childrenAxisStates[axis]);
+    public function getChildren():ReadOnlyArray<Widget<TAxis>> {
+        return children;
     }
+
+    public function refresh() {
+        for (axis in layoutMap.keys()) {
+            trace(axis);
+            layoutMap[axis].arrange(holder.axisStates[axis], childrenAxisStates[axis]);
+        }
+    }
+}
+
+interface Refreshable {
+    function refresh():Void ;
 }
