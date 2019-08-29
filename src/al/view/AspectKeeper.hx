@@ -8,14 +8,21 @@ interface WidgetSizeApplier {
     var widgetWidth(default, set):Float;
     var widgetHeight(default, set):Float;
 }
-typedef Target2D = DisplayObject;//{x:Float, y:Float, width:Float, height:Float, scaleX:Float, scaleY:Float}
-class AspectKeeper<T:Target2D> implements WidgetSizeApplier {
-    var child:T;
+
+interface Target2D {
+    var x(get, set):Float;
+    var y(get, set):Float;
+    var scaleX(get, set):Float;
+    var scaleY(get, set):Float;
+}
+//typedef Target2D = DisplayObject;//{x:Float, y:Float, width:Float, height:Float, scaleX:Float, scaleY:Float}
+class AspectKeeper implements WidgetSizeApplier {
+    var child:Target2D;
     @:isVar public var widgetWidth(default, set):Float;
     @:isVar public var widgetHeight(default, set):Float;
     var bounds:Rectangle;
 
-    public function new(child:T, bounds:Rectangle) {
+    public function new(child:Target2D, bounds:Rectangle) {
         this.bounds = bounds;
         this.child = child;
     }

@@ -1,4 +1,6 @@
 package al;
+import al.Builder.DOT2D;
+import openfl.display.DisplayObject;
 import al.appliers.PropertyAccessors.PropertyAccessor;
 import al.al2d.Axis2D;
 import al.al2d.Widget2D;
@@ -51,12 +53,12 @@ class Builder {
         return adapter;
     }
 
-    function makeContainer(w:Widget2D, children:Array<Widget2D>) {
+    function makeContainer(w:Widget2D, children:Array<Widget2D>, vfac:Widget2D->Void) {
         var wc = new Widget2DContainer(w);
         for (a in Axis2D.keys) {
             w.axisStates[a].addSizeApplier(new ContainerRefresher(wc));
         }
-        addView(w, new Sprite());
+        vfac(w);
         w.entity.addComponent(wc);
         alignContainer(wc,
         if (alignStack.length > 0) {
@@ -104,11 +106,9 @@ class Builder {
 
     public function container(children:Array<Widget2D>) {
         var w = empty();
-        var wc = makeContainer(w, children);
+        var wc = makeContainer(w, children, w->addView(w, new Sprite()));
         return w;
     }
-
-
 }
 
 class MovieClipAdapterLoader implements ViewFactory {
@@ -204,13 +204,58 @@ class ViewBuilder {
         var offset = calculateOffset(dobj);
         if (r==null)
             r = dobj.getBounds(dobj);
-        var aspectKeeper = new AspectKeeper<DisplayObjectContainer>(dobj, r);
+        var aspectKeeper = new AspectKeeper(new DOT2D(dobj), r);
         w.axisStates[Axis2D.horizontal].addSizeApplier(new WidgetWidthApplier(aspectKeeper));
         w.axisStates[Axis2D.vertical].addSizeApplier(new WidgetHeightApplier(aspectKeeper));
         w.axisStates[Axis2D.horizontal].addPosApplier(new DOXPropertySetter(prx));
         w.axisStates[Axis2D.vertical].addPosApplier(new DOYPropertySetter(prx));
         return w;
     }
+}
+
+class DOT2D implements Target2D {
+    var target:DisplayObject;
+    public function new (trg) {
+        this.target = trg;
+    }
+
+    public var x(get, set):Float;
+    public var y(get, set):Float;
+    public var scaleX(get, set):Float;
+    public var scaleY(get, set):Float;
+
+    function set_x(value:Float):Float {
+        return target.x = value;
+    }
+
+    function get_y():Float {
+        return target.y;
+    }
+
+    function set_y(value:Float):Float {
+        return target.y = value;
+    }
+
+    function get_scaleX():Float {
+        return target.scaleX;
+    }
+
+    function set_scaleX(value:Float):Float {
+        return target.scaleX = value;
+    }
+
+    function get_x():Float {
+        return target.x;
+    }
+
+    function get_scaleY():Float {
+        return target.scaleY;
+    }
+
+    function set_scaleY(value:Float):Float {
+        return target.scaleY = value;
+    }
+
 }
 @:property("widgetWidth") class WidgetWidthApplier<T:WidgetSizeApplier> implements PropertyAccessor<Float> implements FloatPropertyAccessor {}
 @:property("widgetHeight") class WidgetHeightApplier<T:WidgetSizeApplier> implements PropertyAccessor<Float> implements FloatPropertyAccessor {}
