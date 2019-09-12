@@ -6,7 +6,7 @@ class W2DStageResizer {
     var target:Widget2D;
     var scale:Float;
 
-    public function new(target, scale = 1) {
+    public function new(target, scale:Float = 1) {
         this.scale = scale;
         this.target = target;
         openfl.Lib.current.stage.addEventListener(Event.RESIZE, onResize);
