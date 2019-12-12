@@ -3,6 +3,7 @@ package al.core;
 *  Stores logic layout state for item and provides access to apply calculated value to target
 **/
 
+import al.appliers.PropertyAccessors.FloatPropertyWriter;
 import al.layouts.data.LayoutData.SizeType;
 import al.layouts.data.LayoutData.Position;
 import al.layouts.data.LayoutData.Size;
@@ -23,15 +24,15 @@ class AxisState {
         return this;
     }
 
-    public function addSizeApplier(a:FloatPropertyAccessor) {
+    public function addSizeApplier(a:FloatPropertyWriter) {
         sizeApplier = addApplier(sizeApplier, a);
     }
 
-    public function addPosApplier(a:FloatPropertyAccessor) {
+    public function addPosApplier(a:FloatPropertyWriter) {
         posApplier = addApplier(posApplier, a);
     }
 
-    inline function addApplier(parent:FloatPropertyAccessor, child:FloatPropertyAccessor) {
+    inline function addApplier(parent:FloatPropertyAccessor, child:FloatPropertyWriter) {
         if (Std.is(parent, AppliersContainer)) {
             cast(parent, AppliersContainer).addChild(child);
             return parent;

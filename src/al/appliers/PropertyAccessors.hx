@@ -34,7 +34,7 @@ class StoreApplier implements FloatPropertyAccessor {
 }
 
 class AppliersContainer extends StoreApplier {
-    var children:Array<FloatPropertyAccessor> = [];
+    var children:Array<FloatPropertyWriter> = [];
 
     override public function setValue(val:Float):Void {
         super.setValue(val);
@@ -47,10 +47,15 @@ class AppliersContainer extends StoreApplier {
     }
 }
 
-interface FloatPropertyAccessor {
+interface FloatPropertyWriter {
     function setValue(val:Float):Void;
+}
 
+interface FloatPropertyReader {
     function getValue():Float;
+}
+
+interface FloatPropertyAccessor extends FloatPropertyReader extends FloatPropertyWriter {
 }
 
 class FloatValue {
