@@ -38,7 +38,6 @@ class WidgetContainer<TAxis:String> extends Component implements Refreshable {
 
     public function refresh() {
         for (axis in layoutMap.keys()) {
-            trace(axis);
             layoutMap[axis].arrange(holder.axisStates[axis], childrenAxisStates[axis]);
         }
     }
