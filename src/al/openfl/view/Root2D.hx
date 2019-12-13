@@ -1,10 +1,10 @@
-package al.view;
+package al.openfl.view;
 import al.al2d.Axis2D;
 import al.al2d.Widget2D;
 import al.al2d.Widget2DContainer;
 import al.appliers.ContainerRefresher;
 import al.layouts.WholefillLayout;
-import al.view.OpenflViewAdapter.ViewAdapter;
+import al.openfl.OpenflViewAdapter.ViewAdapter;
 import openfl.display.DisplayObjectContainer;
 import openfl.display.Sprite;
 import openfl.display.Stage;

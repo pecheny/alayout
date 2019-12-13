@@ -1,4 +1,5 @@
-package al.view;
+package al.openfl;
+import al.view.ViewAdapterBase;
 import al.al2d.Widget2D;
 import al.view.ViewAdapterBase.ViewContainer;
 import openfl.display.DisplayObjectContainer;

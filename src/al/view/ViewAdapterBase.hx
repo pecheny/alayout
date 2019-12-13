@@ -1,6 +1,6 @@
 package al.view;
 import al.ec.Entity.Component;
-import al.view.OpenflViewAdapter.ViewAdapter;
+import al.openfl.OpenflViewAdapter.ViewAdapter;
 class ViewAdapterBase extends Component {
     public function new() {}
 }
