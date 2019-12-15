@@ -4,7 +4,6 @@ import al.openfl.view.Root2D;
 import al.openfl.ViewBuilder;
 import al.openfl.OpenflViewAdapter.ViewAdapter;
 import al.al2d.Axis2D;
-import al.al2d.DirectApplier;
 import al.appliers.PropertyAccessors.DOXPropertySetter;
 import al.appliers.PropertyAccessors.DOYPropertySetter;
 import al.Builder;
@@ -59,7 +58,7 @@ class Main2 extends Sprite {
         ]);
 
         root.addScreen(screen);
-        new StageResizer(new DirectApplier(root.getWidget()));
+        new StageResizer(root.getWidget().axisStates);
     }
 
 

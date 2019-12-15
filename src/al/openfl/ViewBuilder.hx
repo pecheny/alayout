@@ -1,14 +1,17 @@
 package al.openfl;
 import al.al2d.Axis2D;
 import al.al2d.Widget2D;
-import al.al2d.WidgetSizeApplier.WidgetHeightApplier;
-import al.al2d.WidgetSizeApplier.WidgetWidthApplier;
+import al.appliers.PropertyAccessors.DOScaleXPropertySetter;
+import al.appliers.PropertyAccessors.DOScaleYPropertySetter;
 import al.appliers.PropertyAccessors.DOXPropertySetter;
 import al.appliers.PropertyAccessors.DOYPropertySetter;
-import al.Builder.DOT2D;
+import al.core.AxisApplier.SimpleAxisApplier;
+import al.core.AxisApplier;
+import al.core.Boundbox;
 import al.openfl.ColoredRect.DisplayObjectScalerApplierFactory;
 import al.openfl.OpenflViewAdapter.ViewAdapter;
 import al.view.AspectKeeper;
+import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
 import openfl.display.Sprite;
 import openfl.geom.Rectangle;
@@ -57,14 +60,36 @@ class ViewBuilder {
         var adapter = new ViewAdapter(w, prx);
         w.entity.addComponent(adapter);
         var offset = calculateOffset(dobj);
-        if (r==null)
+        if (r == null)
             r = dobj.getBounds(dobj);
-        var aspectKeeper = new AspectKeeper(new DOT2D(dobj), r);
-        w.axisStates[Axis2D.horizontal].addSizeApplier(new WidgetWidthApplier(aspectKeeper));
-        w.axisStates[Axis2D.vertical].addSizeApplier(new WidgetHeightApplier(aspectKeeper));
+        var aspectKeeper = new AspectKeeper(createAxisForDispObj(dobj), rectToBoundbox(r));
+        w.axisStates[Axis2D.horizontal].addSizeApplier(aspectKeeper.getAxisApplier(horizontal));
+        w.axisStates[Axis2D.vertical].addSizeApplier(aspectKeeper.getAxisApplier(vertical));
         w.axisStates[Axis2D.horizontal].addPosApplier(new DOXPropertySetter(prx));
         w.axisStates[Axis2D.vertical].addPosApplier(new DOYPropertySetter(prx));
         return w;
+    }
+
+    function createAxisForDispObj(v:DisplayObject) {
+        var axis = new Map<Axis2D, AxisApplier>();
+        axis[Axis2D.horizontal] = new SimpleAxisApplier(
+        new DOXPropertySetter(v),
+        new DOScaleXPropertySetter(v)
+        );
+        axis[Axis2D.vertical] = new SimpleAxisApplier(
+        new DOYPropertySetter(v),
+        new DOScaleYPropertySetter(v)
+        );
+        return axis;
+    }
+
+    function rectToBoundbox(r:Rectangle) {
+        var bb = new Boundbox();
+        bb.size[Axis2D.horizontal] = r.width;
+        bb.pos[Axis2D.horizontal] = r.x;
+        bb.size[Axis2D.vertical] = r.height;
+        bb.pos[Axis2D.vertical] = r.y;
+        return bb;
     }
 }
 

@@ -1,112 +1,62 @@
 package al.view;
-//import openfl.display.DisplayObject;
-//@:generic
+import al.core.AxisApplier;
+import al.appliers.PropertyAccessors.FloatPropertyWriter;
+import al.al2d.Axis2D;
+import al.core.AxisState;
+import al.core.Boundbox;
+class AspectKeeper {
+    var bounds:Boundbox;
+    var target:Map<Axis2D, AxisApplier>;
+    var size:Map<Axis2D, Float> = new Map();
+    var ownAppliers:Map<Axis2D, FloatPropertyWriter> = new Map();
 
-import openfl.display.DisplayObject;
-import openfl.geom.Rectangle;
-interface WidgetSizeApplier {
-    var widgetWidth(default, set):Float;
-    var widgetHeight(default, set):Float;
-}
-
-interface Target2D {
-    var x(get, set):Float;
-    var y(get, set):Float;
-    var scaleX(get, set):Float;
-    var scaleY(get, set):Float;
-}
-//typedef Target2D = DisplayObject;//{x:Float, y:Float, width:Float, height:Float, scaleX:Float, scaleY:Float}
-class AspectKeeper implements WidgetSizeApplier {
-    var child:Target2D;
-    @:isVar public var widgetWidth(default, set):Float;
-    @:isVar public var widgetHeight(default, set):Float;
-    var bounds:Rectangle;
-
-    public function new(child:Target2D, bounds:Rectangle) {
+    public function new(targetStates:Map<Axis2D, AxisApplier>, bounds:Boundbox) {
         this.bounds = bounds;
-        this.child = child;
-    }
-
-    public function refresh() {
-        var widgetAspect = widgetWidth / widgetHeight;
-
-        var scaleX = widgetWidth / bounds.width ;
-        var scaleY = widgetHeight / bounds.height ;
-        var scale = Math.min(scaleX, scaleY);
-
-        child.scaleX = scale;
-        child.scaleY = scale;
-        var freeWidth:Float = 0;
-        var freeHeight:Float = 0;
-        if (scaleX > scaleY) {
-            freeWidth = widgetWidth - bounds.width * scale;
-        } else {
-            freeHeight = widgetHeight - bounds.height * scale;
-        }
-        child.x = -scale * bounds.x + freeWidth / 2;
-        child.y = -scale * bounds.y + freeHeight / 2;
-    }
-
-    function set_widgetHeight(value:Float):Float {
-        this.widgetHeight = value;
-        refresh();
-        return value;
-    }
-
-    function set_widgetWidth(value:Float):Float {
-        this.widgetWidth = value;
-        refresh();
-        return value;
-    }
-}
-
-class WidthBasedAspectKeeper<T:{x:Float, y:Float, width:Float, height:Float, scaleX:Float, scaleY:Float}> implements WidgetSizeApplier {
-    var child:T;
-    var aspect:Float;
-    var offsetX:Float = 0;
-    var offsetY:Float = 0;
-    @:isVar public var widgetWidth(default, set):Float;
-    @:isVar public var widgetHeight(default, set):Float;
-
-    public function new(child:T, offsetX:Float = 0, offsetY:Float = 0) {
-        this.offsetX = offsetX;
-        this.offsetY = offsetY;
-        this.child = child;
-        aspect = child.width / child.height;
-    }
-
-    public function refresh() {
-        var widgetAspect = widgetWidth / widgetHeight;
-        if (widgetAspect > aspect) {
-            var height = widgetHeight;
-            var width = height * aspect;
-            var freeWidth = widgetWidth - width;
-            child.width = width;
-            child.height = height;
-            child.x = freeWidth / 2 + offsetX * child.scaleY;
-            child.y = offsetY * child.scaleY;
-        } else {
-            var width = widgetWidth;
-            var height = width / aspect;
-            var freeHeight = widgetHeight - height;
-            child.width = width;
-            child.height = height;
-            child.x = offsetX * child.scaleX;
-            child.y = offsetY * child.scaleX + freeHeight / 2;
+        this.target = targetStates;
+        for (axis in Axis2D.keys){
+            size[axis] = 1;
+            ownAppliers[axis] = new KeeperAxisApplier(size, this, axis);
         }
     }
 
-    function set_widgetHeight(value:Float):Float {
-        this.widgetHeight = value;
-        refresh();
-        return value;
+    public function refresh() {
+        var scale = 9999.;
+        for (a in Axis2D.keys) {
+            var _scale = size[a] / bounds.size[a];
+            if (_scale < scale)
+                scale = _scale;
+        }
+
+        for (a in Axis2D.keys) {
+            target[a].applySize(scale);
+            var free = size[a] - bounds.size[a] * scale;
+            target[a].applyPos(-scale * bounds.pos[a] + free / 2);
+        }
     }
 
-    function set_widgetWidth(value:Float):Float {
-        this.widgetWidth = value;
+    public function getAxisApplier(a:Axis2D){
+        return ownAppliers[a];
+    }
+
+    public function applySize(a:Axis2D, val:Float) {
+        size[a] = val;
         refresh();
-        return value;
     }
 }
 
+class KeeperAxisApplier implements FloatPropertyWriter {
+    var target:Map<Axis2D, Float>;
+    var key:Axis2D;
+    var keeper:AspectKeeper;
+    public function new(t, k, a) {
+        this.target = t;
+        this.keeper = k;
+        this.key = a;
+    }
+
+    public function setValue(val:Float):Void {
+        target[key] = val;
+        keeper.refresh();
+    }
+}
 

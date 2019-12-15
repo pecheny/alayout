@@ -10,9 +10,7 @@ import al.core.AxisState;
 import al.layouts.PortionLayout;
 import al.layouts.WholefillLayout;
 import al.utils.Signal;
-import al.view.AspectKeeper;
 import ec.Entity;
-import openfl.display.DisplayObject;
 using al.Builder;
 
 class Builder {
@@ -106,58 +104,6 @@ class Builder {
 
 }
 
-
-
-
-
-
-
-
-
-class DOT2D implements Target2D {
-    var target:DisplayObject;
-    public function new (trg) {
-        this.target = trg;
-    }
-
-    public var x(get, set):Float;
-    public var y(get, set):Float;
-    public var scaleX(get, set):Float;
-    public var scaleY(get, set):Float;
-
-    function set_x(value:Float):Float {
-        return target.x = value;
-    }
-
-    function get_y():Float {
-        return target.y;
-    }
-
-    function set_y(value:Float):Float {
-        return target.y = value;
-    }
-
-    function get_scaleX():Float {
-        return target.scaleX;
-    }
-
-    function set_scaleX(value:Float):Float {
-        return target.scaleX = value;
-    }
-
-    function get_x():Float {
-        return target.x;
-    }
-
-    function get_scaleY():Float {
-        return target.scaleY;
-    }
-
-    function set_scaleY(value:Float):Float {
-        return target.scaleY = value;
-    }
-
-}
 
 class OnAddToParent {
     public var handler:Widget2D -> Void;

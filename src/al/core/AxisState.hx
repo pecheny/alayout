@@ -9,7 +9,7 @@ import al.layouts.data.LayoutData.Position;
 import al.layouts.data.LayoutData.Size;
 import al.appliers.PropertyAccessors.AppliersContainer;
 import al.appliers.PropertyAccessors.FloatPropertyAccessor;
-class AxisState {
+class AxisState implements AxisApplier {
     var sizeApplier:FloatPropertyAccessor;
     var posApplier:FloatPropertyAccessor;
     public var size(default, null):Size = new Size();
@@ -74,4 +74,5 @@ class AxisState {
         return position.type == managed;
     }
 }
+
 
