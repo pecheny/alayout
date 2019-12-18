@@ -63,8 +63,8 @@ class ViewBuilder {
         if (r == null)
             r = dobj.getBounds(dobj);
         var aspectKeeper = new AspectKeeper(createAxisForDispObj(dobj), rectToBoundbox(r));
-        w.axisStates[Axis2D.horizontal].addSizeApplier(aspectKeeper.getAxisApplier(horizontal));
-        w.axisStates[Axis2D.vertical].addSizeApplier(aspectKeeper.getAxisApplier(vertical));
+        w.axisStates[Axis2D.horizontal].addSizeApplier(aspectKeeper.getSizeApplier(horizontal));
+        w.axisStates[Axis2D.vertical].addSizeApplier(aspectKeeper.getSizeApplier(vertical));
         w.axisStates[Axis2D.horizontal].addPosApplier(new DOXPropertySetter(prx));
         w.axisStates[Axis2D.vertical].addPosApplier(new DOYPropertySetter(prx));
         return w;

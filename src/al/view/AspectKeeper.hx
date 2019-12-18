@@ -1,21 +1,26 @@
 package al.view;
-import al.core.AxisApplier;
-import al.appliers.PropertyAccessors.FloatPropertyWriter;
+import al.al2d.Widget2D;
 import al.al2d.Axis2D;
-import al.core.AxisState;
+import al.appliers.PropertyAccessors.FloatPropertyWriter;
+import al.core.AxisApplier;
 import al.core.Boundbox;
 class AspectKeeper {
     var bounds:Boundbox;
     var target:Map<Axis2D, AxisApplier>;
     var size:Map<Axis2D, Float> = new Map();
-    var ownAppliers:Map<Axis2D, FloatPropertyWriter> = new Map();
+    var pos:Map<Axis2D, Float> = new Map();
+    var ownSizeAppliers:Map<Axis2D, FloatPropertyWriter> = new Map();
+    var ownPosAppliers:Map<Axis2D, FloatPropertyWriter> = new Map();
+    var root:Widget2D;
 
-    public function new(targetStates:Map<Axis2D, AxisApplier>, bounds:Boundbox) {
+    public function new(targetStates:Map<Axis2D, AxisApplier>, bounds:Boundbox, root) {
         this.bounds = bounds;
         this.target = targetStates;
+        this.root = root;
         for (axis in Axis2D.keys){
             size[axis] = 1;
-            ownAppliers[axis] = new KeeperAxisApplier(size, this, axis);
+            ownSizeAppliers[axis] = new KeeperAxisApplier(size, this, axis);
+            ownPosAppliers[axis] = new KeeperAxisApplier(pos, this, axis);
         }
     }
 
@@ -28,20 +33,20 @@ class AspectKeeper {
         }
 
         for (a in Axis2D.keys) {
-            target[a].applySize(scale);
+            target[a].applySize(2 * scale / root.axisStates[a].getSize());
             var free = size[a] - bounds.size[a] * scale;
-            target[a].applyPos(-scale * bounds.pos[a] + free / 2);
+            target[a].applyPos(2 * (pos[a] -scale * bounds.pos[a] + free / 2)  / root.axisStates[a].getSize());
         }
     }
 
-    public function getAxisApplier(a:Axis2D){
-        return ownAppliers[a];
+    public function getSizeApplier(a:Axis2D){
+        return ownSizeAppliers[a];
     }
 
-    public function applySize(a:Axis2D, val:Float) {
-        size[a] = val;
-        refresh();
+    public function getPosApplier(a:Axis2D){
+        return ownPosAppliers[a];
     }
+
 }
 
 class KeeperAxisApplier implements FloatPropertyWriter {
