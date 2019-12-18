@@ -1,5 +1,6 @@
 package al.openfl;
-import al.view.AspectKeeper.WidgetSizeApplier;
+import al.al2d.Axis2D;
+import al.al2d.Widget2D;
 import openfl.events.Event;
 
 
@@ -7,7 +8,7 @@ import openfl.events.Event;
 *  Handles stage.RESIZE event and applies stage aspect ratio to the widget. Short side is equal to base.
 **/
 class StageAspectResizer {
-    var target:WidgetSizeApplier;
+    var target:Widget2D;
     var base:Float;
 
     public function new(target, base = 1) {
@@ -22,11 +23,11 @@ class StageAspectResizer {
         var width = stage.stageWidth;
         var height = stage.stageHeight;
         if (width > height) {
-            target.widgetWidth = base * width / height;
-            target.widgetHeight = base;
+            target.axisStates[Axis2D.horizontal].applySize( base * width / height);
+            target.axisStates[Axis2D.vertical].applySize( base );
         } else {
-            target.widgetWidth = base;
-            target.widgetHeight = base * height / width;
+            target.axisStates[horizontal].applySize( base );
+            target.axisStates[vertical].applySize( base * height / width);
         }
     }
 }
