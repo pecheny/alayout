@@ -69,3 +69,18 @@ class FloatValue {
         return this.value = value;
     }
 }
+
+class SumPropertyWriter implements FloatPropertyWriter {
+    var summand:FloatPropertyReader;
+    var target:FloatPropertyWriter;
+    public function new(summand:FloatPropertyReader, target:FloatPropertyWriter) {
+        this.summand = summand;
+        this.target = target;
+    }
+
+    public function setValue(val:Float):Void {
+        target.setValue(val + summand.getValue());
+    }
+
+
+}
