@@ -1,10 +1,12 @@
 package al;
 
+import al.appliers.PropertyAccessors.FloatPropertyWriter;
+import al.appliers.PropertyAccessors.FloatPropertyAccessor;
 import al.al2d.Axis2D;
 import al.al2d.Widget2D;
 import al.al2d.Widget2DContainer;
 import al.appliers.ContainerRefresher;
-import al.appliers.DynamicPropertyAccessor;
+import al.appliers.PropertyAccessors.FloatPropertyReader;
 import al.appliers.PropertyAccessors.StoreApplier;
 import al.core.AxisState;
 import al.layouts.PortionLayout;
@@ -28,12 +30,11 @@ class Builder {
     }
 
 
-
     public function widget(vfac:Widget2D -> Void = null) {
         var entity = new Entity();
         var axisStates = new Map();
         for (a in Axis2D.keys)
-            axisStates[a] = new AxisState().init(new StoreApplier(10), new StoreApplier(10));
+            axisStates[a] = new AxisState().init(new StoreApplier(10), new StoreApplier(0));
         var w = new Widget2D(axisStates);
         entity.addComponent(w);
         onWidgetCreated.dispatch(w);
@@ -45,11 +46,12 @@ class Builder {
 
     function makeContainer(w:Widget2D, children:Array<Widget2D>) {
         var wc = new Widget2DContainer(w);
-        var gp = new GlobalPos();
-        w.entity.addComponent(gp);
+//        var gp = new GlobalPos();
+//        w.entity.addComponent(gp);
         for (a in Axis2D.keys) {
             w.axisStates[a].addSizeApplier(new ContainerRefresher(wc));
-            w.axisStates[a].addPosApplier(new DynamicPropertyAccessor(() -> gp.axis[a], (x) -> gp.axis[a] = x));
+            w.axisStates[a].addPosApplier(new ContainerRefresher(wc));
+//            w.axisStates[a].addPosApplier(new DynamicPropertyAccessor(() -> gp.axis[a], (x) -> gp.axis[a] = x));
         }
         w.entity.addComponent(wc);
         alignContainer(wc,
@@ -77,7 +79,7 @@ class Builder {
         return wc;
     }
 
-    public function gap(wg:Float){
+    public function gap(wg:Float) {
         return weight(wg, widget());
     }
 
@@ -117,8 +119,41 @@ class GlobalPos {
 //    public var x:Float = 0;
 //    public var y:Float = 0;
     public var axis:Map<Axis2D, Float> = new Map();
+    var readers:Map<Axis2D, FloatPropertyAccessor> = new Map();
 
-    public function new() {}
+
+    public function new() {
+        for (a in Axis2D.keys) {
+            axis[a] = 0;
+            readers[a] = new FloatAxisAccessor(a, axis);
+        }
+    }
+
+    public function getReader(a):FloatPropertyReader return readers[a];
+    public function getWriter(a):FloatPropertyWriter return readers[a];
+
+    public function toString() {
+        return "" + axis;
+    }
+}
+
+class FloatAxisAccessor implements FloatPropertyAccessor {
+    var target:Map<Axis2D, Float>;
+    var axis:Axis2D;
+    public function new (a, t) {
+        this.target = t;
+        this.axis = a;
+    }
+
+    public function setValue(val:Float):Void {
+        target[axis] = val;
+    }
+
+    public function getValue():Float {
+        return target[axis];
+    }
+
+
 }
 
 
