@@ -14,6 +14,7 @@ class AxisState implements AxisApplier {
     var posApplier:FloatPropertyAccessor;
     public var size(default, null):Size = new Size();
     public var position(default, null):Position = new Position();
+    var siblings:Array<AxisApplier> = [];
 
     public function new() {}
 
@@ -54,11 +55,19 @@ class AxisState implements AxisApplier {
         }
     }
 
+    public function addSibling(aa:AxisApplier){
+        siblings.push(aa);
+    }
+
     public function applySize(value) {
+        for (s in siblings)
+            s.applySize(value);
         sizeApplier.setValue(value);
     }
 
     public function applyPos(value) {
+        for (s in siblings)
+            s.applyPos(value);
         posApplier.setValue(value);
     }
 
