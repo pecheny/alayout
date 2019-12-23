@@ -30,12 +30,11 @@ class Main2 extends Sprite {
         );
 
         b.onAddedToContainer.listen(
-            (wc, w) -> {
+            function (wc, w) {
                 var doChild:ViewAdapter = w.entity.getComponent(ViewAdapter);
                 if (doChild == null)
                     return;
-                var doContatiner:ViewAdapter = w.entity.parent.getComponent(ViewAdapter);
-                doContatiner.addChild(doChild);
+                openfl.Lib.current.addChild(doChild.view);
             }
         );
 
