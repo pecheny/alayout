@@ -8,7 +8,7 @@ class PortionLayout implements AxisLayout {
     public function arrange(parent:AxisState, children:Array<AxisState>):Void {
         var fixedValue = 0.0;
         var portionsSum = 0.0;
-        var coord = 0.0;
+        var coord = parent.getPos();
 
         for (child in children) {
             if (!child.isArrangable())
