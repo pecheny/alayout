@@ -1,5 +1,4 @@
 package al.view;
-import al.al2d.Widget2D;
 import al.al2d.Axis2D;
 import al.appliers.PropertyAccessors.FloatPropertyWriter;
 import al.core.AxisApplier;
@@ -11,12 +10,10 @@ class AspectKeeper {
     var pos:Map<Axis2D, Float> = new Map();
     var ownSizeAppliers:Map<Axis2D, FloatPropertyWriter> = new Map();
     var ownPosAppliers:Map<Axis2D, FloatPropertyWriter> = new Map();
-    var root:Widget2D;
 
-    public function new(targetStates:Map<Axis2D, AxisApplier>, bounds:Boundbox, root) {
+    public function new(targetStates:Map<Axis2D, AxisApplier>, bounds:Boundbox) {
         this.bounds = bounds;
         this.target = targetStates;
-        this.root = root;
         for (axis in Axis2D.keys){
             size[axis] = 1;
             ownSizeAppliers[axis] = new KeeperAxisApplier(size, this, axis);
@@ -33,9 +30,9 @@ class AspectKeeper {
         }
 
         for (a in Axis2D.keys) {
-            target[a].applySize(2 * scale / root.axisStates[a].getSize());
+            target[a].applySize(scale);
             var free = size[a] - bounds.size[a] * scale;
-            target[a].applyPos(2 * (pos[a] -scale * bounds.pos[a] + free / 2)  / root.axisStates[a].getSize());
+            target[a].applyPos(-scale * bounds.pos[a] + free / 2);
         }
     }
 
