@@ -8,6 +8,7 @@ class WidgetContainer<TAxis:String> extends Component implements Refreshable {
     var children:Array<Widget<TAxis>> = [];
     var layoutMap:Map<TAxis, AxisLayout> = new Map<TAxis, AxisLayout>();
     var childrenAxisStates:Map<TAxis, Array<AxisState>> = new Map();
+    var mode:LayoutPosMode = global;
 
     public function new(holder) {
         this.holder = holder;
@@ -17,7 +18,8 @@ class WidgetContainer<TAxis:String> extends Component implements Refreshable {
         this.holder = h;
     }
 
-    public function setLayout(axis:TAxis, layout:AxisLayout) {
+    public function setLayout(axis:TAxis, layout:AxisLayout, mode:LayoutPosMode = global) {
+        this.mode = mode;
         layoutMap[axis] = layout;
         if (!childrenAxisStates.exists(axis))
             childrenAxisStates[axis] = [];
@@ -38,11 +40,18 @@ class WidgetContainer<TAxis:String> extends Component implements Refreshable {
 
     public function refresh() {
         for (axis in layoutMap.keys()) {
-            layoutMap[axis].arrange(holder.axisStates[axis], childrenAxisStates[axis]);
+            layoutMap[axis].arrange(holder.axisStates[axis], childrenAxisStates[axis], mode);
         }
     }
 }
 
 interface Refreshable {
     function refresh():Void ;
+}
+
+
+@:enum abstract LayoutPosMode(Bool) {
+    var global:LayoutPosMode = cast true;
+    var local:LayoutPosMode = cast false;
+    public inline function isGlobal() return this;
 }

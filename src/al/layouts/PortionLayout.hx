@@ -1,14 +1,15 @@
 package al.layouts;
 
+import al.core.WidgetContainer.LayoutPosMode;
 import al.core.AxisState;
 class PortionLayout implements AxisLayout {
     public static var instance(default, null) = new PortionLayout();
     public function new() {}
 
-    public function arrange(parent:AxisState, children:Array<AxisState>):Void {
+    public function arrange(parent:AxisState, children:Array<AxisState>, mode:LayoutPosMode):Void {
         var fixedValue = 0.0;
         var portionsSum = 0.0;
-        var coord = parent.getPos();
+        var coord = mode.isGlobal() ? parent.getPos() : 0;
 
         for (child in children) {
             if (!child.isArrangable())
@@ -18,7 +19,7 @@ class PortionLayout implements AxisLayout {
             fixedValue += getFixed(child);
         }
 
-        var totalValue = parent.getSize();
+        var totalValue = mode.isGlobal() ? parent.getSize() : 1;
         var distributedValue = totalValue - fixedValue;
         for (child in children) {
             if (!child.isArrangable()) // todo handle unmanaged percent size here
