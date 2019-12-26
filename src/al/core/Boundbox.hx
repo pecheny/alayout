@@ -5,6 +5,10 @@ class Boundbox {
     public var pos(default, null):Map<Axis2D, Float> = new Map();
 
     public function new(x = 0., y = 0., w = 1., h = 1.) {
+        set(x, y, w, h);
+    }
+
+    inline public function set(x = 0., y = 0., w = 1., h = 1.) {
         size[horizontal] = w;
         size[vertical] = h;
         pos[horizontal] = x;
