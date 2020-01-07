@@ -3,15 +3,15 @@ import al.ec.Entity.Component;
 import al.layouts.AxisLayout;
 import haxe.ds.ReadOnlyArray;
 using Lambda;
-class WidgetContainer<TAxis:String> extends Component implements Refreshable {
-    var holder:Widget<TAxis>;
-    var children:Array<Widget<TAxis>> = [];
+class WidgetContainer<TAxis:String, TChild:Widget<TAxis>> extends Component implements Refreshable {
+    var holder:TChild;
+    var children:Array<TChild> = [];
     var layoutMap:Map<TAxis, AxisLayout> = new Map<TAxis, AxisLayout>();
     var childrenAxisStates:Map<TAxis, Array<AxisState>> = new Map();
     var mode:LayoutPosMode = global;
 
     public function new(holder) {
-        this.holder = holder;
+        setHolder(holder);
     }
 
     public function setHolder(h) {
@@ -25,7 +25,7 @@ class WidgetContainer<TAxis:String> extends Component implements Refreshable {
             childrenAxisStates[axis] = [];
     }
 
-    public function addChild(child:Widget<TAxis>) {
+    public function addChild(child:TChild) {
         if (children.indexOf(child) > -1)
             throw "Already child";
         children.push(child);
@@ -34,7 +34,7 @@ class WidgetContainer<TAxis:String> extends Component implements Refreshable {
         }
     }
 
-    public function getChildren():ReadOnlyArray<Widget<TAxis>> {
+    public function getChildren():ReadOnlyArray<TChild> {
         return children;
     }
 
