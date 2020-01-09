@@ -1,5 +1,6 @@
 package al.appliers;
 
+import al.appliers.PropertyAccessors.ConstFloatPropertyReader;
 import openfl.display.DisplayObject;
 typedef ViewTarget = DisplayObject;
 
@@ -57,6 +58,22 @@ interface FloatPropertyReader {
     function getValue():Float;
 }
 
+class FloatProvertyValue extends ConstFloatPropertyReader implements FloatPropertyAccessor {
+    public function setValue(val:Float):Void {
+        this.val = val;
+    }
+}
+
+class ConstFloatPropertyReader implements FloatPropertyReader {
+    var val:Float;
+    public static var ZERO(default, never) = new ConstFloatPropertyReader(0);
+    public function new(v) this.val = v;
+
+    public function getValue():Float {
+        return val;
+    }
+}
+
 interface FloatPropertyAccessor extends FloatPropertyReader extends FloatPropertyWriter {
 }
 
@@ -80,6 +97,19 @@ class SumPropertyWriter implements FloatPropertyWriter {
 
     public function setValue(val:Float):Void {
         target.setValue(val + summand.getValue());
+    }
+}
+
+class Multiplier implements FloatPropertyReader {
+    var src:FloatPropertyReader;
+    public var multiplier:Float = 1;
+    public function new (src,  mul) {
+        this.src = src;
+        this.multiplier = mul;
+    }
+
+    public function getValue():Float {
+        return src.getValue() * multiplier;
     }
 
 
