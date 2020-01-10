@@ -100,7 +100,7 @@ class SumPropertyWriter implements FloatPropertyWriter {
     }
 }
 
-class Multiplier implements FloatPropertyReader {
+class MultiplierReader implements FloatPropertyReader {
     var src:FloatPropertyReader;
     public var multiplier:Float = 1;
     public function new (src,  mul) {
@@ -111,6 +111,17 @@ class Multiplier implements FloatPropertyReader {
     public function getValue():Float {
         return src.getValue() * multiplier;
     }
+}
 
+class SummandReader implements FloatPropertyReader {
+    var src:FloatPropertyReader;
+    public var summand:Float = 1;
+    public function new (src,  mul) {
+        this.src = src;
+        this.summand = mul;
+    }
 
+    public function getValue():Float {
+        return src.getValue() + summand;
+    }
 }
