@@ -18,13 +18,15 @@ class PortionLayout implements AxisLayout {
             portionsSum += getPortion(child);
             fixedValue += getFixed(child);
         }
+        if (portionsSum == 0)
+            portionsSum = 1;
 
         var totalValue = mode.isGlobal() ? parent.getSize() : 1;
         var distributedValue = totalValue - fixedValue;
         for (child in children) {
             if (!child.isArrangable()) // todo handle unmanaged percent size here
                 continue;
-            var size = 0.0;
+            var size:Float = 0.0;
             size += distributedValue * getPortion(child) / portionsSum;
             size += getFixed(child);
             child.applyPos(coord);
