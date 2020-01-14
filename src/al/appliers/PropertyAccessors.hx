@@ -116,9 +116,9 @@ class MultiplierReader implements FloatPropertyReader {
 class SummandReader implements FloatPropertyReader {
     var src:FloatPropertyReader;
     public var summand:Float = 1;
-    public function new (src,  mul) {
+    public function new (src,  sum) {
         this.src = src;
-        this.summand = mul;
+        this.summand = sum;
     }
 
     public function getValue():Float {
