@@ -15,6 +15,7 @@ class ViewportAspectKeeper {
         this.child = child;
         this.aspect = aspect;
         openfl.Lib.current.stage.addEventListener(Event.RESIZE, refresh);
+        refresh(null);
     }
 
     public function refresh(e:Event) {
