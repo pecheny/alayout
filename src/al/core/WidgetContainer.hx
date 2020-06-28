@@ -3,7 +3,7 @@ import al.ec.Entity.Component;
 import al.layouts.AxisLayout;
 import haxe.ds.ReadOnlyArray;
 using Lambda;
-class WidgetContainer<TAxis:String, TChild:Widget<TAxis>> extends Component implements Refreshable {
+class WidgetContainer<TAxis:AxisKeyBase, TChild:Widget<TAxis>> extends Component implements Refreshable {
     var holder:TChild;
     var children:Array<TChild> = [];
     var layoutMap:Map<TAxis, AxisLayout> = new Map<TAxis, AxisLayout>();
@@ -49,7 +49,7 @@ interface Refreshable {
     function refresh():Void ;
 }
 
-
+typedef AxisKeyBase = Int;
 @:enum abstract LayoutPosMode(Bool) {
     var global:LayoutPosMode = cast true;
     var local:LayoutPosMode = cast false;
