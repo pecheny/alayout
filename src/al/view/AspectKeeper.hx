@@ -1,17 +1,18 @@
 package al.view;
+import al.al2d.Widget2D.AxisCollection2D;
 import al.al2d.Axis2D;
 import al.appliers.PropertyAccessors.FloatPropertyWriter;
 import al.core.AxisApplier;
 import al.core.Boundbox;
 class AspectKeeper {
     var bounds:Boundbox;
-    var target:Map<Axis2D, AxisApplier>;
-    var size:Map<Axis2D, Float> = new Map();
-    var pos:Map<Axis2D, Float> = new Map();
-    var ownSizeAppliers:Map<Axis2D, FloatPropertyWriter> = new Map();
-    var ownPosAppliers:Map<Axis2D, FloatPropertyWriter> = new Map();
+    var target:AxisCollection2D<AxisApplier>;
+    var size:AxisCollection2D<Float> = new AxisCollection2D();
+    var pos:AxisCollection2D<Float> = new AxisCollection2D();
+    var ownSizeAppliers:AxisCollection2D<FloatPropertyWriter> = new AxisCollection2D();
+    var ownPosAppliers:AxisCollection2D<FloatPropertyWriter> = new AxisCollection2D();
 
-    public function new(targetStates:Map<Axis2D, AxisApplier>, bounds:Boundbox) {
+    public function new(targetStates:AxisCollection2D<AxisApplier>, bounds:Boundbox) {
         this.bounds = bounds;
         this.target = targetStates;
         for (axis in Axis2D.keys){
@@ -47,7 +48,7 @@ class AspectKeeper {
 }
 
 class KeeperAxisApplier implements FloatPropertyWriter {
-    var target:Map<Axis2D, Float>;
+    var target:AxisCollection2D<Float>;
     var key:Axis2D;
     var keeper:AspectKeeper;
     public function new(t, k, a) {

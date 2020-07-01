@@ -1,9 +1,11 @@
 package al.core;
 import al.ec.Entity.Component;
-class Widget<TAxis> extends Component {
-    public var axisStates(default, null):Map<TAxis, AxisState>;
+import al.core.AxisCollection;
 
-    public function new(axisStates:Map<TAxis, AxisState>) {
+class Widget<TAxis:al.core.WidgetContainer.AxisKeyBase> extends Component {
+    public var axisStates(default, null):AxisCollection<TAxis, AxisState>;
+
+    public function new(axisStates:AxisCollection<TAxis, AxisState>) {
         this.axisStates = axisStates;
     }
 }

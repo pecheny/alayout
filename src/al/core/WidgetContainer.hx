@@ -1,13 +1,14 @@
 package al.core;
 import al.ec.Entity.Component;
+import al.core.AxisCollection;
 import al.layouts.AxisLayout;
 import haxe.ds.ReadOnlyArray;
 using Lambda;
 class WidgetContainer<TAxis:AxisKeyBase, TChild:Widget<TAxis>> extends Component implements Refreshable {
     var holder:TChild;
     var children:Array<TChild> = [];
-    var layoutMap:Map<TAxis, AxisLayout> = new Map<TAxis, AxisLayout>();
-    var childrenAxisStates:Map<TAxis, Array<AxisState>> = new Map();
+    var layoutMap:AxisCollection<TAxis, AxisLayout> = new AxisCollection();
+    var childrenAxisStates:AxisCollection<TAxis, Array<AxisState>> = new AxisCollection();
     var mode:LayoutPosMode = global;
 
     public function new(holder) {
@@ -21,7 +22,7 @@ class WidgetContainer<TAxis:AxisKeyBase, TChild:Widget<TAxis>> extends Component
     public function setLayout(axis:TAxis, layout:AxisLayout, mode:LayoutPosMode = global) {
         this.mode = mode;
         layoutMap[axis] = layout;
-        if (!childrenAxisStates.exists(axis))
+        if (!childrenAxisStates.hasValueFor(axis))
             childrenAxisStates[axis] = [];
     }
 
@@ -30,6 +31,7 @@ class WidgetContainer<TAxis:AxisKeyBase, TChild:Widget<TAxis>> extends Component
             throw "Already child";
         children.push(child);
         for (axis in layoutMap.keys()) {
+            var a:TAxis = axis;
             childrenAxisStates[axis].push(child.axisStates[axis]);
         }
     }

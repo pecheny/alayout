@@ -71,7 +71,7 @@ class ViewBuilder {
     }
 
     function createAxisForDispObj(v:DisplayObject) {
-        var axis = new Map<Axis2D, AxisApplier>();
+        var axis = new AxisCollection2D<AxisApplier>();
         axis[Axis2D.horizontal] = new SimpleAxisApplier(
         new DOXPropertySetter(v),
         new DOScaleXPropertySetter(v)

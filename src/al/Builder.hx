@@ -1,5 +1,6 @@
 package al;
 
+import al.core.AxisCollection;
 import al.appliers.PropertyAccessors.FloatPropertyWriter;
 import al.appliers.PropertyAccessors.FloatPropertyAccessor;
 import al.al2d.Axis2D;
@@ -32,7 +33,7 @@ class Builder {
 
     public function widget(vfac:Widget2D -> Void = null) {
         var entity = new Entity();
-        var axisStates = new Map();
+        var axisStates = new AxisCollection<Axis2D, AxisState>();
         for (a in Axis2D.keys)
             axisStates[a] = new AxisState().init(new StoreApplier(10), new StoreApplier(0));
         var w = new Widget2D(axisStates);
@@ -118,7 +119,7 @@ class OnAddToParent {
 class GlobalPos {
 //    public var x:Float = 0;
 //    public var y:Float = 0;
-    public var axis:Map<Axis2D, Float> = new Map();
+    public var axis:AxisCollection2D<Float> = new AxisCollection();
     var readers:Map<Axis2D, FloatPropertyAccessor> = new Map();
 
 
@@ -138,7 +139,7 @@ class GlobalPos {
 }
 
 class FloatAxisAccessor implements FloatPropertyAccessor {
-    var target:Map<Axis2D, Float>;
+    var target:AxisCollection2D<Float>;
     var axis:Axis2D;
     public function new (a, t) {
         this.target = t;
