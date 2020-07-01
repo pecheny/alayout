@@ -23,4 +23,4 @@ package al.al2d;
     }
 }
 
-typedef AxisCollection<T> = Map<Axis2D, T>;
+
