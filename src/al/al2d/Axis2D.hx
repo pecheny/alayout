@@ -21,6 +21,16 @@ package al.al2d;
             case s : throw "Cant parse axis ";
         }
     }
+
+    public static inline function fromInt(v:Int) {
+        #if debug
+        if(v!=0 &&v!=1)
+            throw 'wrong axis $v';
+        #end
+        return cast v;
+    }
+
+    public inline function toInt():Int return this;
 }
 
 
