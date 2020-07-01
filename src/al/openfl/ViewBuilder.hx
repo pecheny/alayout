@@ -7,7 +7,7 @@ import al.appliers.PropertyAccessors.DOXPropertySetter;
 import al.appliers.PropertyAccessors.DOYPropertySetter;
 import al.core.AxisApplier.SimpleAxisApplier;
 import al.core.AxisApplier;
-import al.core.Boundbox;
+import al.al2d.Boundbox;
 import al.openfl.ColoredRect.DisplayObjectScalerApplierFactory;
 import al.openfl.OpenflViewAdapter.ViewAdapter;
 import al.view.AspectKeeper;

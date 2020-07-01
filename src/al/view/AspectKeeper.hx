@@ -3,7 +3,7 @@ import al.al2d.Widget2D.AxisCollection2D;
 import al.al2d.Axis2D;
 import al.appliers.PropertyAccessors.FloatPropertyWriter;
 import al.core.AxisApplier;
-import al.core.Boundbox;
+import al.al2d.Boundbox;
 class AspectKeeper {
     var bounds:Boundbox;
     var target:AxisCollection2D<AxisApplier>;

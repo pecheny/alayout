@@ -1,4 +1,4 @@
-package al.core;
+package al.al2d;
 import al.al2d.Widget2D.AxisCollection2D;
 import al.al2d.Axis2D;
 class Boundbox {
