@@ -13,7 +13,9 @@
   "classPath": "src",
   "contributors": [
     "pecheny"
-  ]
-
+  ],
+  "dependencies": {
+    "slec": "https://github.com/pecheny/slec"
+  }
 }
  
