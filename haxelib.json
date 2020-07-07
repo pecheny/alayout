@@ -15,7 +15,7 @@
     "pecheny"
   ],
   "dependencies": {
-    "slec": "https://github.com/pecheny/slec"
+    "slec": "git:https://github.com/pecheny/slec"
   }
 }
  
