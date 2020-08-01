@@ -1,6 +1,6 @@
 package al.al2d;
 @:enum abstract Axis2D(Int) to Int{
-    public static var keys = [ vertical, horizontal,];
+    public static var keys = [ horizontal, vertical,];
     var horizontal = 0;
     var vertical = 1;
     inline private static var HORIZONTAL_STRING:String = "horizontal";
