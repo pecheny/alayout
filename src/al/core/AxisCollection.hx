@@ -39,7 +39,7 @@ class AxisIterator<TAxis:al.core.WidgetContainer.AxisKeyBase> {
 
 //typedef AxisCollection<TAxis:al.core.WidgetContainer.AxisKeyBase, T> = Map<TAxis, T>;
 @:forward( keys)
-abstract AxisCollection<TAxis:al.core.WidgetContainer.AxisKeyBase, T>  (Map<TAxis, T>) {
+abstract AxisCollection<TAxis:al.core.WidgetContainer.AxisKeyBase, T>  (Map<TAxis, T>) from Map<TAxis, T> {
     public inline function new () this = new Map();
 
     @:arrayAccess public inline function get(a:TAxis):T return this[a];
