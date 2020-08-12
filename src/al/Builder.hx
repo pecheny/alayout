@@ -45,7 +45,7 @@ class Builder {
     }
 
 
-    function makeContainer(w:Widget2D, children:Array<Widget2D>) {
+    public function makeContainer(w:Widget2D, children:Array<Widget2D>) {
         var wc = new Widget2DContainer(w);
 //        var gp = new GlobalPos();
 //        w.entity.addComponent(gp);
