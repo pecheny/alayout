@@ -15,6 +15,7 @@ class AxisState implements AxisApplier {
     public var size(default, null):Size = new Size();
     public var position(default, null):Position = new Position();
     var siblings:Array<AxisApplier> = [];
+    var postSiblings:Array<AxisApplier> = [];
 
     public function new() {}
 
@@ -55,20 +56,27 @@ class AxisState implements AxisApplier {
         }
     }
 
-    public function addSibling(aa:AxisApplier){
-        siblings.push(aa);
+    public function addSibling(aa:AxisApplier, postValueApplying = false){
+        if (postValueApplying)
+            postSiblings.push(aa)
+        else
+            siblings.push(aa);
     }
 
     public function applySize(value) {
         for (s in siblings)
             s.applySize(value);
         sizeApplier.setValue(value);
+        for (s in postSiblings)
+            s.applySize(value);
     }
 
     public function applyPos(value) {
         for (s in siblings)
             s.applyPos(value);
         posApplier.setValue(value);
+        for (s in postSiblings)
+            s.applyPos(value);
     }
 
     public function getSize() {
