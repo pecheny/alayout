@@ -1,10 +1,10 @@
 package al.openfl;
 import al.al2d.Axis2D;
 import al.al2d.Widget2D;
-import al.appliers.PropertyAccessors.DOScaleXPropertySetter;
-import al.appliers.PropertyAccessors.DOScaleYPropertySetter;
-import al.appliers.PropertyAccessors.DOXPropertySetter;
-import al.appliers.PropertyAccessors.DOYPropertySetter;
+import al.openfl.DisplayObjectValueAppliers.DOScaleXPropertySetter;
+import al.openfl.DisplayObjectValueAppliers.DOScaleYPropertySetter;
+import al.openfl.DisplayObjectValueAppliers.DOXPropertySetter;
+import al.openfl.DisplayObjectValueAppliers.DOYPropertySetter;
 import al.core.AxisApplier.SimpleAxisApplier;
 import al.core.AxisApplier;
 import al.al2d.Boundbox;

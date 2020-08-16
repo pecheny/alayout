@@ -7,5 +7,4 @@
     <haxelib name="openfl"/>
     <haxelib name="entity"/>
     <library path="src/example/fingers.swf" preload="true"/>
-    <assets path="src/example/fingers.swf"  />
 </project>

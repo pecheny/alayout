@@ -1,12 +1,12 @@
 package al.openfl;
-import al.appliers.ApplierFactory;
+import openfl.display.DisplayObject;
 import al.al2d.Axis2D;
-import al.appliers.PropertyAccessors.DOHeightPropertySetter;
-import al.appliers.PropertyAccessors.DOWidthPropertySetter;
-import al.appliers.PropertyAccessors.DOXPropertySetter;
-import al.appliers.PropertyAccessors.DOYPropertySetter;
+import al.appliers.ApplierFactory;
 import al.appliers.PropertyAccessors.FloatPropertyAccessor;
-import al.appliers.PropertyAccessors.Target2D;
+import al.openfl.DisplayObjectValueAppliers.DOHeightPropertySetter;
+import al.openfl.DisplayObjectValueAppliers.DOWidthPropertySetter;
+import al.openfl.DisplayObjectValueAppliers.DOXPropertySetter;
+import al.openfl.DisplayObjectValueAppliers.DOYPropertySetter;
 import openfl.display.Sprite;
 class ColoredRect extends Sprite {
     public function new(c) {
@@ -17,7 +17,7 @@ class ColoredRect extends Sprite {
     }
 }
 
-class DisplayObjectScalerApplierFactory<T:Target2D> implements ApplierFactory<Axis2D> {
+class DisplayObjectScalerApplierFactory<T:DisplayObject> implements ApplierFactory<Axis2D> {
     var target:T;
 
     public function new(t) this.target = t;

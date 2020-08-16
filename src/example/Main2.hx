@@ -4,8 +4,8 @@ import al.openfl.view.Root2D;
 import al.openfl.ViewBuilder;
 import al.openfl.OpenflViewAdapter.ViewAdapter;
 import al.al2d.Axis2D;
-import al.appliers.PropertyAccessors.DOXPropertySetter;
-import al.appliers.PropertyAccessors.DOYPropertySetter;
+import al.openfl.DisplayObjectValueAppliers.DOXPropertySetter;
+import al.openfl.DisplayObjectValueAppliers.DOYPropertySetter;
 import al.Builder;
 import al.openfl.StageResizer;
 import openfl.display.Sprite;
@@ -25,7 +25,6 @@ class Main2 extends Sprite {
                 w.entity.addComponent(adapter);
                 w.axisStates[Axis2D.horizontal].addPosApplier(new DOXPropertySetter(v));
                 w.axisStates[Axis2D.vertical].addPosApplier(new DOYPropertySetter(v));
-                return adapter;
             }
         );
 

@@ -1,10 +1,5 @@
 package al.appliers;
 
-import al.appliers.PropertyAccessors.ConstFloatPropertyReader;
-import openfl.display.DisplayObject;
-typedef ViewTarget = DisplayObject;
-
-
 
 @:autoBuild(al.appliers.buildmacro.AccessorMacro.build())
 interface PropertyAccessor<Tval> {
@@ -12,13 +7,7 @@ interface PropertyAccessor<Tval> {
     function getValue():Float;
 }
 
-@:property("scaleX") class DOScaleXPropertySetter<T:DisplayObject> implements PropertyAccessor<Float> implements FloatPropertyAccessor {}
-@:property("scaleY") class DOScaleYPropertySetter<T:DisplayObject> implements PropertyAccessor<Float> implements FloatPropertyAccessor {}
-@:property("width") class DOWidthPropertySetter<T:DisplayObject> implements PropertyAccessor<Float> implements FloatPropertyAccessor {}
-@:property("height") class DOHeightPropertySetter<T:DisplayObject> implements PropertyAccessor<Float> implements FloatPropertyAccessor {}
-@:property("x") class DOXPropertySetter<T:DisplayObject> implements PropertyAccessor<Float> implements FloatPropertyAccessor {}
-@:property("y") class DOYPropertySetter<T:DisplayObject> implements PropertyAccessor<Float> implements FloatPropertyAccessor {}
-typedef Target2D = DisplayObject;// doesnt work on cpp {x:Float, y:Float, width:Float, height:Float};
+
 @:property("value") class ValueApplier<T:FloatValue> implements PropertyAccessor<Float> implements FloatPropertyAccessor {}
 
 class StoreApplier implements FloatPropertyAccessor {
