@@ -35,7 +35,7 @@ class Builder {
         var entity = new Entity();
         var axisStates = new AxisCollection<Axis2D, AxisState>();
         for (a in Axis2D.keys)
-            axisStates[a] = new AxisState().init(new StoreApplier(10), new StoreApplier(0));
+            axisStates[a] = new AxisState();
         var w = new Widget2D(axisStates);
         entity.addComponent(w);
         onWidgetCreated.dispatch(w);
