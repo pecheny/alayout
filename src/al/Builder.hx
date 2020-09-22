@@ -31,7 +31,7 @@ class Builder {
     }
 
 
-    public function widget(vfac:Widget2D -> Void = null) {
+    public function widget() {
         var entity = new Entity();
         var axisStates = new AxisCollection<Axis2D, AxisState>();
         for (a in Axis2D.keys)
@@ -39,8 +39,6 @@ class Builder {
         var w = new Widget2D(axisStates);
         entity.addComponent(w);
         onWidgetCreated.dispatch(w);
-        if (vfac != null)
-            entity.addComponent(new OnAddToParent(vfac));
         return w;
     }
 
@@ -95,8 +93,8 @@ class Builder {
         wc.entity.addChild(w.entity);
         wc.addChild(w);
         onAddedToContainer.dispatch(wc, w);
-        if (w.entity.hasComponent(OnAddToParent))
-            w.entity.getComponent(OnAddToParent).handler(w);
+//        if (w.entity.hasComponent(OnAddToParent))
+//            w.entity.getComponent(OnAddToParent).handler(w);
     }
 
     public function container(children:Array<Widget2D>) {
@@ -107,14 +105,6 @@ class Builder {
 
 }
 
-
-class OnAddToParent {
-    public var handler:Widget2D -> Void;
-
-    public function new(h) {
-        handler = h;
-    }
-}
 
 class GlobalPos {
 //    public var x:Float = 0;
