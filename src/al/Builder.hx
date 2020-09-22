@@ -1,5 +1,6 @@
 package al;
 
+import al.layouts.data.LayoutData.SizeType;
 import al.core.AxisCollection;
 import al.appliers.PropertyAccessors.FloatPropertyWriter;
 import al.appliers.PropertyAccessors.FloatPropertyAccessor;
@@ -31,11 +32,14 @@ class Builder {
     }
 
 
-    public function widget() {
+    public function widget(xtype:SizeType = SizeType.portion, xsize = 1., ytype = SizeType.portion, ysize = 1.) {
         var entity = new Entity();
         var axisStates = new AxisCollection<Axis2D, AxisState>();
-        for (a in Axis2D.keys)
-            axisStates[a] = new AxisState();
+        axisStates[horizontal] = new AxisState();
+        axisStates[horizontal].initSize(xtype, xsize);
+        axisStates[vertical] = new AxisState();
+        axisStates[vertical].initSize(ytype, ysize);
+
         var w = new Widget2D(axisStates);
         entity.addComponent(w);
         onWidgetCreated.dispatch(w);
@@ -121,6 +125,7 @@ class GlobalPos {
     }
 
     public function getReader(a):FloatPropertyReader return readers[a];
+
     public function getWriter(a):FloatPropertyWriter return readers[a];
 
     public function toString() {
@@ -131,7 +136,8 @@ class GlobalPos {
 class FloatAxisAccessor implements FloatPropertyAccessor {
     var target:AxisCollection2D<Float>;
     var axis:Axis2D;
-    public function new (a, t) {
+
+    public function new(a, t) {
         this.target = t;
         this.axis = a;
     }
