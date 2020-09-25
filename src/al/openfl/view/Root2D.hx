@@ -19,7 +19,7 @@ class Root2D {
         wc = new Widget2DContainer(w);
         w.entity.addComponent(wc);
         for (a in Axis2D.keys) {
-            w.axisStates[a].addSizeApplier(new ContainerRefresher(wc));
+            w.axisStates[a].addSibling(new ContainerRefresher(wc));
             wc.setLayout(a, WholefillLayout.instance);
         }
         stage = openfl.Lib.current.stage;
@@ -35,9 +35,6 @@ class Root2D {
 
     public function addScreen(w:Widget2D) {
         wc.entity.addChild(w.entity);
-        var doContatiner:ViewAdapter = wc.entity.getComponent(ViewAdapter);
-        var doChild:ViewAdapter = w.entity.getComponent(ViewAdapter);
-        doContatiner.addChild(doChild);
         wc.addChild(w);
         wc.refresh();
     }
