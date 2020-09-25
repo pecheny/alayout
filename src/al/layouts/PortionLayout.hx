@@ -29,8 +29,7 @@ class PortionLayout implements AxisLayout {
             var size:Float = 0.0;
             size += distributedValue * getPortion(child) / portionsSum;
             size += getFixed(child);
-            child.applyPos(coord);
-            child.applySize(size);
+            child.apply(coord, size);
             coord += size;
         }
     }

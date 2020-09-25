@@ -49,12 +49,8 @@ class Builder {
 
     public function makeContainer(w:Widget2D, children:Array<Widget2D>) {
         var wc = new Widget2DContainer(w);
-//        var gp = new GlobalPos();
-//        w.entity.addComponent(gp);
         for (a in Axis2D.keys) {
-            w.axisStates[a].addSizeApplier(new ContainerRefresher(wc));
-            w.axisStates[a].addPosApplier(new ContainerRefresher(wc));
-//            w.axisStates[a].addPosApplier(new DynamicPropertyAccessor(() -> gp.axis[a], (x) -> gp.axis[a] = x));
+            w.axisStates[a].addSibling(new ContainerRefresher(wc));
         }
         w.entity.addComponent(wc);
         alignContainer(wc,

@@ -4,11 +4,9 @@ package al.core;
 **/
 
 import al.appliers.PropertyAccessors.StoreApplier;
-import al.appliers.PropertyAccessors.FloatPropertyWriter;
 import al.layouts.data.LayoutData.SizeType;
 import al.layouts.data.LayoutData.Position;
 import al.layouts.data.LayoutData.Size;
-import al.appliers.PropertyAccessors.AppliersContainer;
 import al.appliers.PropertyAccessors.FloatPropertyAccessor;
 class AxisState implements AxisApplier {
     var sizeApplier:FloatPropertyAccessor;
@@ -24,29 +22,8 @@ class AxisState implements AxisApplier {
         size.value = 1;
     }
 
-    public function addSizeApplier(a:FloatPropertyWriter) {
-        sizeApplier = addApplier(sizeApplier, a);
-    }
-
-    public function addPosApplier(a:FloatPropertyWriter) {
-        posApplier = addApplier(posApplier, a);
-    }
-
-    inline function addApplier(parent:FloatPropertyAccessor, child:FloatPropertyWriter):FloatPropertyAccessor {
-        if (Std.is(parent, AppliersContainer)) {
-            cast(parent, AppliersContainer).addChild(child);
-            return parent;
-        } else {
-            var cont = new AppliersContainer(parent.getValue());
-            cont.addChild(parent);
-            cont.addChild(child);
-            return cont;
-        }
-    }
-
-
     public function initSize(type:SizeType, size:Float) {
-        if(type == fixed) {
+        if (type == fixed) {
             this.size.setFixed(size);
             sizeApplier.setValue(size);
         } else if (type == portion) {
@@ -54,28 +31,22 @@ class AxisState implements AxisApplier {
         }
     }
 
-    public function addSibling(aa:AxisApplier, postValueApplying = false){
+    public function addSibling(aa:AxisApplier, postValueApplying = false) {
         if (postValueApplying)
             postSiblings.push(aa)
         else
             siblings.push(aa);
     }
 
-    public function applySize(value) {
+    public function apply(pos:Float, size:Float):Void {
+        posApplier.setValue(pos);
+        sizeApplier.setValue(size);
         for (s in siblings)
-            s.applySize(value);
-        sizeApplier.setValue(value);
+            s.apply(pos, size);
         for (s in postSiblings)
-            s.applySize(value);
+            s.apply(pos, size);
     }
 
-    public function applyPos(value) {
-        for (s in siblings)
-            s.applyPos(value);
-        posApplier.setValue(value);
-        for (s in postSiblings)
-            s.applyPos(value);
-    }
 
     public function getSize() {
         return sizeApplier.getValue();

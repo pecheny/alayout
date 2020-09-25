@@ -1,6 +1,7 @@
 package al.openfl;
 import al.al2d.Axis2D;
 import al.al2d.Widget2D;
+import al.openfl.DisplayObjectAxisAppliers;
 import al.openfl.DisplayObjectValueAppliers.DOScaleXPropertySetter;
 import al.openfl.DisplayObjectValueAppliers.DOScaleYPropertySetter;
 import al.openfl.DisplayObjectValueAppliers.DOXPropertySetter;
@@ -35,8 +36,7 @@ class ViewBuilder {
         var entity = w.entity;
         var appliers = new DisplayObjectScalerApplierFactory(view);
         for (a in Axis2D.keys) {
-            w.axisStates[a].addSizeApplier(appliers.getSizeApplier(a));
-            w.axisStates[a].addPosApplier(appliers.getPosApplier(a));
+            w.axisStates[a].addSibling(appliers.getApplier(a));
         }
         var adapter = new ViewAdapter(w, view);
         entity.addComponent(adapter);
@@ -63,10 +63,11 @@ class ViewBuilder {
         if (r == null)
             r = dobj.getBounds(dobj);
         var aspectKeeper = new AspectKeeper(createAxisForDispObj(dobj), rectToBoundbox(r));
-        w.axisStates[Axis2D.horizontal].addSizeApplier(aspectKeeper.getSizeApplier(horizontal));
-        w.axisStates[Axis2D.vertical].addSizeApplier(aspectKeeper.getSizeApplier(vertical));
-        w.axisStates[Axis2D.horizontal].addPosApplier(new DOXPropertySetter(prx));
-        w.axisStates[Axis2D.vertical].addPosApplier(new DOYPropertySetter(prx));
+        w.axisStates[Axis2D.horizontal].addSibling(aspectKeeper.getApplier(horizontal));
+        w.axisStates[Axis2D.vertical].addSibling(aspectKeeper.getApplier(vertical));
+
+        w.axisStates[Axis2D.horizontal].addSibling(new DOHorizontalPosApplier(prx));
+        w.axisStates[Axis2D.vertical].addSibling(new DOVerticalPosApplier(prx));
         return w;
     }
 
@@ -106,8 +107,7 @@ class ViewBuilderStaticWrapper {
         var entity = w.entity;
         var appliers = new DisplayObjectScalerApplierFactory(view);
         for (a in Axis2D.keys) {
-            w.axisStates[a].addSizeApplier(appliers.getSizeApplier(a));
-            w.axisStates[a].addPosApplier(appliers.getPosApplier(a));
+            w.axisStates[a].addSibling(appliers.getApplier(a));
         }
         var adapter = new ViewAdapter(w, view);
         entity.addComponent(adapter);

@@ -11,10 +11,9 @@ class WholefillLayout implements AxisLayout {
             if (!child.isArrangable())
                 continue;
             if (mode.isGlobal()){
-                child.applySize(parent.getSize());
-                child.applyPos(parent.getPos());
+                child.apply(parent.getPos(), parent.getSize());
             }else{
-                child.applySize(1);
+                child.apply(0, 1);
             }
 
         }

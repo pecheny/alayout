@@ -1,9 +1,8 @@
 package al.appliers;
 
-import al.appliers.PropertyAccessors.FloatPropertyAccessor;
+import al.core.AxisApplier;
 interface ApplierFactory<TKey> {
-    function getPosApplier(axis:TKey):FloatPropertyAccessor;
 
-    function getSizeApplier(axis:TKey):FloatPropertyAccessor;
+    public function getApplier(a:TKey):AxisApplier;
 }
 

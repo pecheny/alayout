@@ -14,8 +14,8 @@ class StageResizer {
     }
 
     function onResize(e) {
-        targetAxis[Axis2D.horizontal].applySize(openfl.Lib.current.stage.stageWidth);
-        targetAxis[Axis2D.vertical].applySize(openfl.Lib.current.stage.stageHeight);
+        targetAxis[Axis2D.horizontal].apply(0, openfl.Lib.current.stage.stageWidth);
+        targetAxis[Axis2D.vertical].apply(0, openfl.Lib.current.stage.stageHeight);
     }
 }
 

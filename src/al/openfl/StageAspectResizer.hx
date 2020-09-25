@@ -23,11 +23,11 @@ class StageAspectResizer {
         var width = stage.stageWidth;
         var height = stage.stageHeight;
         if (width > height) {
-            target.axisStates[Axis2D.horizontal].applySize( base * width / height);
-            target.axisStates[Axis2D.vertical].applySize( base );
+            target.axisStates[Axis2D.horizontal].apply(0, base * width / height);
+            target.axisStates[Axis2D.vertical].apply(0, base );
         } else {
-            target.axisStates[horizontal].applySize( base );
-            target.axisStates[vertical].applySize( base * height / width);
+            target.axisStates[horizontal].apply(0, base );
+            target.axisStates[vertical].apply(0, base * height / width);
         }
     }
 }

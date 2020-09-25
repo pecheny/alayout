@@ -1,7 +1,6 @@
 package al.view;
 import al.al2d.Widget2D.AxisCollection2D;
 import al.al2d.Axis2D;
-import al.appliers.PropertyAccessors.FloatPropertyWriter;
 import al.core.AxisApplier;
 import al.al2d.Boundbox;
 class AspectKeeper {
@@ -9,16 +8,14 @@ class AspectKeeper {
     var target:AxisCollection2D<AxisApplier>;
     var size:AxisCollection2D<Float> = new AxisCollection2D();
     var pos:AxisCollection2D<Float> = new AxisCollection2D();
-    var ownSizeAppliers:AxisCollection2D<FloatPropertyWriter> = new AxisCollection2D();
-    var ownPosAppliers:AxisCollection2D<FloatPropertyWriter> = new AxisCollection2D();
+    var ownSizeAppliers:AxisCollection2D<AxisApplier> = new AxisCollection2D();
 
     public function new(targetStates:AxisCollection2D<AxisApplier>, bounds:Boundbox) {
         this.bounds = bounds;
         this.target = targetStates;
-        for (axis in Axis2D.keys){
+        for (axis in Axis2D.keys) {
             size[axis] = 1;
-            ownSizeAppliers[axis] = new KeeperAxisApplier(size, this, axis);
-            ownPosAppliers[axis] = new KeeperAxisApplier(pos, this, axis);
+            ownSizeAppliers[axis] = new KeeperAxisApplier(pos, size, this, axis);
         }
     }
 
@@ -31,35 +28,36 @@ class AspectKeeper {
         }
 
         for (a in Axis2D.keys) {
-            target[a].applySize(scale);
             var free = size[a] - bounds.size[a] * scale;
-            target[a].applyPos(-scale * bounds.pos[a] + free / 2);
+            var pos = -scale * bounds.pos[a] + free / 2;
+            target[a].apply(pos, scale);
         }
     }
 
-    public function getSizeApplier(a:Axis2D){
+
+    public function getApplier(a:Axis2D) {
         return ownSizeAppliers[a];
     }
-
-    public function getPosApplier(a:Axis2D){
-        return ownPosAppliers[a];
-    }
-
 }
 
-class KeeperAxisApplier implements FloatPropertyWriter {
-    var target:AxisCollection2D<Float>;
+class KeeperAxisApplier implements AxisApplier {
     var key:Axis2D;
     var keeper:AspectKeeper;
-    public function new(t, k, a) {
-        this.target = t;
+    var size:AxisCollection2D<Float> = new AxisCollection2D();
+    var pos:AxisCollection2D<Float> = new AxisCollection2D();
+
+    public function new(p, s, k, a) {
+        this.pos = p;
+        this.size = s;
         this.keeper = k;
         this.key = a;
     }
 
-    public function setValue(val:Float):Void {
-        target[key] = val;
+    public function apply(pos:Float, size:Float):Void {
+        this.pos[key] = pos;
+        this.size[key] = size;
         keeper.refresh();
     }
+
 }
 
