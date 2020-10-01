@@ -42,7 +42,13 @@ class AxisIterator<TAxis:al.core.WidgetContainer.AxisKeyBase> {
 abstract AxisCollection<TAxis:al.core.WidgetContainer.AxisKeyBase, T>  (Map<TAxis, T>) from Map<TAxis, T> {
     public inline function new () this = new Map();
 
-    @:arrayAccess public inline function get(a:TAxis):T return this[a];
+    @:arrayAccess public inline function get(a:TAxis):T {
+        #if debug
+        if (!hasValueFor(a))
+            throw "no value for axis " + a;
+        #end
+        return this[a];
+    }
     @:arrayAccess public inline function set(a:TAxis, val:T):T return this[a] = val;
 
     public inline function hasValueFor(a:TAxis) return this.exists(a);
