@@ -6,17 +6,18 @@ class PortionLayout implements AxisLayout {
     public static var instance(default, null) = new PortionLayout();
     public function new() {}
 
-    public function arrange(parent:AxisState, children:Array<AxisState>, mode:LayoutPosMode):Void {
+    public function arrange(parent:AxisState, children:Array<AxisState>, mode:LayoutPosMode){
         var fixedValue = 0.0;
         var portionsSum = 0.0;
         var coord = mode.isGlobal() ? parent.getPos() : 0;
+        var origin = coord;
 
         for (child in children) {
             if (!child.isArrangable())
                 continue;
 
-            portionsSum += getPortion(child);
-            fixedValue += getFixed(child);
+            portionsSum += child.size.getPortion();
+            fixedValue += child.size.getFixed();
         }
         if (portionsSum == 0)
             portionsSum = 1;
@@ -27,26 +28,12 @@ class PortionLayout implements AxisLayout {
             if (!child.isArrangable()) // todo handle unmanaged percent size here
                 continue;
             var size:Float = 0.0;
-            size += distributedValue * getPortion(child) / portionsSum;
-            size += getFixed(child);
+            size += distributedValue * child.size.getPortion() / portionsSum;
+            size += child.size.getFixed();
             child.apply(coord, size);
             coord += size;
         }
-    }
-
-    inline function getPortion(w:AxisState) {
-        return switch w.size.type {
-            case fixed, percent: 0;
-            case range: w.size.maxValue - w.size.value;
-            case portion : w.size.value;
-        }
-    }
-
-    inline function getFixed(w:AxisState) {
-        return switch w.size.type {
-            case fixed, range: w.size.value;
-            case portion, percent: 0;
-        }
+        return coord - origin;
     }
 }
 

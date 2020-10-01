@@ -6,17 +6,26 @@ class WholefillLayout implements AxisLayout {
 
     function new() {}
 
-    public function arrange(parent:AxisState, children:Array<AxisState>, mode:LayoutPosMode):Void {
+    public function arrange(parent:AxisState, children:Array<AxisState>, mode:LayoutPosMode) {
+        var size = mode.isGlobal() ? parent.getSize() : 1;
+        var max = size;
+        var pos = mode.isGlobal() ? parent.getPos() : 0;
+        var origin = pos;
         for (child in children) {
             if (!child.isArrangable())
                 continue;
-            if (mode.isGlobal()){
-                child.apply(parent.getPos(), parent.getSize());
-            }else{
-                child.apply(0, 1);
-            }
-
+            var fixed = child.size.getFixed();
+            var portion = child.size.getPortion();
+            var chSize = fixed;
+            if (portion > 0 && fixed < size)
+                chSize = size;
+            if (chSize > max)
+                max = chSize;
+            child.apply(pos, chSize);
         }
+        return max ;
     }
+
+
 }
 

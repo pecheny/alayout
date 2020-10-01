@@ -64,6 +64,21 @@ class Size extends FloatValue {
         type = fixed;
         value = w;
     }
+
+    public inline function getPortion() {
+        return switch type {
+            case fixed, percent: 0;
+            case range: maxValue - value;
+            case portion : value;
+        }
+    }
+
+    public inline function getFixed() {
+        return switch type {
+            case fixed, range: value;
+            case portion, percent: 0;
+        }
+    }
 }
 @:enum abstract SizeType(String) from String to String {
     var fixed = "fixed";

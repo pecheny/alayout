@@ -4,6 +4,6 @@ package al.layouts;
 import al.core.WidgetContainer.LayoutPosMode;
 import al.core.AxisState;
 interface AxisLayout {
-    function arrange(parent:AxisState, children:Array<AxisState>, mode:LayoutPosMode):Void;
+    function arrange(parent:AxisState, children:Array<AxisState>, mode:LayoutPosMode):Float;
 }
 
