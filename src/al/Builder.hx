@@ -31,8 +31,7 @@ class Builder {
         return this;
     }
 
-
-    public function widget(xtype:SizeType = SizeType.portion, xsize = 1., ytype = SizeType.portion, ysize = 1.) {
+    public static inline function widget2d(xtype:SizeType = SizeType.portion, xsize = 1., ytype = SizeType.portion, ysize = 1.) {
         var entity = new Entity();
         var axisStates = new AxisCollection<Axis2D, AxisState>();
         axisStates[horizontal] = new AxisState();
@@ -42,6 +41,11 @@ class Builder {
 
         var w = new Widget2D(axisStates);
         entity.addComponent(w);
+        return w;
+    }
+
+    public function widget(xtype:SizeType = SizeType.portion, xsize = 1., ytype = SizeType.portion, ysize = 1.) {
+        var w = widget2d(xtype, xsize, ytype, ysize);
         onWidgetCreated.dispatch(w);
         return w;
     }
