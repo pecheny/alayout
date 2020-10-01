@@ -32,6 +32,8 @@ class AxisState implements AxisApplier {
     }
 
     public function addSibling(aa:AxisApplier, postValueApplying = false) {
+        if (aa == this)
+            throw "Dont do this";
         if (postValueApplying)
             postSiblings.push(aa)
         else
