@@ -9,7 +9,6 @@ import al.al2d.Widget2D;
 import al.al2d.Widget2DContainer;
 import al.appliers.ContainerRefresher;
 import al.appliers.PropertyAccessors.FloatPropertyReader;
-import al.appliers.PropertyAccessors.StoreApplier;
 import al.core.AxisState;
 import al.layouts.PortionLayout;
 import al.layouts.WholefillLayout;
@@ -32,12 +31,13 @@ class Builder {
     }
 
     public static inline function widget2d(xtype:SizeType = SizeType.portion, xsize = 1., ytype = SizeType.portion, ysize = 1.) {
+        var factor = #if flash 300 #else 1 #end ;
         var entity = new Entity();
         var axisStates = new AxisCollection<Axis2D, AxisState>();
         axisStates[horizontal] = new AxisState();
-        axisStates[horizontal].initSize(xtype, xsize);
+        axisStates[horizontal].initSize(xtype, xsize * factor);
         axisStates[vertical] = new AxisState();
-        axisStates[vertical].initSize(ytype, ysize);
+        axisStates[vertical].initSize(ytype, ysize * factor);
 
         var w = new Widget2D(axisStates);
         entity.addComponent(w);
