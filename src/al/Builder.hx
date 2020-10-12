@@ -52,25 +52,30 @@ class Builder {
 
 
     public function makeContainer(w:Widget2D, children:Array<Widget2D>) {
-        var wc = new Widget2DContainer(w);
-        for (a in Axis2D.keys) {
-            w.axisStates[a].addSibling(new ContainerRefresher(wc));
-        }
-        w.entity.addComponent(wc);
-        alignContainer(wc,
-        if (alignStack.length > 0) {
+        var alignment = if (alignStack.length > 0) {
             alignStack.pop();
         } else {
             trace("Warn: empty align stack");
             Axis2D.horizontal;
-        });
+        };
+        var wc = createContainer(w, alignment);
         onContainerCreated.dispatch(w);
         for (ch in children)
             addWidget(wc, ch);
         return wc;
     }
 
-    function alignContainer(wc:Widget2DContainer, align:Axis2D) {
+    public static function createContainer(w:Widget2D, alignment) {
+        var wc = new Widget2DContainer(w);
+        for (a in Axis2D.keys) {
+            w.axisStates[a].addSibling(new ContainerRefresher(wc));
+        }
+        w.entity.addComponent(wc);
+        alignContainer(wc, alignment);
+        return wc;
+    }
+
+    public static function alignContainer(wc:Widget2DContainer, align:Axis2D) {
         for (axis in Axis2D.keys) {
             wc.setLayout(axis,
             if (axis == align)
