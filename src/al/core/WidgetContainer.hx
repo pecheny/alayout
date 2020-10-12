@@ -13,6 +13,8 @@ class WidgetContainer<TAxis:AxisKeyBase, TChild:Widget<TAxis>> extends Component
     var mode:LayoutPosMode = global;
     var contentSize:AxisCollection<TAxis, Float> = new AxisCollection();
 
+    public var refreshOnChildrenChanged = false;
+
     public function new(holder) {
         setHolder(holder);
     }
@@ -35,6 +37,22 @@ class WidgetContainer<TAxis:AxisKeyBase, TChild:Widget<TAxis>> extends Component
         for (axis in layoutMap.keys()) {
             var a:TAxis = axis;
             childrenAxisStates[axis].push(child.axisStates[axis]);
+        }
+        if (refreshOnChildrenChanged){
+            refresh();
+        }
+    }
+
+    public function removeChild(child:TChild) {
+        if (children.indexOf(child) < 0)
+            throw "not a child";
+        children.remove(child);
+        for (axis in layoutMap.keys()) {
+            var a:TAxis = axis;
+            childrenAxisStates[axis].remove(child.axisStates[axis]);
+        }
+        if (refreshOnChildrenChanged){
+            refresh();
         }
     }
 

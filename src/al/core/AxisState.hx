@@ -36,6 +36,10 @@ class AxisState implements AxisApplier {
         siblings.push(aa);
     }
 
+    public function removeSibling(aa:AxisApplier) {
+        siblings.remove(aa);
+    }
+
     public function apply(pos:Float, size:Float):Void {
         posApplier.setValue(pos);
         sizeApplier.setValue(size);
