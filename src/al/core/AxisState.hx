@@ -34,6 +34,7 @@ class AxisState implements AxisApplier {
         if (aa == this)
             throw "Dont do this";
         siblings.push(aa);
+        aa.apply(getPos(), getSize());
     }
 
     public function removeSibling(aa:AxisApplier) {
