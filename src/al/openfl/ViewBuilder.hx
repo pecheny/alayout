@@ -1,4 +1,7 @@
 package al.openfl;
+import al.openfl.display.DrawcallDataProvider;
+import ec.CtxBinder;
+import al.openfl.display.FlashDisplayRoot;
 import al.al2d.Axis2D;
 import al.al2d.Widget2D;
 import al.openfl.DisplayObjectAxisAppliers;
@@ -10,7 +13,6 @@ import al.core.AxisApplier.SimpleAxisApplier;
 import al.core.AxisApplier;
 import al.al2d.Boundbox;
 import al.openfl.ColoredRect.DisplayObjectScalerApplierFactory;
-import al.openfl.OpenflViewAdapter.ViewAdapter;
 import al.view.AspectKeeper;
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
@@ -38,8 +40,9 @@ class ViewBuilder {
         for (a in Axis2D.keys) {
             w.axisStates[a].addSibling(appliers.getApplier(a));
         }
-        var adapter = new ViewAdapter(w, view);
-        entity.addComponent(adapter);
+        var vp = DrawcallDataProvider.get(w.entity);
+        vp.views.push(view);
+        new CtxBinder(FlashDisplayRoot, w.entity);
         return w;
     }
 
@@ -53,12 +56,14 @@ class ViewBuilder {
         }
         if (dobj == null)
             throw "Cant build view with id " + sourceId;
-//        cast(dobj, MovieClip).stop();
         var prx = new Sprite();
         prx.addChild(dobj);
-//        prx.addChild(new ColoredRect(0xc0aa020));
-        var adapter = new ViewAdapter(w, prx);
-        w.entity.addComponent(adapter);
+
+        var vp = DrawcallDataProvider.get(w.entity);
+        new CtxBinder(FlashDisplayRoot, w.entity);
+        vp.views.push(prx);
+
+
         var offset = calculateOffset(dobj);
         if (r == null)
             r = dobj.getBounds(dobj);
@@ -94,33 +99,6 @@ class ViewBuilder {
     }
 }
 
-class ViewBuilderStaticWrapper {
-    public static var instance:ViewBuilder;
-
-    public static function sprite(w:Widget2D, sid:String) {
-        instance.sprite(w, sid);
-        return w;
-    }
-
-    public static function rect(w:Widget2D) {
-        var view = new ColoredRect(Std.int(Math.random() * 0xffffff));
-        var entity = w.entity;
-        var appliers = new DisplayObjectScalerApplierFactory(view);
-        for (a in Axis2D.keys) {
-            w.axisStates[a].addSibling(appliers.getApplier(a));
-        }
-        var adapter = new ViewAdapter(w, view);
-        entity.addComponent(adapter);
-        return w;
-    }
-
-    public static function setSourceSwf(swfName:String) {
-        var fac = new MovieClipAdapterLoader(swfName);
-        var viewBuilder = new ViewBuilder();
-        viewBuilder.regFactory(fac);
-        ViewBuilderStaticWrapper.instance = viewBuilder;
-    }
-}
 
 interface ViewFactory {
 //    function createView(w:Widget2D):ViewAdapter;

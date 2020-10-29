@@ -19,10 +19,6 @@ using al.Builder;
 class Builder {
     var alignStack:Array<Axis2D> = [];
 
-    public var onWidgetCreated(default, null):Signal<Widget2D -> Void> = new Signal();
-    public var onContainerCreated(default, null):Signal<Widget2D -> Void> = new Signal();
-    public var onAddedToContainer(default, null):Signal<(Widget2DContainer, Widget2D) -> Void> = new Signal();
-
     public function new() {}
 
     public function align(d:Axis2D) {
@@ -46,7 +42,6 @@ class Builder {
 
     public function widget(xtype:SizeType = SizeType.portion, xsize = 1., ytype = SizeType.portion, ysize = 1.) {
         var w = widget2d(xtype, xsize, ytype, ysize);
-        onWidgetCreated.dispatch(w);
         return w;
     }
 
@@ -59,7 +54,6 @@ class Builder {
             Axis2D.horizontal;
         };
         var wc = createContainer(w, alignment);
-        onContainerCreated.dispatch(w);
         for (ch in children)
             addWidget(wc, ch);
         return wc;
@@ -87,23 +81,14 @@ class Builder {
         return wc;
     }
 
-    public function gap(wg:Float) {
-        return weight(wg, widget());
-    }
-
-    public function weight(val:Float, w:Widget2D) {
-        var axis = alignStack[alignStack.length - 1];
-        w.axisStates[axis].size.setWeight(val);
-        return w;
-    }
-
-
-    public function addWidget(wc:Widget2DContainer, w:Widget2D) {
-        wc.entity.addChild(w.entity);
+    public static function addWidget(wc:Widget2DContainer, w:Widget2D) {
         wc.addChild(w);
-        onAddedToContainer.dispatch(wc, w);
-//        if (w.entity.hasComponent(OnAddToParent))
-//            w.entity.getComponent(OnAddToParent).handler(w);
+        wc.entity.addChild(w.entity);
+    }
+
+    public static function removeWidget(wc:Widget2DContainer, w:Widget2D) {
+        wc.removeChild(w);
+        wc.entity.removeChild(w.entity);
     }
 
     public function container(children:Array<Widget2D>) {
