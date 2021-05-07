@@ -19,7 +19,7 @@ class AnimationTreeBuilder {
 //                trace(rec  + " " + l);
                 var con = animationContainer(w, getLayout(l));
                 for (ch in children) {
-                    addCild(con, build(ch));
+                    addChild(con, build(ch));
                 }
                 con.refresh();
             };
@@ -37,7 +37,7 @@ class AnimationTreeBuilder {
         ]
     }
 
-    function addCild(wc:AnimContainer, w:AnimWidget) {
+    public function addChild(wc:AnimContainer, w:AnimWidget) {
         wc.entity.addChild(w.entity);
         wc.addChild(w);
     }
