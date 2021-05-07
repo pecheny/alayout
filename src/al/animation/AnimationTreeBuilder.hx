@@ -42,10 +42,12 @@ class AnimationTreeBuilder {
         wc.addChild(w);
     }
 
-    function animationWidget(e:Entity, rec:AxisRec):AnimWidget {
+    public function animationWidget(e:Entity, rec:AxisRec):AnimWidget {
         var timeAxis = new AxisState();
         if (rec.size != null)
             timeAxis.initSize(rec.size.type != null ? rec.size.type : portion, rec.size.value);
+        else
+            timeAxis.initSize(portion, 1);
         var animationWidget = new AnimWidget([TimeAxis.time => timeAxis]);
         e.addComponent(animationWidget);
         return animationWidget;
