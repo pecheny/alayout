@@ -1,18 +1,17 @@
 package al;
 
-import al.layouts.data.LayoutData.SizeType;
-import al.core.AxisCollection;
-import al.appliers.PropertyAccessors.FloatPropertyWriter;
-import al.appliers.PropertyAccessors.FloatPropertyAccessor;
 import al.al2d.Axis2D;
 import al.al2d.Widget2D;
 import al.al2d.Widget2DContainer;
 import al.appliers.ContainerRefresher;
+import al.appliers.PropertyAccessors.FloatPropertyAccessor;
 import al.appliers.PropertyAccessors.FloatPropertyReader;
+import al.appliers.PropertyAccessors.FloatPropertyWriter;
+import al.core.AxisCollection;
 import al.core.AxisState;
+import al.layouts.data.LayoutData.SizeType;
 import al.layouts.PortionLayout;
 import al.layouts.WholefillLayout;
-import al.utils.Signal;
 import ec.Entity;
 using al.Builder;
 
@@ -26,7 +25,7 @@ class Builder {
         return this;
     }
 
-    public static inline function widget2d(xtype:SizeType = SizeType.portion, xsize = 1., ytype = SizeType.portion, ysize = 1.) {
+    public static inline function widget2d(xtype:SizeType = SizeType.portion, xsize = 1., ytype = SizeType.portion, ysize = 1.):Widget2D {
         var factor = #if flash 300 #else 1 #end ;
         var entity = new Entity();
         var axisStates = new AxisCollection<Axis2D, AxisState>();
@@ -40,13 +39,13 @@ class Builder {
         return w;
     }
 
-    public function widget(xtype:SizeType = SizeType.portion, xsize = 1., ytype = SizeType.portion, ysize = 1.) {
+    public function widget(xtype:SizeType = SizeType.portion, xsize = 1., ytype = SizeType.portion, ysize = 1.):Widget2D {
         var w = widget2d(xtype, xsize, ytype, ysize);
         return w;
     }
 
 
-    public function makeContainer(w:Widget2D, children:Array<Widget2D>) {
+    public function makeContainer(w:Widget2D, children:Array<Widget2D>):Widget2DContainer {
         var alignment = if (alignStack.length > 0) {
             alignStack.pop();
         } else {
@@ -59,7 +58,7 @@ class Builder {
         return wc;
     }
 
-    public static function createContainer(w:Widget2D, alignment) {
+    public static function createContainer(w:Widget2D, alignment):Widget2DContainer {
         var wc = new Widget2DContainer(w);
         for (a in Axis2D.keys) {
             w.axisStates[a].addSibling(new ContainerRefresher(wc));
@@ -69,7 +68,7 @@ class Builder {
         return wc;
     }
 
-    public static function alignContainer(wc:Widget2DContainer, align:Axis2D) {
+    public static function alignContainer(wc:Widget2DContainer, align:Axis2D) :Widget2DContainer{
         for (axis in Axis2D.keys) {
             wc.setLayout(axis,
             if (axis == align)
@@ -91,7 +90,7 @@ class Builder {
         wc.entity.removeChild(w.entity);
     }
 
-    public function container(children:Array<Widget2D>) {
+    public function container(children:Array<Widget2D>):Widget2D {
         var w = widget();
         var wc = makeContainer(w, children);
         return w;
