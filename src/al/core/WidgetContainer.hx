@@ -40,7 +40,7 @@ class WidgetContainer<TAxis:AxisKeyBase, TChild:Widget<TAxis>> extends Component
             var a:TAxis = axis;
             childrenAxisStates[axis].push(child.axisStates[axis]);
         }
-        if (refreshOnChildrenChanged){
+        if (refreshOnChildrenChanged) {
             refresh();
         }
     }
@@ -53,7 +53,7 @@ class WidgetContainer<TAxis:AxisKeyBase, TChild:Widget<TAxis>> extends Component
             var a:TAxis = axis;
             childrenAxisStates[axis].remove(child.axisStates[axis]);
         }
-        if (refreshOnChildrenChanged){
+        if (refreshOnChildrenChanged) {
             refresh();
         }
     }
@@ -87,6 +87,7 @@ interface Refreshable {
 
 interface ContentSizeProvider<TAxis:AxisKeyBase> {
     var contentSizeChanged(default, null):Signal<TAxis -> Void>;
+
     function getContentSize(a:TAxis):Float;
 }
 
