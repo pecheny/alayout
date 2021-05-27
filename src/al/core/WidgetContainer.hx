@@ -1,4 +1,5 @@
 package al.core;
+import ec.Signal;
 import Array;
 import al.ec.Entity.Component;
 import al.core.AxisCollection;
@@ -12,6 +13,7 @@ class WidgetContainer<TAxis:AxisKeyBase, TChild:Widget<TAxis>> extends Component
     var childrenAxisStates:AxisCollection<TAxis, Array<AxisState>> = new AxisCollection();
     var mode:LayoutPosMode = global;
     var contentSize:AxisCollection<TAxis, Float> = new AxisCollection();
+    public var contentSizeChanged(default, null) = new Signal<TAxis -> Void>();
 
     public var refreshOnChildrenChanged = false;
 
@@ -68,7 +70,9 @@ class WidgetContainer<TAxis:AxisKeyBase, TChild:Widget<TAxis>> extends Component
 
     public function refresh() {
         for (axis in layoutMap.keys()) {
+            var oldSize = if (contentSize.hasValueFor(axis)) contentSize[axis] else -1;
             contentSize[axis] = layoutMap[axis].arrange(holder.axisStates[axis], childrenAxisStates[axis], mode);
+            if (contentSize[axis] != oldSize) contentSizeChanged.dispatch(axis);
         }
     }
 
@@ -82,6 +86,7 @@ interface Refreshable {
 }
 
 interface ContentSizeProvider<TAxis:AxisKeyBase> {
+    var contentSizeChanged(default, null):Signal<TAxis -> Void>;
     function getContentSize(a:TAxis):Float;
 }
 
