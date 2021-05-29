@@ -30,6 +30,10 @@ package al.al2d;
         return cast v;
     }
 
+    public inline function athwart() {
+        return this == horizontal ? vertical : horizontal;
+    }
+
     public inline function toInt():Int return this;
 }
 
