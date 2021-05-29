@@ -21,7 +21,7 @@ class WidgetContainer<TAxis:AxisKeyBase, TChild:Widget<TAxis>> extends Component
         setHolder(holder);
     }
 
-    public function setHolder(h) {
+    function setHolder(h) {
         this.holder = h;
     }
 
@@ -70,8 +70,9 @@ class WidgetContainer<TAxis:AxisKeyBase, TChild:Widget<TAxis>> extends Component
 
     public function refresh() {
         for (axis in layoutMap.keys()) {
+            var parent = holder.axisStates[axis];
             var oldSize = if (contentSize.hasValueFor(axis)) contentSize[axis] else -1;
-            contentSize[axis] = layoutMap[axis].arrange(holder.axisStates[axis], childrenAxisStates[axis], mode);
+            contentSize[axis] = layoutMap[axis].arrange(parent.getPos(), parent.getSize(), childrenAxisStates[axis], mode);
             if (contentSize[axis] != oldSize) contentSizeChanged.dispatch(axis);
         }
     }

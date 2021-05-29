@@ -9,8 +9,8 @@ class OffsetLayout implements AxisLayout {
         this.offset = offset;
     }
 
-    public function arrange(parent:AxisState, children:Array<AxisState>, mode:LayoutPosMode) {
-        var coord = mode.isGlobal() ? parent.getPos() : 0;
+    public function arrange(pos:Float, size:Float, children:Array<AxisState>, mode:LayoutPosMode) {
+        var coord = mode.isGlobal() ? pos : 0;
         var origin = coord;
         var childNum = 0;
         for (child in children) {
@@ -18,7 +18,7 @@ class OffsetLayout implements AxisLayout {
                 continue;
             childNum++;
         }
-        var totalValue = mode.isGlobal() ? parent.getSize() : 1;
+        var totalValue = mode.isGlobal() ? size : 1;
         var delta =  (offset * (childNum - 1));
         var distributedValue = totalValue - delta  ;//
 
