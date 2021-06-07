@@ -28,6 +28,7 @@ class AxisState implements AxisApplier {
         } else if (type == portion) {
             this.size.setWeight(size);
         }
+        return this;
     }
 
     public function addSibling(aa:AxisApplier) {
