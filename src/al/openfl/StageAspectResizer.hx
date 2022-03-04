@@ -11,7 +11,7 @@ class StageAspectResizer {
     var target:Widget2D;
     var base:Float;
 
-    public function new(target, base = 1) {
+    public function new(target, base:Float = 1) {
         this.target = target;
         this.base = base;
         openfl.Lib.current.stage.addEventListener(Event.RESIZE, onResize);
