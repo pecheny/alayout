@@ -38,9 +38,9 @@ class AxisIterator<TAxis:al.core.WidgetContainer.AxisKeyBase> {
 #else
 
 //typedef AxisCollection<TAxis:al.core.WidgetContainer.AxisKeyBase, T> = Map<TAxis, T>;
-@:forward( keys)
-abstract AxisCollection<TAxis:al.core.WidgetContainer.AxisKeyBase, T>  (Map<TAxis, T>) from Map<TAxis, T> {
-    public inline function new () this = new Map();
+@:forward(keys, copy)
+abstract AxisCollection<TAxis:al.core.WidgetContainer.AxisKeyBase, T> (Map<TAxis, T>) from Map<TAxis, T> {
+    public inline function new() this = new Map();
 
     @:arrayAccess public inline function get(a:TAxis):T {
         #if debug
@@ -49,6 +49,7 @@ abstract AxisCollection<TAxis:al.core.WidgetContainer.AxisKeyBase, T>  (Map<TAxi
         #end
         return this[a];
     }
+
     @:arrayAccess public inline function set(a:TAxis, val:T):T return this[a] = val;
 
     public inline function hasValueFor(a:TAxis) return this.exists(a);
