@@ -65,7 +65,7 @@ class Size extends FloatValue {
         value = w;
     }
 
-    public inline function getPortion() {
+    public function getPortion() {
         return switch type {
             case fixed, percent: 0;
             case range: maxValue - value;
@@ -73,7 +73,7 @@ class Size extends FloatValue {
         }
     }
 
-    public inline function getFixed() {
+    public function getFixed() {
         return switch type {
             case fixed, range: value;
             case portion, percent: 0;
