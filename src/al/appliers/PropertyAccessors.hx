@@ -67,7 +67,7 @@ interface FloatPropertyAccessor extends FloatPropertyReader extends FloatPropert
 }
 
 class FloatValue {
-    public var value(default, set):Float;
+    public var value(default, set):Float = 0;
 
     public function new() {}
 
