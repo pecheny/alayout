@@ -1,47 +1,11 @@
 package al.layouts.data;
-import al.appliers.PropertyAccessors.FloatValue;
-//enum LayoutItem {
-//    Range(minSize:Pixels, fluidIncreace:Weight);
-//    Weightd(w:Weight);
-//    Unmanaged(pos:Length, size:Length);
-//}
-//
-//enum Length {
-//    Fixed(value:Pixels);
-//    Percent(value:Percent);
-//}
-//abstract Percent(Float) {
-//    public inline function new(val) this = val;
-//
-//    public inline function toMultiplier():Float return this / 100;
-//    public inline function raw() return this;
-//    @:op(A + B) static private inline function __aPlusB (a:Percent, b:Percent):Percent return new Percent(a.raw() + b.raw());
-//    @:op(A - B) static private inline function __aMinusB (a:Percent, b:Percent):Percent return new Percent(a.raw() - b.raw());
-//}
-//abstract Pixels(Float) {
-//    public inline function new(val) this = val;
-//
-//    @:op(A + B) static private inline function __aPlusB (a:Pixels, b:Pixels):Pixels;// return new Pixels(a + b);
-//    @:op(A - B) static private inline function __aMinusB (a:Pixels, b:Pixels):Pixels;// return new Pixels(a - b);
-//    @:op(A * B) static private inline function __aMulB (a:Pixels, b:Float);// return new Pixels(a * b);
-//    @:op(A / B) static private inline function __aDivB (a:Pixels, b:Float);// return new Pixels(a / b);
-//    @:op(A / B) static private inline function __aDivB2 (a:Pixels, b:Pixels);// return (a / b);
-//}
-//
-//abstract Weight(Float) to Float {
-//    public inline function new(val) this = val;
-//
-//    @:op(A + B) static private inline function __aPlusB (a:Weight, b:Weight):Weight return new Weight(a + b);
-//    @:op(A - B) static private inline function __aMinusB (a:Weight, b:Weight):Weight return new Weight(a - b);
-//    @:op(A * B) static private inline function __aMulB (a:Weight, b:Float) return new Weight(a * b);
-//    @:op(A / B) static private inline function __aDivB (a:Weight, b:Float) return new Weight(a / b);
-////    @:op(A / B) static private inline function __aDivB2 (a:Weight, b:Weight) return (a / b);
-//}
-//// ** from first iteration
 
 
-class Position extends FloatValue {
+class Position {
     public var type:PositionType = managed;
+    public var value:Float = 0;
+
+    public function new() {}
 }
 
 
@@ -51,9 +15,18 @@ class Position extends FloatValue {
     var managed = "managed";
 }
 
-class Size extends FloatValue {
+interface ISize {
+    public function getPortion():Float;
+
+    public function getFixed():Float;
+}
+
+class Size {
     public var type(default, null):SizeType = portion;
     public var maxValue:Null<Float>;
+    var value:Float = 1;
+
+    public function new() {}
 
     public function setWeight(w:Float) {
         type = portion;

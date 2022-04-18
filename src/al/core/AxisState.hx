@@ -13,9 +13,7 @@ class AxisState implements AxisApplier {
     public var position(default, null):Position = new Position();
     var siblings:Array<AxisApplier> = [];
 
-    public function new() {
-        size.value = 1;
-    }
+    public function new() { }
 
     public function initSize(type:SizeType, size:Float) {
         if (type == fixed) {
