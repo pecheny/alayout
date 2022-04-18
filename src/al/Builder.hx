@@ -1,5 +1,6 @@
 package al;
 
+import al.layouts.data.LayoutData;
 import al.al2d.Axis2D;
 import al.al2d.Widget2D;
 import al.al2d.Widget2DContainer;
@@ -29,11 +30,8 @@ class Builder {
         var factor = #if flash 300 #else 1 #end ;
         var entity = new Entity();
         var axisStates = new AxisCollection<Axis2D, AxisState>();
-        axisStates[horizontal] = new AxisState();
-        axisStates[horizontal].initSize(xtype, xsize * factor);
-        axisStates[vertical] = new AxisState();
-        axisStates[vertical].initSize(ytype, ysize * factor);
-
+        axisStates[horizontal] = new AxisState(new Position(), new Size(xtype, xsize * factor));
+        axisStates[vertical] = new AxisState(new Position(), new Size(ytype, ysize * factor));
         var w = new Widget2D(axisStates);
         entity.addComponent(w);
         return w;

@@ -1,28 +1,19 @@
 package al.core;
+import al.layouts.data.LayoutData;
 /**
 *  Stores logic layout state for item and provides access to apply calculated value to target
 **/
 
-import al.layouts.data.LayoutData.Position;
-import al.layouts.data.LayoutData.Size;
-import al.layouts.data.LayoutData.SizeType;
 class AxisState implements AxisApplier {
     var sizeVal:Float = 1;
     var posVal:Float = 0;
-    public var size(default, null):Size = new Size();
-    public var position(default, null):Position = new Position();
+    public var size(default, null):ISize;
+    public var position(default, null):Position;
     var siblings:Array<AxisApplier> = [];
 
-    public function new() { }
-
-    public function initSize(type:SizeType, size:Float) {
-        if (type == fixed) {
-            this.size.setFixed(size);
-            sizeVal = size;
-        } else if (type == portion) {
-            this.size.setWeight(size);
-        }
-        return this;
+    public function new(p, s) {
+        this.position = p;
+        this.size = s;
     }
 
     public function addSibling(aa:AxisApplier) {

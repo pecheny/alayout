@@ -1,4 +1,6 @@
 package al.animation;
+import al.layouts.data.LayoutData.Size;
+import al.layouts.data.LayoutData.Position;
 import al.appliers.ContainerRefresher;
 import al.core.AxisState;
 import al.layouts.AxisLayout;
@@ -43,11 +45,11 @@ class AnimationTreeBuilder {
     }
 
     public function animationWidget(e:Entity, rec:AxisRec):AnimWidget {
-        var timeAxis = new AxisState();
-        if (rec.size != null)
-            timeAxis.initSize(rec.size.type != null ? rec.size.type : portion, rec.size.value);
+        var size = if (rec.size != null)
+            new Size(rec.size.type != null ? rec.size.type : portion, rec.size.value);
         else
-            timeAxis.initSize(portion, 1);
+            new Size(portion, 1);
+        var timeAxis = new AxisState(new Position(), size);
         var animationWidget = new AnimWidget([TimeAxis.time => timeAxis]);
         e.addComponent(animationWidget);
         return animationWidget;

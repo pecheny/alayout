@@ -21,12 +21,15 @@ interface ISize {
     public function getFixed():Float;
 }
 
-class Size {
+class Size implements ISize {
     public var type(default, null):SizeType = portion;
     public var maxValue:Null<Float>;
     var value:Float = 1;
 
-    public function new() {}
+    public function new(t, v) {
+        this.type = t;
+        this.value = v;
+    }
 
     public function setWeight(w:Float) {
         type = portion;
