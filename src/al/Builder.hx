@@ -1,59 +1,28 @@
 package al;
 
-import al.layouts.data.LayoutData;
-import al.al2d.Axis2D;
-import al.al2d.Widget2D;
-import al.al2d.Widget2DContainer;
-import al.appliers.ContainerRefresher;
-import al.appliers.PropertyAccessors.FloatPropertyAccessor;
-import al.appliers.PropertyAccessors.FloatPropertyReader;
-import al.appliers.PropertyAccessors.FloatPropertyWriter;
-import al.core.AxisCollection;
-import al.core.AxisState;
-import al.layouts.data.LayoutData.SizeType;
-import al.layouts.PortionLayout;
 import al.layouts.WholefillLayout;
-import ec.Entity;
+import al.layouts.PortionLayout;
+import al.appliers.ContainerRefresher;
+import al.al2d.Axis2D;
+import al.layouts.data.LayoutData.Size;
+import al.layouts.data.LayoutData.Position;
+import al.core.AxisState;
+import al.core.AxisCollection;
+import al.ec.Entity;
+import al.layouts.data.LayoutData.SizeType;
+import al.al2d.Widget2DContainer;
+import al.al2d.Widget2D;
 using al.Builder;
 
 class Builder {
-    var alignStack:Array<Axis2D> = [];
-
-    public function new() {}
-
-    public function align(d:Axis2D) {
-        alignStack.push(d);
-        return this;
-    }
-
-    public static inline function widget2d(xtype:SizeType = SizeType.portion, xsize = 1., ytype = SizeType.portion, ysize = 1.):Widget2D {
-        var factor = #if flash 300 #else 1 #end ;
+    public static inline function widget(xtype:SizeType = SizeType.portion, xsize = 1., ytype = SizeType.portion, ysize = 1.):Widget2D {
         var entity = new Entity();
         var axisStates = new AxisCollection<Axis2D, AxisState>();
-        axisStates[horizontal] = new AxisState(new Position(), new Size(xtype, xsize * factor));
-        axisStates[vertical] = new AxisState(new Position(), new Size(ytype, ysize * factor));
+        axisStates[horizontal] = new AxisState(new Position(), new Size(xtype, xsize ));
+        axisStates[vertical] = new AxisState(new Position(), new Size(ytype, ysize ));
         var w = new Widget2D(axisStates);
         entity.addComponent(w);
         return w;
-    }
-
-    public function widget(xtype:SizeType = SizeType.portion, xsize = 1., ytype = SizeType.portion, ysize = 1.):Widget2D {
-        var w = widget2d(xtype, xsize, ytype, ysize);
-        return w;
-    }
-
-
-    public function makeContainer(w:Widget2D, children:Array<Widget2D>):Widget2DContainer {
-        var alignment = if (alignStack.length > 0) {
-            alignStack.pop();
-        } else {
-            trace("Warn: empty align stack");
-            Axis2D.horizontal;
-        };
-        var wc = createContainer(w, alignment);
-        for (ch in children)
-            addWidget(wc, ch);
-        return wc;
     }
 
     public static function createContainer(w:Widget2D, alignment):Widget2DContainer {
@@ -66,7 +35,7 @@ class Builder {
         return wc;
     }
 
-    public static function alignContainer(wc:Widget2DContainer, align:Axis2D) :Widget2DContainer{
+    public static function alignContainer(wc:Widget2DContainer, align:Axis2D):Widget2DContainer {
         for (axis in Axis2D.keys) {
             wc.setLayout(axis,
             if (axis == align)
@@ -78,66 +47,25 @@ class Builder {
         return wc;
     }
 
+    public static function v(xtype:SizeType = SizeType.portion, xsize = 1., ytype = SizeType.portion, ysize = 1.) {
+        return createContainer(widget(xtype, xsize, ytype, ysize), vertical);
+    }
+
+    public static function h(xtype:SizeType = SizeType.portion, xsize = 1., ytype = SizeType.portion, ysize = 1.) {
+        return createContainer(widget(xtype, xsize, ytype, ysize), horizontal);
+    }
+
+    public static function withChildren(c:Widget2DContainer, children:Array<Widget2D>):Widget2D {
+        for (ch in children)
+            addWidget(c, ch);
+        return c.widget();
+    }
+
     public static function addWidget(wc:Widget2DContainer, w:Widget2D) {
         wc.addChild(w);
         wc.entity.addChild(w.entity);
     }
-
-    public static function removeWidget(wc:Widget2DContainer, w:Widget2D) {
-        wc.removeChild(w);
-        wc.entity.removeChild(w.entity);
-    }
-
-    public function container(children:Array<Widget2D>):Widget2D {
-        var w = widget();
-        var wc = makeContainer(w, children);
-        return w;
-    }
-
 }
 
-
-class GlobalPos {
-//    public var x:Float = 0;
-//    public var y:Float = 0;
-    public var axis:AxisCollection2D<Float> = new AxisCollection();
-    var readers:Map<Axis2D, FloatPropertyAccessor> = new Map();
-
-
-    public function new() {
-        for (a in Axis2D.keys) {
-            axis[a] = 0;
-            readers[a] = new FloatAxisAccessor(a, axis);
-        }
-    }
-
-    public function getReader(a):FloatPropertyReader return readers[a];
-
-    public function getWriter(a):FloatPropertyWriter return readers[a];
-
-    public function toString() {
-        return "" + axis;
-    }
-}
-
-class FloatAxisAccessor implements FloatPropertyAccessor {
-    var target:AxisCollection2D<Float>;
-    var axis:Axis2D;
-
-    public function new(a, t) {
-        this.target = t;
-        this.axis = a;
-    }
-
-    public function setValue(val:Float):Void {
-        target[axis] = val;
-    }
-
-    public function getValue():Float {
-        return target[axis];
-    }
-
-
-}
 
 
