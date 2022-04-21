@@ -1,25 +1,25 @@
 package al;
 
-import al.layouts.WholefillLayout;
-import al.layouts.PortionLayout;
-import al.appliers.ContainerRefresher;
+import al.layouts.data.LayoutData.FractionSize;
+import al.layouts.data.LayoutData.ISize;
 import al.al2d.Axis2D;
-import al.layouts.data.LayoutData.Size;
-import al.layouts.data.LayoutData.Position;
-import al.core.AxisState;
-import al.core.AxisCollection;
-import al.ec.Entity;
-import al.layouts.data.LayoutData.SizeType;
-import al.al2d.Widget2DContainer;
 import al.al2d.Widget2D;
+import al.al2d.Widget2DContainer;
+import al.appliers.ContainerRefresher;
+import al.core.AxisCollection;
+import al.core.AxisState;
+import al.ec.Entity;
+import al.layouts.data.LayoutData.Position;
+import al.layouts.PortionLayout;
+import al.layouts.WholefillLayout;
 using al.Builder;
 
 class Builder {
-    public static inline function widget(xtype:SizeType = SizeType.portion, xsize = 1., ytype = SizeType.portion, ysize = 1.):Widget2D {
+    public static inline function widget(hsize:ISize = null, vsize:ISize = null):Widget2D {
         var entity = new Entity();
         var axisStates = new AxisCollection<Axis2D, AxisState>();
-        axisStates[horizontal] = new AxisState(new Position(), new Size(xtype, xsize ));
-        axisStates[vertical] = new AxisState(new Position(), new Size(ytype, ysize ));
+        axisStates[horizontal] = new AxisState(new Position(), hsize != null ? hsize : new FractionSize(1));
+        axisStates[vertical] = new AxisState(new Position(), vsize != null ? vsize : new FractionSize(1));
         var w = new Widget2D(axisStates);
         entity.addComponent(w);
         return w;
@@ -47,12 +47,12 @@ class Builder {
         return wc;
     }
 
-    public static function v(xtype:SizeType = SizeType.portion, xsize = 1., ytype = SizeType.portion, ysize = 1.) {
-        return createContainer(widget(xtype, xsize, ytype, ysize), vertical);
+    public static function v(hsize:ISize = null, vsize:ISize = null) {
+        return createContainer(widget(hsize, vsize), vertical);
     }
 
-    public static function h(xtype:SizeType = SizeType.portion, xsize = 1., ytype = SizeType.portion, ysize = 1.) {
-        return createContainer(widget(xtype, xsize, ytype, ysize), horizontal);
+    public static function h(hsize:ISize = null, vsize:ISize = null) {
+        return createContainer(widget(hsize, vsize), horizontal);
     }
 
     public static function withChildren(c:Widget2DContainer, children:Array<Widget2D>):Widget2D {

@@ -21,46 +21,32 @@ interface ISize {
     public function getFixed():Float;
 }
 
-class Size implements ISize {
-    public var type(default, null):SizeType = portion;
-    public var maxValue:Null<Float>;
-    var value:Float = 1;
-
-    public function new(t, v) {
-        this.type = t;
+class FixedSize implements ISize {
+    var value:Float;
+    public function new (v) {
         this.value = v;
     }
 
-    public function setWeight(w:Float) {
-        type = portion;
-        value = w;
+    public function getPortion():Float {
+        return 0;
     }
 
-    public function setFixed(w:Float) {
-        type = fixed;
-        value = w;
-    }
-
-    public function getPortion() {
-        return switch type {
-            case fixed, percent: 0;
-            case range: maxValue - value;
-            case portion : value;
-        }
-    }
-
-    public function getFixed() {
-        return switch type {
-            case fixed, range: value;
-            case portion, percent: 0;
-        }
+    public function getFixed():Float {
+        return value;
     }
 }
-@:enum abstract SizeType(String) from String to String {
-    var fixed = "fixed";
-    var portion = "portion";
-    var percent = "percent";
-    var range = "range";
+
+class FractionSize implements ISize {
+    var value:Float;
+    public function new (v) {
+        this.value = v;
+    }
+
+    public function getPortion():Float {
+        return value;
+    }
+
+    public function getFixed():Float {
+        return 0;
+    }
 }
-
-

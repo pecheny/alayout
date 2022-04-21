@@ -1,12 +1,12 @@
 package example;
 
+import al.layouts.data.LayoutData.FractionSize;
 import al.openfl.display.FlashDisplayRoot;
 import al.Builder as B;
 import al.openfl.StageResizer;
 import al.openfl.view.Root2D;
 import al.openfl.ViewBuilder;
 import openfl.display.Sprite;
-import al.layouts.data.LayoutData.SizeType;
 
 using al.Builder;
 class Main2 extends Sprite {
@@ -23,8 +23,8 @@ class Main2 extends Sprite {
 
         var screen = B
         .h().withChildren([
-            wb.rect(B.widget(portion, 0.5, portion, 1)),
-            wb.rect(B.widget(portion, 0.5, portion, 1)),
+            wb.rect(B.widget(new FractionSize(0.5), new FractionSize(1))),
+            wb.rect(B.widget(new FractionSize(0.5), new FractionSize(1))),
             wb.sprite(B.widget(), "FingertapL"),
             B.v().withChildren([
                 wb.sprite(B.widget(), "FingertapL"),
@@ -35,8 +35,6 @@ class Main2 extends Sprite {
         root.addScreen(screen);
         new StageResizer(root.getWidget().axisStates);
     }
-
-
 }
 
 
