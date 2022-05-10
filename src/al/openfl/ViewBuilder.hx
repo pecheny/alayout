@@ -1,6 +1,6 @@
 package al.openfl;
 import al.openfl.display.DrawcallDataProvider;
-import ec.CtxBinder;
+import ec.CtxWatcher;
 import al.openfl.display.FlashDisplayRoot;
 import al.al2d.Axis2D;
 import al.al2d.Widget2D;
@@ -42,7 +42,7 @@ class ViewBuilder {
         }
         var vp = DrawcallDataProvider.get(w.entity);
         vp.views.push(view);
-        new CtxBinder(FlashDisplayRoot, w.entity);
+        new CtxWatcher(FlashDisplayRoot, w.entity);
         return w;
     }
 
@@ -60,7 +60,7 @@ class ViewBuilder {
         prx.addChild(dobj);
 
         var vp = DrawcallDataProvider.get(w.entity);
-        new CtxBinder(FlashDisplayRoot, w.entity);
+        new CtxWatcher(FlashDisplayRoot, w.entity);
         vp.views.push(prx);
 
 

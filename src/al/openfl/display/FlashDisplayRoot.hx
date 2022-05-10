@@ -2,12 +2,12 @@ package al.openfl.display;
 import al.ec.Entity;
 import openfl.display.Sprite;
 import openfl.display.DisplayObjectContainer;
-import ec.CtxBinder.CtxBindable;
+import ec.CtxWatcher.CtxBinder;
 @:keep
-class FlashDisplayRoot implements CtxBindable {
+class FlashDisplayRoot implements CtxBinder {
     var container:DisplayObjectContainer;
 
-    public static var instance:CtxBindable = new FlashDisplayRoot(new Sprite());
+    public static var instance:CtxBinder = new FlashDisplayRoot(new Sprite());
     public function new(c) {
         this.container = c;
 
