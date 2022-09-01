@@ -56,6 +56,10 @@ class ViewBuilder {
         }
         if (dobj == null)
             throw "Cant build view with id " + sourceId;
+        return bindDispObjToWidget(dobj, w, r);
+    }
+
+    public function bindDispObjToWidget(dobj:DisplayObjectContainer, w:Widget2D, r:Rectangle = null) {
         var prx = new Sprite();
         prx.addChild(dobj);
 
@@ -76,7 +80,7 @@ class ViewBuilder {
         return w;
     }
 
-    function createAxisForDispObj(v:DisplayObject) {
+    public function createAxisForDispObj(v:DisplayObject) {
         var axis = new AxisCollection2D<AxisApplier>();
         axis[Axis2D.horizontal] = new SimpleAxisApplier(
         new DOXPropertySetter(v),
