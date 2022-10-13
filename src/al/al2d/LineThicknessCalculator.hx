@@ -7,7 +7,7 @@ package al.al2d;
 **/
 import al.core.AxisApplier;
 import al.al2d.Widget2D;
-import al.al2d.Axis2D;
+import Axis2D;
 import haxe.ds.ReadOnlyArray;
 class LineThicknessCalculator implements AxisApplier {
     var w:Widget2D;
@@ -19,7 +19,7 @@ class LineThicknessCalculator implements AxisApplier {
         this.w = w;
         lwBase = thickness;
         this.aspectRatio = ar;
-        for (a in Axis2D.keys) {
+        for (a in Axis2D) {
             w.axisStates[a].addSibling(this);
         }
     }

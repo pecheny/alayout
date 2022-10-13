@@ -1,8 +1,10 @@
 package al.openfl;
+
+import macros.AVConstructor;
 import al.openfl.display.DrawcallDataProvider;
 import ec.CtxWatcher;
 import al.openfl.display.FlashDisplayRoot;
-import al.al2d.Axis2D;
+import Axis2D;
 import al.al2d.Widget2D;
 import al.openfl.DisplayObjectAxisAppliers;
 import al.openfl.DisplayObjectValueAppliers.DOScaleXPropertySetter;
@@ -18,6 +20,7 @@ import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
 import openfl.display.Sprite;
 import openfl.geom.Rectangle;
+
 class ViewBuilder {
     var factories:Array<ViewFactory> = [];
 
@@ -30,14 +33,14 @@ class ViewBuilder {
     static function calculateOffset(spr:DisplayObjectContainer):{x:Float, y:Float} {
         var r = spr.getBounds(spr);
         trace(r);
-        return {x:r.x, y:r.y};
+        return {x: r.x, y: r.y};
     }
 
     public function rect(w:Widget2D) {
         var view = new ColoredRect(Std.int(Math.random() * 0xffffff));
         var entity = w.entity;
         var appliers = new DisplayObjectScalerApplierFactory(view);
-        for (a in Axis2D.keys) {
+        for (a in Axis2D) {
             w.axisStates[a].addSibling(appliers.getApplier(a));
         }
         var vp = DrawcallDataProvider.get(w.entity);
@@ -45,7 +48,6 @@ class ViewBuilder {
         new CtxWatcher(FlashDisplayRoot, w.entity);
         return w;
     }
-
 
     public function sprite(w:Widget2D, sourceId:String, r:Rectangle = null) {
         var dobj:DisplayObjectContainer = null;
@@ -67,7 +69,6 @@ class ViewBuilder {
         new CtxWatcher(FlashDisplayRoot, w.entity);
         vp.views.push(prx);
 
-
         var offset = calculateOffset(dobj);
         if (r == null)
             r = dobj.getBounds(dobj);
@@ -81,15 +82,8 @@ class ViewBuilder {
     }
 
     public function createAxisForDispObj(v:DisplayObject) {
-        var axis = new AxisCollection2D<AxisApplier>();
-        axis[Axis2D.horizontal] = new SimpleAxisApplier(
-        new DOXPropertySetter(v),
-        new DOScaleXPropertySetter(v)
-        );
-        axis[Axis2D.vertical] = new SimpleAxisApplier(
-        new DOYPropertySetter(v),
-        new DOScaleYPropertySetter(v)
-        );
+        var axis:AVector<Axis2D, AxisApplier> = AVConstructor.create(Axis2D, new SimpleAxisApplier(new DOXPropertySetter(v), new DOScaleXPropertySetter(v)),
+        new SimpleAxisApplier(new DOYPropertySetter(v), new DOScaleYPropertySetter(v)));
         return axis;
     }
 
@@ -103,9 +97,8 @@ class ViewBuilder {
     }
 }
 
-
 interface ViewFactory {
-//    function createView(w:Widget2D):ViewAdapter;
+    //    function createView(w:Widget2D):ViewAdapter;
     function createView(id:String):DisplayObjectContainer;
 }
 

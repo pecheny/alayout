@@ -6,5 +6,6 @@
     <source path="src"/>
     <haxelib name="openfl"/>
     <haxelib name="entity"/>
+    <haxelib name="taxis"/>
     <library path="src/example/fingers.swf" preload="true"/>
 </project>

@@ -1,8 +1,9 @@
 package al;
 
+import macros.AVConstructor;
 import al.layouts.data.LayoutData.FractionSize;
 import al.layouts.data.LayoutData.ISize;
-import al.al2d.Axis2D;
+import Axis2D;
 import al.al2d.Widget2D;
 import al.al2d.Widget2DContainer;
 import al.appliers.ContainerRefresher;
@@ -17,9 +18,9 @@ using al.Builder;
 class Builder {
     public static inline function widget(hsize:ISize = null, vsize:ISize = null):Widget2D {
         var entity = new Entity();
-        var axisStates = new AxisCollection<Axis2D, AxisState>();
-        axisStates[horizontal] = new AxisState(new Position(), hsize != null ? hsize : new FractionSize(1));
-        axisStates[vertical] = new AxisState(new Position(), vsize != null ? vsize : new FractionSize(1));
+        var hst = new AxisState(new Position(), hsize != null ? hsize : new FractionSize(1));
+        var vst = new AxisState(new Position(), vsize != null ? vsize : new FractionSize(1));
+        var axisStates:AVector<Axis2D,AxisState> = AVConstructor.create(hst, vst);
         var w = new Widget2D(axisStates);
         entity.addComponent(w);
         return w;
@@ -27,7 +28,7 @@ class Builder {
 
     public static function createContainer(w:Widget2D, alignment):Widget2DContainer {
         var wc = new Widget2DContainer(w);
-        for (a in Axis2D.keys) {
+        for (a in Axis2D) {
             w.axisStates[a].addSibling(new ContainerRefresher(wc));
         }
         w.entity.addComponent(wc);
@@ -36,7 +37,7 @@ class Builder {
     }
 
     public static function alignContainer(wc:Widget2DContainer, align:Axis2D):Widget2DContainer {
-        for (axis in Axis2D.keys) {
+        for (axis in Axis2D) {
             wc.setLayout(axis,
             if (axis == align)
                 PortionLayout.instance

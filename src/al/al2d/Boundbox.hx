@@ -1,9 +1,10 @@
 package al.al2d;
-import al.al2d.Widget2D.AxisCollection2D;
-import al.al2d.Axis2D;
+
+import macros.AVConstructor;
+import Axis2D;
 class Boundbox {
-    public var size(default, null):AxisCollection2D<Float> = new AxisCollection2D();
-    public var pos(default, null):AxisCollection2D<Float> = new AxisCollection2D();
+    public var size(default, null) = AVConstructor.create(Axis2D, 1.,1.);
+    public var pos(default, null) = AVConstructor.create(Axis2D, 0.,0.);
 
     public function new(x = 0., y = 0., w = 1., h = 1.) {
         set(x, y, w, h);

@@ -16,6 +16,7 @@
   ],
   "dependencies": {
     "slec": "git:https://github.com/pecheny/slec"
+    "taxis": ""
   }
 }
  

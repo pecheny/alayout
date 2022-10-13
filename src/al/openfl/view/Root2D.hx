@@ -1,5 +1,5 @@
 package al.openfl.view;
-import al.al2d.Axis2D;
+import Axis2D;
 import al.al2d.Widget2D;
 import al.al2d.Widget2DContainer;
 import al.appliers.ContainerRefresher;
@@ -14,7 +14,7 @@ class Root2D {
         this.w = w;
         wc = new Widget2DContainer(w);
         w.entity.addComponent(wc);
-        for (a in Axis2D.keys) {
+        for (a in Axis2D) {
             w.axisStates[a].addSibling(new ContainerRefresher(wc));
             wc.setLayout(a, WholefillLayout.instance);
         }

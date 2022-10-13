@@ -1,5 +1,5 @@
 package al.al2d;
-import al.al2d.Axis2D;
+import Axis2D;
 class GlAxis2DDirection {
     public static function get(a:Axis2D):AxisDirection {
         if (a==vertical)

@@ -1,5 +1,5 @@
 package al.openfl;
-import al.al2d.Axis2D;
+import Axis2D;
 import al.al2d.Widget2D;
 import openfl.events.Event;
 

@@ -1,5 +1,5 @@
 package al.openfl;
-import al.al2d.Axis2D;
+import Axis2D;
 import al.appliers.ApplierFactory;
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
