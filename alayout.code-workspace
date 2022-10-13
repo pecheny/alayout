@@ -1,0 +1,13 @@
+{
+	"folders": [
+        {
+            "name": "example",
+            "path": "example"
+        },
+        {
+            "name": "alayout",
+            "path": "."
+        }
+    ],
+    "settings": {}
+}

@@ -32,7 +32,6 @@ class ViewBuilder {
 
     static function calculateOffset(spr:DisplayObjectContainer):{x:Float, y:Float} {
         var r = spr.getBounds(spr);
-        trace(r);
         return {x: r.x, y: r.y};
     }
 

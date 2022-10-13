@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
     <meta title="Sample" package="org.al.example" version="1.0.0" company="pecheny"/>
-    <app main="example.Main2" path="Export" file="layout-example"/>
+    <app main="AlayoutDemo" path="Export" file="layout-example"/>
     <window background="#303030" fps="60" orientation="portrait"/>
-    <source path="src"/>
+    <source path="."/>
     <haxelib name="openfl"/>
-    <haxelib name="entity"/>
-    <haxelib name="taxis"/>
-    <library path="src/example/fingers.swf" preload="true"/>
+    <haxelib name="alayout"/>
+    <library path="fingers.swf" preload="true"/>
 </project>
