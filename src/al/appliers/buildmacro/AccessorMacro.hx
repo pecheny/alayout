@@ -16,7 +16,6 @@ class AccessorMacro {
         var trgType = cl.params[0].t.toComplexType();
         var valType:ComplexType;
         for (intf in cl.interfaces) {
-            trace(cl.name + " " + intf);
             valType = switch (intf){
                 case ({t:_.get() => {name:interfaceName}, params:[ tv]}): tv.toComplexType();
                 case _:null;
