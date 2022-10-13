@@ -10,8 +10,6 @@ class FlashDisplayRoot implements CtxBinder {
     public static var instance:CtxBinder = new FlashDisplayRoot(new Sprite());
     public function new(c) {
         this.container = c;
-
-        trace(instance  + " " + c.name);
     }
 
     public function bind(e:Entity):Void {
