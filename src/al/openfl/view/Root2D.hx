@@ -12,7 +12,7 @@ class Root2D {
 
     public function new(w:Widget2D) {
         this.w = w;
-        wc = new Widget2DContainer(w);
+        wc = new Widget2DContainer(w, 2);
         w.entity.addComponent(wc);
         for (a in Axis2D) {
             w.axisStates[a].addSibling(new ContainerRefresher(wc));

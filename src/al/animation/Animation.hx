@@ -25,6 +25,9 @@ class AnimWidget extends Widget<TimeAxis> implements Animatable {
     }
 }
 class AnimContainer extends WidgetContainer<TimeAxis, AnimWidget> implements Animatable {
+    public function new(w) {
+        super(w, 1);
+    }
 
     public function setTime(t:Float) {
         var ptime = t;

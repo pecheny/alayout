@@ -1,24 +1,30 @@
 package al.core;
+import macros.AVConstructor;
 import ec.Signal;
-import Array;
 import al.ec.Entity.Component;
-import al.core.AxisCollection;
 import al.layouts.AxisLayout;
 import haxe.ds.ReadOnlyArray;
 using Lambda;
+using al.core.WidgetContainer.Utils;
+@:generic
 class WidgetContainer<TAxis:Axis<TAxis>, TChild:Widget<TAxis>> extends Component implements Refreshable implements ContentSizeProvider<TAxis> {
     var holder:TChild;
     var children:Array<TChild> = [];
-    var layoutMap:AxisCollection<TAxis, AxisLayout> = new AxisCollection();
-    var childrenAxisStates:AxisCollection<TAxis, Array<AxisState>> = new AxisCollection();
+    var layoutMap:AVector<TAxis, AxisLayout>;
+    var childrenAxisStates:AVector<TAxis, Array<AxisState>> ;
     var mode:LayoutPosMode = global;
-    var contentSize:AxisCollection<TAxis, Float> = new AxisCollection();
+    var contentSize:AVector<TAxis, Null<Float>> ;
     public var contentSizeChanged(default, null) = new Signal<TAxis -> Void>();
 
     public var refreshOnChildrenChanged = false;
 
-    public function new(holder) {
+    public function new(holder, n) {
+        layoutMap = AVConstructor.empty(n);
+        childrenAxisStates = AVConstructor.empty(n);
+        // todo add support of Null<T> as value in AVConstructor
+        contentSize = cast new haxe.ds.Vector<Null<Float>>(n);//AVConstructor.factoryCreate(TAxis, a -> cast null, n);
         setHolder(holder);
+
     }
 
     function setHolder(h) {
@@ -36,7 +42,7 @@ class WidgetContainer<TAxis:Axis<TAxis>, TChild:Widget<TAxis>> extends Component
         if (children.indexOf(child) > -1)
             throw "Already child";
         children.push(child);
-        for (axis in layoutMap.keys()) {
+        for (axis in layoutMap.axes()) {
             var a:TAxis = axis;
             childrenAxisStates[axis].push(child.axisStates[axis]);
         }
@@ -49,7 +55,7 @@ class WidgetContainer<TAxis:Axis<TAxis>, TChild:Widget<TAxis>> extends Component
         if (children.indexOf(child) < 0)
             throw "not a child";
         children.remove(child);
-        for (axis in layoutMap.keys()) {
+        for (axis in layoutMap.axes()) {
             var a:TAxis = axis;
             childrenAxisStates[axis].remove(child.axisStates[axis]);
         }
@@ -62,14 +68,15 @@ class WidgetContainer<TAxis:Axis<TAxis>, TChild:Widget<TAxis>> extends Component
         return children;
     }
 
-    public function getContentSize(a:TAxis) {
+    public function getContentSize(a:TAxis):Float {
         if (contentSize.hasValueFor(a))
             return contentSize[a];
         return 0;
     }
 
     public function refresh() {
-        for (axis in layoutMap.keys()) {
+        for (axis in layoutMap.axes()) {
+            if (layoutMap[axis] == null) continue;
             var parent = holder.axisStates[axis];
             var oldSize = if (contentSize.hasValueFor(axis)) contentSize[axis] else -1;
             contentSize[axis] = layoutMap[axis].arrange(parent.getPos(), parent.getSize(), childrenAxisStates[axis], mode);
@@ -79,6 +86,12 @@ class WidgetContainer<TAxis:Axis<TAxis>, TChild:Widget<TAxis>> extends Component
 
     public function widget() {
         return holder;
+    }
+}
+
+class Utils {
+    public static function hasValueFor<TAxis:Axis<TAxis>, TVal>(av:AVector<TAxis, TVal>, a:TAxis) {
+        return av[a] != null;
     }
 }
 

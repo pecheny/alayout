@@ -27,7 +27,7 @@ class Builder {
     }
 
     public static function createContainer(w:Widget2D, alignment):Widget2DContainer {
-        var wc = new Widget2DContainer(w);
+        var wc = new Widget2DContainer(w, 2);
         for (a in Axis2D) {
             w.axisStates[a].addSibling(new ContainerRefresher(wc));
         }
