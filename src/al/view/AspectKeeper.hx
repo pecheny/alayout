@@ -1,18 +1,18 @@
 package al.view;
 
+import a2d.Boundbox;
 import macros.AVConstructor;
 import Axis2D;
 import al.core.AxisApplier;
-import al.al2d.Boundbox;
 
 class AspectKeeper {
     var bounds:Boundbox;
-    var target:AxisCollection2D<AxisApplier>;
+    var target:AVector2D<AxisApplier>;
     var size = AVConstructor.create(Axis2D, 1., 1.);
     var pos = AVConstructor.create(Axis2D, 0., 0.);
-    var ownSizeAppliers:AxisCollection2D<AxisApplier>;// = new AxisCollection2D();
+    var ownSizeAppliers:AVector2D<AxisApplier>;// = new AxisCollection2D();
 
-    public function new(targetStates:AxisCollection2D<AxisApplier>, bounds:Boundbox) {
+    public function new(targetStates:AVector2D<AxisApplier>, bounds:Boundbox) {
         this.bounds = bounds;
         this.target = targetStates;
         ownSizeAppliers = AVConstructor.factoryCreate(Axis2D, axis -> new KeeperAxisApplier(pos, size, this, axis));

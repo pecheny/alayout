@@ -6,7 +6,7 @@ import openfl.events.Event;
 class StageResizer {
     var targetAxis:AVector2D<AxisState>;
 
-    public function new(targetAxis:AxisCollection2D<AxisState>){
+    public function new(targetAxis:AVector2D<AxisState>){
         this.targetAxis = targetAxis;
         openfl.Lib.current.stage.addEventListener(Event.RESIZE, onResize);
         onResize(null);

@@ -7,7 +7,6 @@ import Axis2D;
 import al.al2d.Widget2D;
 import al.al2d.Widget2DContainer;
 import al.appliers.ContainerRefresher;
-import al.core.AxisCollection;
 import al.core.AxisState;
 import al.ec.Entity;
 import al.layouts.data.LayoutData.Position;
