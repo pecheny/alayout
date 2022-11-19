@@ -1,11 +1,10 @@
 package al.animation;
-import al.layouts.data.LayoutData.Size;
-import al.layouts.data.LayoutData.Position;
+import macros.AVConstructor;
+import al.layouts.data.LayoutData;
 import al.appliers.ContainerRefresher;
 import al.core.AxisState;
 import al.layouts.AxisLayout;
 import al.layouts.data.LayoutData.PositionType;
-import al.layouts.data.LayoutData.SizeType;
 import al.layouts.PortionLayout;
 import al.layouts.WholefillLayout;
 import al.animation.Animation;
@@ -44,13 +43,25 @@ class AnimationTreeBuilder {
         wc.addChild(w);
     }
 
+    var defaultSizeRec = {
+        type:SizeType.fraction,
+        value:1.
+    }
     public function animationWidget(e:Entity, rec:AxisRec):AnimWidget {
-        var size = if (rec.size != null)
-            new Size(rec.size.type != null ? rec.size.type : portion, rec.size.value);
-        else
-            new Size(portion, 1);
+        var sizeRec:SizeRec =
+        if (rec.size == null) defaultSizeRec else rec.size;
+
+        if (sizeRec.type == null)
+            sizeRec.type = fraction;
+
+
+        var size = switch sizeRec.type {
+            case fixed: new FixedSize(sizeRec.value); //todo /2 its fixed size in units of the parent
+            case fraction: new FractionSize(sizeRec.value);
+//            case px: new PixelSize(axis, screen, value);
+        }
         var timeAxis = new AxisState(new Position(), size);
-        var animationWidget = new AnimWidget([TimeAxis.time => timeAxis]);
+        var animationWidget = new AnimWidget(AVConstructor.create(timeAxis));
         e.addComponent(animationWidget);
         return animationWidget;
     }
@@ -98,5 +109,8 @@ typedef PosRec = {
     ?type:PositionType,
     value:Float
 }
-
+@:enum abstract SizeType(Int){
+    var fraction;
+    var fixed;
+}
 

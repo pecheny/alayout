@@ -3,7 +3,8 @@ import al.core.AxisState;
 import al.core.Widget;
 import al.core.WidgetContainer;
 import utils.Mathu;
-@:enum abstract TimeAxis(Int) to AxisKeyBase {
+@:build(macros.BuildMacro.buildAxes())
+@:enum abstract TimeAxis(Axis<TimeAxis>) to Axis<TimeAxis> to Int{
     var time = 0;
 }
 
@@ -14,13 +15,13 @@ class AnimWidget extends Widget<TimeAxis> implements Animatable {
         animations.setTime(time);
     }
 
-    public function bindAnimation(id, handler:Float->Void) {
+    public function bindAnimation(id, handler:Float -> Void) {
         entity.getChildren()[id].getComponent(AnimWidget).animations.channels.push(handler);
     }
 
-    public function bindDeep(path, handler:Float->Void) {
+    public function bindDeep(path, handler:Float -> Void) {
         var trg = entity.getGrandchild(path);
-        if (trg!=null)
+        if (trg != null)
             trg.getComponent(AnimWidget).animations.channels.push(handler);
     }
 }
@@ -59,6 +60,6 @@ class Animations implements Animatable {
     }
 }
 
-interface Animatable{
+interface Animatable {
     function setTime(t:Float):Void;
 }
