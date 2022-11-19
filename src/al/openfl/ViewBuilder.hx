@@ -1,5 +1,6 @@
 package al.openfl;
 
+import a2d.Boundbox;
 import macros.AVConstructor;
 import al.openfl.display.DrawcallDataProvider;
 import ec.CtxWatcher;
@@ -13,7 +14,6 @@ import al.openfl.DisplayObjectValueAppliers.DOXPropertySetter;
 import al.openfl.DisplayObjectValueAppliers.DOYPropertySetter;
 import al.core.AxisApplier.SimpleAxisApplier;
 import al.core.AxisApplier;
-import al.al2d.Boundbox;
 import al.openfl.ColoredRect.DisplayObjectScalerApplierFactory;
 import al.view.AspectKeeper;
 import openfl.display.DisplayObject;
