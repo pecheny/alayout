@@ -10,7 +10,7 @@ class AspectKeeper {
     var target:AVector2D<AxisApplier>;
     var size = AVConstructor.create(Axis2D, 1., 1.);
     var pos = AVConstructor.create(Axis2D, 0., 0.);
-    var ownSizeAppliers:AVector2D<AxisApplier>;// = new AxisCollection2D();
+    var ownSizeAppliers:AVector2D<AxisApplier>;
 
     public function new(targetStates:AVector2D<AxisApplier>, bounds:Boundbox) {
         this.bounds = bounds;
