@@ -1,9 +1,9 @@
 package al.openfl;
 import Axis2D;
-import al.al2d.Widget2D;
+import al.al2d.Placeholder2D;
 import openfl.events.Event;
 class W2DStageResizer {
-    var target:Widget2D;
+    var target:Placeholder2D;
     var scale:Float;
 
     public function new(target, scale:Float = 1) {

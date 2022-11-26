@@ -6,7 +6,7 @@ import al.openfl.display.DrawcallDataProvider;
 import ec.CtxWatcher;
 import al.openfl.display.FlashDisplayRoot;
 import Axis2D;
-import al.al2d.Widget2D;
+import al.al2d.Placeholder2D;
 import al.openfl.DisplayObjectAxisAppliers;
 import al.openfl.DisplayObjectValueAppliers.DOScaleXPropertySetter;
 import al.openfl.DisplayObjectValueAppliers.DOScaleYPropertySetter;
@@ -35,7 +35,7 @@ class ViewBuilder {
         return {x: r.x, y: r.y};
     }
 
-    public function rect(w:Widget2D) {
+    public function rect(w:Placeholder2D) {
         var view = new ColoredRect(Std.int(Math.random() * 0xffffff));
         var entity = w.entity;
         var appliers = new DisplayObjectScalerApplierFactory(view);
@@ -48,7 +48,7 @@ class ViewBuilder {
         return w;
     }
 
-    public function sprite(w:Widget2D, sourceId:String, r:Rectangle = null) {
+    public function sprite(w:Placeholder2D, sourceId:String, r:Rectangle = null) {
         var dobj:DisplayObjectContainer = null;
         for (fac in factories) {
             dobj = fac.createView(sourceId);
@@ -60,7 +60,7 @@ class ViewBuilder {
         return bindDispObjToWidget(dobj, w, r);
     }
 
-    public function bindDispObjToWidget(dobj:DisplayObjectContainer, w:Widget2D, r:Rectangle = null) {
+    public function bindDispObjToWidget(dobj:DisplayObjectContainer, w:Placeholder2D, r:Rectangle = null) {
         var prx = new Sprite();
         prx.addChild(dobj);
 
