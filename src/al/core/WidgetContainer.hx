@@ -7,7 +7,7 @@ import haxe.ds.ReadOnlyArray;
 using Lambda;
 using al.core.WidgetContainer.Utils;
 @:generic
-class WidgetContainer<TAxis:Axis<TAxis>, TChild:Widget<TAxis>> extends Component implements Refreshable implements ContentSizeProvider<TAxis> {
+class WidgetContainer<TAxis:Axis<TAxis>, TChild:Placeholder<TAxis>> extends Component implements Refreshable implements ContentSizeProvider<TAxis> {
     var holder:TChild;
     var children:Array<TChild> = [];
     var layoutMap:AVector<TAxis, AxisLayout>;

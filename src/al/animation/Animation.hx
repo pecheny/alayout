@@ -1,6 +1,6 @@
 package al.animation;
 import al.core.AxisState;
-import al.core.Widget;
+import al.core.Placeholder;
 import al.core.WidgetContainer;
 import utils.Mathu;
 @:build(macros.BuildMacro.buildAxes())
@@ -8,7 +8,7 @@ import utils.Mathu;
     var time = 0;
 }
 
-class AnimWidget extends Widget<TimeAxis> implements Animatable {
+class AnimWidget extends Placeholder<TimeAxis> implements Animatable {
     public var animations(default, null):Animations = new Animations();
 
     public inline function setTime(time:Float) {
