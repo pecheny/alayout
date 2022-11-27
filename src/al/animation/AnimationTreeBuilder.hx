@@ -38,7 +38,7 @@ class AnimationTreeBuilder {
         ]
     }
 
-    public function addChild(wc:AnimContainer, w:AnimWidget) {
+    public function addChild(wc:AnimContainer, w:AnimationPlaceholder) {
         wc.entity.addChild(w.entity);
         wc.addChild(w);
     }
@@ -47,7 +47,7 @@ class AnimationTreeBuilder {
         type:SizeType.fraction,
         value:1.
     }
-    public function animationWidget(e:Entity, rec:AxisRec):AnimWidget {
+    public function animationWidget(e:Entity, rec:AxisRec):AnimationPlaceholder {
         var sizeRec:SizeRec =
         if (rec.size == null) defaultSizeRec else rec.size;
 
@@ -61,7 +61,7 @@ class AnimationTreeBuilder {
 //            case px: new PixelSize(axis, screen, value);
         }
         var timeAxis = new AxisState(new Position(), size);
-        var animationWidget = new AnimWidget(AVConstructor.create(timeAxis));
+        var animationWidget = new AnimationPlaceholder(AVConstructor.create(timeAxis));
         e.addComponent(animationWidget);
         return animationWidget;
     }
@@ -81,7 +81,7 @@ class AnimationTreeBuilder {
         return layouts[name] ;
     }
 
-    function animationContainer(aw:AnimWidget, l):AnimContainer {
+    function animationContainer(aw:AnimationPlaceholder, l):AnimContainer {
         var ac = new AnimContainer(aw);
         aw.axisStates[TimeAxis.time].addSibling(new ContainerRefresher(ac));
         ac.setLayout(TimeAxis.time, l, global);

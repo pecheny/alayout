@@ -8,7 +8,7 @@ import utils.Mathu;
     var time = 0;
 }
 
-class AnimWidget extends Placeholder<TimeAxis> implements Animatable {
+class AnimationPlaceholder extends Placeholder<TimeAxis> implements Animatable {
     public var animations(default, null):Animations = new Animations();
 
     public inline function setTime(time:Float) {
@@ -16,16 +16,16 @@ class AnimWidget extends Placeholder<TimeAxis> implements Animatable {
     }
 
     public function bindAnimation(id, handler:Float -> Void) {
-        entity.getChildren()[id].getComponent(AnimWidget).animations.channels.push(handler);
+        entity.getChildren()[id].getComponent(AnimationPlaceholder).animations.channels.push(handler);
     }
 
     public function bindDeep(path, handler:Float -> Void) {
         var trg = entity.getGrandchild(path);
         if (trg != null)
-            trg.getComponent(AnimWidget).animations.channels.push(handler);
+            trg.getComponent(AnimationPlaceholder).animations.channels.push(handler);
     }
 }
-class AnimContainer extends WidgetContainer<TimeAxis, AnimWidget> implements Animatable {
+class AnimContainer extends WidgetContainer<TimeAxis, AnimationPlaceholder> implements Animatable {
     public function new(w) {
         super(w, 1);
     }
@@ -40,7 +40,7 @@ class AnimContainer extends WidgetContainer<TimeAxis, AnimWidget> implements Ani
         }
     }
 
-    override public function setHolder(h:AnimWidget) {
+    override public function setHolder(h:AnimationPlaceholder) {
         if (holder == h)
             return;
         super.setHolder(h);
