@@ -104,7 +104,7 @@ class PortionLayout implements AxisLayout {
                         calculatedTotalSize += getSize(child.size);
 
                     var coord = mode.isGlobal() ? pos : 0;
-                    var offset = Math.max((totalValue - calculatedTotalSize) / 2, getSize(gap));
+                    var offset =  getSize(gap) + (totalValue - calculatedTotalSize) / 2;//Math.max((totalValue - calculatedTotalSize) / 2, getSize(gap));
                     coord += offset;
 
                     arrangePart(0, coord, positive);
