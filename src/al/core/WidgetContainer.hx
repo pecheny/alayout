@@ -36,6 +36,7 @@ class WidgetContainer<TAxis:Axis<TAxis>, TChild:Placeholder<TAxis>> extends Comp
         layoutMap[axis] = layout;
         if (!childrenAxisStates.hasValueFor(axis))
             childrenAxisStates[axis] = [];
+        return this;
     }
 
     public function addChild(child:TChild) {
