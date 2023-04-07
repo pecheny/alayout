@@ -55,7 +55,6 @@ class PortionLayout implements AxisLayout {
             var calculatedTotal = 0.;
             while (index != lastIndex + direction) {
                 var child = children[index];
-                trace(child);
                 var size = getSize(child.size);
 
                 if (direction == 1)
