@@ -23,8 +23,9 @@ class PortionLayout implements AxisLayout {
     public function arrange(pos:Float, size:Float, children:Array<AxisState>, mode:LayoutPosMode) {
         if (children.length == 0)
             return 0.;
-        var fixedValue = gap.getFixed();
-        var portionsSum = gap.getPortion();
+        var gapsNum = children.length - 1; 
+        var fixedValue = gap.getFixed() * gapsNum;
+        var portionsSum = gap.getPortion() * gapsNum;
 
         for (child in children) {
             if (!child.isArrangable())
@@ -32,8 +33,6 @@ class PortionLayout implements AxisLayout {
 
             portionsSum += child.size.getPortion();
             fixedValue += child.size.getFixed();
-            portionsSum += gap.getPortion();
-            fixedValue += gap.getFixed();
         }
         if (portionsSum == 0)
             portionsSum = 1;
@@ -53,7 +52,7 @@ class PortionLayout implements AxisLayout {
             var index = startIndex;
             var coord = startCoord;
             var calculatedTotal = 0.;
-            while (index != lastIndex + direction) {
+            while (true) {
                 var child = children[index];
                 var size = getSize(child.size);
 
@@ -67,11 +66,14 @@ class PortionLayout implements AxisLayout {
 
                 calculatedTotal += size;
 
+                index += direction;
+                if (index == lastIndex + direction)
+                    break;
+
                 size = getSize(gap);
                 calculatedTotal += size;
                 coord += direction * size;
 
-                index += direction;
             };
             return calculatedTotal;
         };
@@ -80,55 +82,30 @@ class PortionLayout implements AxisLayout {
             case Forward:
                 {
                     var coord = mode.isGlobal() ? pos : 0;
-                    var calculatedTotalSize = getSize(gap);
-                    coord += getSize(gap);
+                    var calculatedTotalSize = 0.;
                     calculatedTotalSize += arrangePart(0, coord, positive);
                     return calculatedTotalSize;
                 }
             case Backward:
                 {
                     var coord = (mode.isGlobal() ? pos : 0) + totalValue;
-                    var calculatedTotalSize = getSize(gap);
-                    coord -= getSize(gap);
+                    var calculatedTotalSize = 0.;
                     calculatedTotalSize += arrangePart(children.length - 1, coord, negative);
                     return calculatedTotalSize;
                 }
             case Center:
                 {
-                    var gapsNum = children.length + 1; // if (children.length == 1) 2 else if(children.length % 2 == 0)
-
                     var calculatedTotalSize = getSize(gap) * gapsNum;
 
                     for (child in children)
                         calculatedTotalSize += getSize(child.size);
 
                     var coord = mode.isGlobal() ? pos : 0;
-                    var offset =  getSize(gap) + (totalValue - calculatedTotalSize) / 2;//Math.max((totalValue - calculatedTotalSize) / 2, getSize(gap));
+                    var offset =   (totalValue - calculatedTotalSize) / 2;
                     coord += offset;
 
                     arrangePart(0, coord, positive);
                     return calculatedTotalSize;
-                    // var coord = (mode.isGlobal() ? pos : 0) + totalValue / 2;
-                    // var even = children.length % 2 == 0;
-                    // if (even) {
-                    //     var gapSize = getSize(gap);
-                    //     var calculatedTotalSize = gapSize;
-                    //     var startInd = Std.int(children.length / 2);
-                    //     calculatedTotalSize += arrangePart(startInd - 1, coord - gapSize / 2, negative);
-                    //     calculatedTotalSize += arrangePart(startInd, coord + gapSize / 2, positive);
-                    //     return calculatedTotalSize;
-                    // } else {
-                    //     var centralInd = Math.floor(children.length/2);
-                    //     var centralChild = children[centralInd];
-                    //     var size = getSize(centralChild.size);
-                    //     centralChild.apply(coord - size / 2, size);
-                    //     var calculatedTotalSize = size;
-                    //     var gapSize = getSize(gap);
-                    //     if (children.length == 1)
-                    //         return calculatedTotalSize + gapSize * 2;
-                    //     calculatedTotalSize += arrangePart(centralInd - 1, coord - ( gapSize + size / 2 ), negative);
-                    //     calculatedTotalSize += arrangePart(centralInd + 1, coord + ( gapSize + size / 2 ), positive);
-                    //     return calculatedTotalSize;
                 }
         }
     }
