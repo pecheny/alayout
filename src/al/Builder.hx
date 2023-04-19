@@ -1,5 +1,6 @@
 package al;
 
+import al.core.Align;
 import macros.AVConstructor;
 import al.layouts.data.LayoutData.FractionSize;
 import al.layouts.data.LayoutData.ISize;
@@ -25,21 +26,25 @@ class Builder {
         return w;
     }
 
-    public static function createContainer(w:Placeholder2D, alignment):Widget2DContainer {
+    public static function createContainer(w:Placeholder2D, direction, alignment):Widget2DContainer {
         var wc = new Widget2DContainer(w, 2);
         for (a in Axis2D) {
             w.axisStates[a].addSibling(new ContainerRefresher(wc));
         }
         w.entity.addComponent(wc);
-        alignContainer(wc, alignment);
+        alignContainer(wc, direction, alignment);
         return wc;
     }
 
-    public static function alignContainer(wc:Widget2DContainer, align:Axis2D):Widget2DContainer {
+    static function alignContainer(wc:Widget2DContainer, direction:Axis2D, alignment:Align):Widget2DContainer {
         for (axis in Axis2D) {
             wc.setLayout(axis,
-            if (axis == align)
-                PortionLayout.instance
+            if (axis == direction)
+                switch alignment {
+                    case Forward:PortionLayout.instance;
+                    case Backward:PortionLayout.backward;
+                    case Center:PortionLayout.center;
+                }
             else
                 WholefillLayout.instance
             );
@@ -47,12 +52,13 @@ class Builder {
         return wc;
     }
 
-    public static function v(hsize:ISize = null, vsize:ISize = null) {
-        return createContainer(widget(hsize, vsize), vertical);
+
+    public static function v(hsize:ISize = null, vsize:ISize = null, align = Forward) {
+        return createContainer(widget(hsize, vsize), vertical, align);
     }
 
-    public static function h(hsize:ISize = null, vsize:ISize = null) {
-        return createContainer(widget(hsize, vsize), horizontal);
+    public static function h(hsize:ISize = null, vsize:ISize = null, align = Forward) {
+        return createContainer(widget(hsize, vsize), horizontal, align);
     }
 
     public static function withChildren(c:Widget2DContainer, children:Array<Placeholder2D>):Placeholder2D {
