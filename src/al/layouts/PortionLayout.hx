@@ -40,6 +40,9 @@ class PortionLayout implements AxisLayout {
         var totalValue = mode.isGlobal() ? size : 1;
         var distributedValue = totalValue - fixedValue;
 
+        if(distributedValue < 0)
+            distributedValue = 0;
+
         inline function getSize(isize:ISize) {
             var size:Float = 0.0;
             size += distributedValue * isize.getPortion() / portionsSum;
