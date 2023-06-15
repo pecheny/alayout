@@ -2,6 +2,7 @@ package al.layouts;
 import al.core.AxisState;
 import al.core.WidgetContainer.LayoutPosMode;
 class OffsetLayout implements AxisLayout {
+    public static inline var  NAME = "offset";
     public static var instance(default, null) = new OffsetLayout(0.1);
     var offset = 0.1;
 
