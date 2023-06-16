@@ -1,15 +1,15 @@
 package al.layouts;
-import al.core.WidgetContainer.LayoutPosMode;
+import al.layouts.data.LayoutData.ISize;
 import al.core.AxisState;
 class WholefillLayout implements AxisLayout {
     public static var instance(default, null) = new WholefillLayout();
 
     function new() {}
 
-    public function arrange(pos:Float, size:Float, children:Array<AxisState>, mode:LayoutPosMode) {
-        var size = mode.isGlobal() ? size : 1;
+    public function arrange(pos:Float, size:Float, children:Array<AxisState>) {
+        var size =  size ;
         var max = size;
-        var pos = mode.isGlobal() ? pos : 0;
+        var pos =  pos ;
         var origin = pos;
         for (child in children) {
             if (!child.isArrangable())

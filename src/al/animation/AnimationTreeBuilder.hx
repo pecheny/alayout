@@ -84,7 +84,7 @@ class AnimationTreeBuilder {
     function animationContainer(aw:AnimationPlaceholder, l):AnimContainer {
         var ac = new AnimContainer(aw);
         aw.axisStates[TimeAxis.time].addSibling(new ContainerRefresher(ac));
-        ac.setLayout(TimeAxis.time, l, global);
+        ac.setLayout(TimeAxis.time, l);
         aw.entity.addComponent(ac);
         return ac;
     }

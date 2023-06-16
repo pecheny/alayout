@@ -4,14 +4,15 @@ import al.layouts.data.LayoutData.FractionSize;
 import al.core.Align;
 import al.layouts.data.LayoutData.FixedSize;
 import al.layouts.data.LayoutData.ISize;
-import al.core.WidgetContainer.LayoutPosMode;
 import al.core.AxisState;
 
 class PortionLayout implements AxisLayout {
     public static var instance(default, null) = new PortionLayout(Forward);
     public static var backward(default, null) = new PortionLayout(Backward);
     public static var center(default, null) = new PortionLayout(Center);
+
     public var gap:ISize = new FixedSize(0);
+
     var align:Align = Center;
 
     public function new(align:Align, spacing:ISize = null) {
@@ -20,10 +21,10 @@ class PortionLayout implements AxisLayout {
         this.align = align;
     }
 
-    public function arrange(pos:Float, size:Float, children:Array<AxisState>, mode:LayoutPosMode) {
+    public function arrange(pos:Float, size:Float, children:Array<AxisState>) {
         if (children.length == 0)
             return 0.;
-        var gapsNum = children.length - 1; 
+        var gapsNum = children.length - 1;
         var fixedValue = gap.getFixed() * gapsNum;
         var portionsSum = gap.getPortion() * gapsNum;
 
@@ -37,10 +38,10 @@ class PortionLayout implements AxisLayout {
         if (portionsSum == 0)
             portionsSum = 1;
 
-        var totalValue = mode.isGlobal() ? size : 1;
+        var totalValue = size;
         var distributedValue = totalValue - fixedValue;
 
-        if(distributedValue < 0)
+        if (distributedValue < 0)
             distributedValue = 0;
 
         inline function getSize(isize:ISize) {
@@ -76,7 +77,6 @@ class PortionLayout implements AxisLayout {
                 size = getSize(gap);
                 calculatedTotal += size;
                 coord += direction * size;
-
             };
             return calculatedTotal;
         };
@@ -84,14 +84,14 @@ class PortionLayout implements AxisLayout {
         switch align {
             case Forward:
                 {
-                    var coord = mode.isGlobal() ? pos : 0;
+                    var coord = pos;
                     var calculatedTotalSize = 0.;
                     calculatedTotalSize += arrangePart(0, coord, positive);
                     return calculatedTotalSize;
                 }
             case Backward:
                 {
-                    var coord = (mode.isGlobal() ? pos : 0) + totalValue;
+                    var coord = pos + totalValue;
                     var calculatedTotalSize = 0.;
                     calculatedTotalSize += arrangePart(children.length - 1, coord, negative);
                     return calculatedTotalSize;
@@ -103,8 +103,8 @@ class PortionLayout implements AxisLayout {
                     for (child in children)
                         calculatedTotalSize += getSize(child.size);
 
-                    var coord = mode.isGlobal() ? pos : 0;
-                    var offset =   (totalValue - calculatedTotalSize) / 2;
+                    var coord = pos;
+                    var offset = (totalValue - calculatedTotalSize) / 2;
                     coord += offset;
 
                     arrangePart(0, coord, positive);

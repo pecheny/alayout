@@ -12,7 +12,6 @@ class WidgetContainer<TAxis:Axis<TAxis>, TChild:Placeholder<TAxis>> extends Comp
     var children:Array<TChild> = [];
     var layoutMap:AVector<TAxis, AxisLayout>;
     var childrenAxisStates:AVector<TAxis, Array<AxisState>> ;
-    var mode:LayoutPosMode = global;
     var contentSize:AVector<TAxis, Null<Float>> ;
     public var contentSizeChanged(default, null) = new Signal<TAxis -> Void>();
 
@@ -31,8 +30,7 @@ class WidgetContainer<TAxis:Axis<TAxis>, TChild:Placeholder<TAxis>> extends Comp
         this.holder = h;
     }
 
-    public function setLayout(axis:TAxis, layout:AxisLayout, mode:LayoutPosMode = global) {
-        this.mode = mode;
+    public function setLayout(axis:TAxis, layout:AxisLayout) {
         layoutMap[axis] = layout;
         if (!childrenAxisStates.hasValueFor(axis))
             childrenAxisStates[axis] = [];
@@ -80,7 +78,7 @@ class WidgetContainer<TAxis:Axis<TAxis>, TChild:Placeholder<TAxis>> extends Comp
             if (layoutMap[axis] == null) continue;
             var parent = holder.axisStates[axis];
             var oldSize = if (contentSize.hasValueFor(axis)) contentSize[axis] else -1;
-            contentSize[axis] = layoutMap[axis].arrange(parent.getPos(), parent.getSize(), childrenAxisStates[axis], mode);
+            contentSize[axis] = layoutMap[axis].arrange(parent.getPos(), parent.getSize(), childrenAxisStates[axis]);
             if (contentSize[axis] != oldSize) contentSizeChanged.dispatch(axis);
         }
     }
@@ -107,9 +105,3 @@ interface ContentSizeProvider<TAxis:AxisKeyBase> {
 }
 
 typedef AxisKeyBase = Int;
-@:enum abstract LayoutPosMode(Bool) {
-    var global:LayoutPosMode = cast true;
-    var local:LayoutPosMode = cast false;
-
-    public inline function isGlobal() return this;
-}
