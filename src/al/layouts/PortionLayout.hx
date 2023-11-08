@@ -117,4 +117,8 @@ class PortionLayout implements AxisLayout {
 @:enum abstract Sign(Int) to Int {
     var positive = 1;
     var negative = -1;
+
+    public inline function other():Sign {
+        return cast this * -1;
+    }
 }
