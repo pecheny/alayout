@@ -26,7 +26,7 @@ class Builder {
         return w;
     }
 
-    public static function createContainer(w:Placeholder2D, direction, alignment):Widget2DContainer {
+    public static function createContainer(w:Placeholder2D, direction:Axis2D, alignment:Align):Widget2DContainer {
         var wc = new Widget2DContainer(w, 2);
         for (a in Axis2D) {
             w.axisStates[a].addSibling(new ContainerRefresher(wc));
