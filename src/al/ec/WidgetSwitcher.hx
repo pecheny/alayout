@@ -38,4 +38,8 @@ class WidgetSwitcher<T:Axis<T>> {
         }
         root.entity.removeChild(target.entity);
     }
+
+    public function widget() {
+        return root;
+    }
 }
