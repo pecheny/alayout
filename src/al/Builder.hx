@@ -71,6 +71,14 @@ class Builder {
         wc.addChild(w);
         wc.entity.addChild(w.entity);
     }
+
+    public static function sibling(w:Placeholder2D) {
+        var s = Builder.widget();
+        for (a in Axis2D) 
+            w.axisStates[a].addSibling(s.axisStates[a]);
+        w.entity.addChild(s.entity);
+        return s;
+    }
 }
 
 
