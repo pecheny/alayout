@@ -1,27 +1,51 @@
 package al.core;
+
+import ec.Entity;
 import macros.AVConstructor;
 import ec.Signal;
 import al.ec.Entity.Component;
 import al.layouts.AxisLayout;
 import haxe.ds.ReadOnlyArray;
+
 using Lambda;
 using al.core.WidgetContainer.Utils;
+
 @:generic
 class WidgetContainer<TAxis:Axis<TAxis>, TChild:Placeholder<TAxis>> extends Component implements Refreshable implements ContentSizeProvider<TAxis> {
     var holder:TChild;
     var children:Array<TChild> = [];
     var layoutMap:AVector<TAxis, AxisLayout>;
-    var childrenAxisStates:AVector<TAxis, Array<AxisState>> ;
-    var contentSize:AVector<TAxis, Null<Float>> ;
-    public var contentSizeChanged(default, null) = new Signal<TAxis -> Void>();
+    var childrenAxisStates:AVector<TAxis, Array<AxisState>>;
+    var contentSize:AVector<TAxis, Null<Float>>;
+
+    public var contentSizeChanged(default, null) = new Signal<TAxis->Void>();
 
     public var refreshOnChildrenChanged = false;
+    @:isVar public var refreshOnContext(get, set):Bool;
+
+    function get_refreshOnContext():Bool {
+        return refreshOnContext;
+    }
+
+    @:keep
+    function onContext(_:Entity) {
+        refresh();
+    }
+
+    function set_refreshOnContext(value:Bool):Bool {
+        if (value && !refreshOnContext)
+            entity.onContext.listen(onContext);
+        if(!value)
+            entity.onContext.remove(onContext);
+        return value;
+    }
+
 
     public function new(holder, n) {
         layoutMap = AVConstructor.empty(n);
         childrenAxisStates = AVConstructor.empty(n);
         // todo add support of Null<T> as value in AVConstructor
-        contentSize = cast new haxe.ds.Vector<Null<Float>>(n);//AVConstructor.factoryCreate(TAxis, a -> cast null, n);
+        contentSize = cast new haxe.ds.Vector<Null<Float>>(n); // AVConstructor.factoryCreate(TAxis, a -> cast null, n);
         setHolder(holder);
 
     }
