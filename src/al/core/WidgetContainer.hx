@@ -1,11 +1,11 @@
 package al.core;
 
-import ec.Entity;
-import macros.AVConstructor;
-import ec.Signal;
 import al.ec.Entity.Component;
 import al.layouts.AxisLayout;
+import ec.Entity;
+import ec.Signal;
 import haxe.ds.ReadOnlyArray;
+import macros.AVConstructor;
 
 using Lambda;
 using al.core.WidgetContainer.Utils;
@@ -35,11 +35,10 @@ class WidgetContainer<TAxis:Axis<TAxis>, TChild:Placeholder<TAxis>> extends Comp
     function set_refreshOnContext(value:Bool):Bool {
         if (value && !refreshOnContext)
             entity.onContext.listen(onContext);
-        if(!value)
+        if (!value)
             entity.onContext.remove(onContext);
         return value;
     }
-
 
     public function new(holder, n) {
         layoutMap = AVConstructor.empty(n);
@@ -47,7 +46,6 @@ class WidgetContainer<TAxis:Axis<TAxis>, TChild:Placeholder<TAxis>> extends Comp
         // todo add support of Null<T> as value in AVConstructor
         contentSize = cast new haxe.ds.Vector<Null<Float>>(n); // AVConstructor.factoryCreate(TAxis, a -> cast null, n);
         setHolder(holder);
-
     }
 
     function setHolder(h) {
@@ -99,11 +97,13 @@ class WidgetContainer<TAxis:Axis<TAxis>, TChild:Placeholder<TAxis>> extends Comp
 
     public function refresh() {
         for (axis in layoutMap.axes()) {
-            if (layoutMap[axis] == null) continue;
+            if (layoutMap[axis] == null)
+                continue;
             var parent = holder.axisStates[axis];
             var oldSize = if (contentSize.hasValueFor(axis)) contentSize[axis] else -1;
             contentSize[axis] = layoutMap[axis].arrange(parent.getPos(), parent.getSize(), childrenAxisStates[axis]);
-            if (contentSize[axis] != oldSize) contentSizeChanged.dispatch(axis);
+            if (contentSize[axis] != oldSize)
+                contentSizeChanged.dispatch(axis);
         }
     }
 
@@ -119,11 +119,11 @@ class Utils {
 }
 
 interface Refreshable {
-    function refresh():Void ;
+    function refresh():Void;
 }
 
 interface ContentSizeProvider<TAxis:AxisKeyBase> {
-    var contentSizeChanged(default, null):Signal<TAxis -> Void>;
+    var contentSizeChanged(default, null):Signal<TAxis->Void>;
 
     function getContentSize(a:TAxis):Float;
 }
