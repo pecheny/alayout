@@ -64,6 +64,7 @@ class Builder {
     public static function withChildren(c:Widget2DContainer, children:Array<Placeholder2D>):Placeholder2D {
         for (ch in children)
             addWidget(c, ch);
+        c.refresh();
         return c.widget();
     }
 
