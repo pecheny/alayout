@@ -73,6 +73,11 @@ class Builder {
         wc.entity.addChild(w.entity);
     }
 
+    public static function removeWidget(wc:Widget2DContainer, w:Placeholder2D) {
+        wc.removeChild(w);
+        wc.entity.removeChild(w.entity);
+    }
+
     public static function sibling(w:Placeholder2D) {
         var s = Builder.widget();
         for (a in Axis2D) 
