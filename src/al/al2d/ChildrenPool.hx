@@ -6,7 +6,7 @@ import widgets.Widget;
 
 class ChildrenPool<T:Widget> {
     var wc:Widget2DContainer;
-    var activeCount:Int = 0;
+    public var activeCount (default, null):Int = 0;
     var _pool:Array<T> = [];
 
     public var pool(get, null):ReadOnlyArray<T>;
@@ -31,6 +31,7 @@ class ChildrenPool<T:Widget> {
             Builder.removeWidget(wc, _pool[i].widget());
         for (i in activeCount...reqCount)
             Builder.addWidget(wc, _pool[i].widget());
+        this.activeCount = reqCount;
         wc.refresh(); // if child size can change during initData, refresh call should be separated
     }
 
