@@ -1,9 +1,10 @@
 package al.al2d;
 
 import al.al2d.Placeholder2D;
+import al.core.Placeholder;
 import al.ec.Entity;
 
-class Widget implements IWidget {
+class Widget implements IWidget<Axis2D> {
     public var ph(get, null):Placeholder2D;
     public var entity(get, null):Entity;
 
@@ -22,7 +23,7 @@ class Widget implements IWidget {
 }
 
 @:autoBuild(ec.macros.InitMacro.build())
-interface IWidget {
-    public var ph(get, null):Placeholder2D;
+interface IWidget<TAxis:Axis<TAxis>> {
+    public var ph(get, null):Placeholder<TAxis>;
     public var entity(get, null):Entity;
 }

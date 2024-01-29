@@ -1,5 +1,7 @@
 package al.core;
 
+import ec.IComponent;
+// import al.core.Placeholder;
 import al.ec.Entity.Component;
 import al.layouts.AxisLayout;
 import ec.Entity;
@@ -10,8 +12,18 @@ import macros.AVConstructor;
 using Lambda;
 using al.core.WidgetContainer.Utils;
 
+// typedef SimpleContainer<TAxis:Axis<TAxis>> = WidgetContainer<TAxis, Placeholder<TAxis>>;
+
+interface WContainer<T> extends IComponent {
+    function addChild(ch:T):Void;
+    function removeChild(ch:T):Void;
+    public function refresh() :Void;
+    public function getChildren():ReadOnlyArray<T>;
+}
+
 @:generic
-class WidgetContainer<TAxis:Axis<TAxis>, TChild:Placeholder<TAxis>> extends Component implements Refreshable implements ContentSizeProvider<TAxis> {
+class WidgetContainer<TAxis:Axis<TAxis>, TChild:Placeholder<TAxis>> extends Component implements Refreshable implements ContentSizeProvider<TAxis>
+        implements WContainer<TChild> {
     var holder:TChild;
     var children:Array<TChild> = [];
     var layoutMap:AVector<TAxis, AxisLayout>;
