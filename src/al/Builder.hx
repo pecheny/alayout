@@ -18,11 +18,16 @@ using al.Builder;
 class Builder {
     public static inline function widget(hsize:ISize = null, vsize:ISize = null):Placeholder2D {
         var entity = new Entity();
+        var w = ph(hsize, vsize);
+        entity.addComponent(w);
+        return w;
+    }
+
+    public static inline function ph(hsize:ISize = null, vsize:ISize = null) {
         var hst = new AxisState(new Position(), hsize != null ? hsize : new FractionSize(1));
         var vst = new AxisState(new Position(), vsize != null ? vsize : new FractionSize(1));
         var axisStates:AVector<Axis2D,AxisState> = AVConstructor.create(hst, vst);
         var w = new Placeholder2D(axisStates);
-        entity.addComponent(w);
         return w;
     }
 
