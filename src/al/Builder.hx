@@ -1,5 +1,8 @@
 package al;
 
+import ec.MultiparentEntity;
+import al.core.Placeholder.MultiparentPlaceholder;
+import al.core.Placeholder.PlainPlaceholder;
 import al.core.Align;
 import macros.AVConstructor;
 import al.layouts.data.LayoutData.FractionSize;
@@ -13,6 +16,7 @@ import al.ec.Entity;
 import al.layouts.data.LayoutData.Position;
 import al.layouts.PortionLayout;
 import al.layouts.WholefillLayout;
+
 using al.Builder;
 
 class Builder {
@@ -26,8 +30,20 @@ class Builder {
     public static inline function ph(hsize:ISize = null, vsize:ISize = null) {
         var hst = new AxisState(new Position(), hsize != null ? hsize : new FractionSize(1));
         var vst = new AxisState(new Position(), vsize != null ? vsize : new FractionSize(1));
-        var axisStates:AVector<Axis2D,AxisState> = AVConstructor.create(hst, vst);
-        var w = new Placeholder2D(axisStates);
+        var axisStates:AVector<Axis2D, AxisState> = AVConstructor.create(hst, vst);
+        var w = new PlainPlaceholder(axisStates);
+        return w;
+    }
+
+    public static inline function mph(hsize:ISize = null, vsize:ISize = null) {
+        var hst = new AxisState(new Position(), hsize != null ? hsize : new FractionSize(1));
+        var vst = new AxisState(new Position(), vsize != null ? vsize : new FractionSize(1));
+        var axisStates:AVector<Axis2D, AxisState> = AVConstructor.create(hst, vst);
+        var w = new MultiparentPlaceholder(axisStates);
+        var e = new MultiparentEntity("mpe");
+        w.setEntity(e);
+        e.addComponent(w);
+        e.addComponentByType(Placeholder2D, w);
         return w;
     }
 
@@ -43,20 +59,14 @@ class Builder {
 
     static function alignContainer(wc:Widget2DContainer, direction:Axis2D, alignment:Align):Widget2DContainer {
         for (axis in Axis2D) {
-            wc.setLayout(axis,
-            if (axis == direction)
-                switch alignment {
-                    case Forward:PortionLayout.instance;
-                    case Backward:PortionLayout.backward;
-                    case Center:PortionLayout.center;
-                }
-            else
-                WholefillLayout.instance
-            );
+            wc.setLayout(axis, if (axis == direction) switch alignment {
+                case Forward: PortionLayout.instance;
+                case Backward: PortionLayout.backward;
+                case Center: PortionLayout.center;
+            } else WholefillLayout.instance);
         };
         return wc;
     }
-
 
     public static function v(hsize:ISize = null, vsize:ISize = null, align = Forward) {
         return createContainer(widget(hsize, vsize), vertical, align);
@@ -85,12 +95,9 @@ class Builder {
 
     public static function sibling(w:Placeholder2D) {
         var s = Builder.widget();
-        for (a in Axis2D) 
+        for (a in Axis2D)
             w.axisStates[a].addSibling(s.axisStates[a]);
         w.entity.addChild(s.entity);
         return s;
     }
 }
-
-
-

@@ -8,7 +8,7 @@ import utils.Mathu;
     var time = 0;
 }
 
-class AnimationPlaceholder extends Placeholder<TimeAxis> implements Animatable {
+class AnimationPlaceholder implements Animatable  extends PlainPlaceholder<TimeAxis>{
     public var animations(default, null):Animations = new Animations();
 
     public inline function setTime(time:Float) {
