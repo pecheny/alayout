@@ -1,10 +1,10 @@
 package al.core;
 
-import al.al2d.Widget.IWidget;
-import al.core.WidgetContainer.WContainer;
 import al.Builder;
 import al.al2d.Placeholder2D;
+import al.al2d.Widget.IWidget;
 import al.al2d.Widget2DContainer;
+import al.core.WidgetContainer.WContainer;
 import algl.Builder.PlaceholderBuilderGl;
 import fancy.widgets.NumButton;
 import haxe.ds.ReadOnlyArray;
@@ -47,10 +47,16 @@ class ChildrenPool<TAxis:Axis<TAxis>, T:IWidget<TAxis>> {
         for (i in activeCount...reqCount) {
             var w = _pool[i].ph;
             wc.addChild(cast w);
+        }
+        // wc.add and e.add separated due to input collision
+        // if button regs in InputSystem before laying out,
+        // wrong hover and tap would trigger until moving pointer
+        wc.refresh(); // if child size can change during initData, refresh call should be separated
+        for (i in activeCount...reqCount) {
+            var w = _pool[i].ph;
             wc.entity.addChild(w.entity);
         }
         this.activeCount = reqCount;
-        wc.refresh(); // if child size can change during initData, refresh call should be separated
     }
 
     inline function grantButtons(n) {
