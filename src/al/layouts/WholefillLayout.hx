@@ -1,5 +1,6 @@
 package al.layouts;
 
+import al.core.Align;
 import al.layouts.data.LayoutData.FixedSize;
 import al.layouts.data.LayoutData.ISize;
 import al.core.AxisState;
@@ -7,6 +8,7 @@ import al.core.AxisState;
 class WholefillLayout implements AxisLayout {
     public static var instance(default, null) = new WholefillLayout(new FixedSize(0));
     public var padding:ISize;
+    var align:Align = Center;
 
     public function new(padding:ISize) {
         this.padding = padding;
@@ -28,7 +30,12 @@ class WholefillLayout implements AxisLayout {
 
             if (chSize + paddingValue * 2 > max) // calc content size for scrollbox
                 max = chSize + paddingValue * 2;
-            child.apply(pos, chSize);
+            var chPos = pos + switch align {
+                case Center: (contSize - chSize) / 2;
+                case Forward: 0;
+                case Backward: (contSize - chSize) ;
+            }
+            child.apply(chPos, chSize);
         }
         return max;
     }
