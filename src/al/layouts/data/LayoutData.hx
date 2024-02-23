@@ -1,13 +1,11 @@
 package al.layouts.data;
 
-
 class Position {
     public var type:PositionType = managed;
     public var value:Float = 0;
 
     public function new() {}
 }
-
 
 @:enum abstract PositionType(String) from String to String {
     var fixed = "fixed";
@@ -21,9 +19,28 @@ interface ISize {
     public function getFixed():Float;
 }
 
+class MixedSize implements ISize {
+    var portion:Float;
+    var fixed:Float;
+
+    public function new(f, p) {
+        fixed = f;
+        portion = p;
+    }
+
+    public function getPortion():Float {
+        return portion;
+    }
+
+    public function getFixed():Float {
+        return fixed;
+    }
+}
+
 class FixedSize implements ISize {
     var value:Float;
-    public function new (v) {
+
+    public function new(v) {
         this.value = v;
     }
 
@@ -38,7 +55,8 @@ class FixedSize implements ISize {
 
 class FractionSize implements ISize {
     var value:Float;
-    public function new (v) {
+
+    public function new(v) {
         this.value = v;
     }
 
