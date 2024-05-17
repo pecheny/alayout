@@ -1,18 +1,8 @@
 package al.core;
 
-import al.Builder;
-import al.al2d.Placeholder2D;
 import al.al2d.Widget.IWidget;
-import al.al2d.Widget2DContainer;
 import al.core.WidgetContainer.WContainer;
-import algl.Builder.PlaceholderBuilderGl;
-import fancy.widgets.NumButton;
 import haxe.ds.ReadOnlyArray;
-import htext.style.TextStyleContext;
-import utils.Signal;
-import widgets.ColouredQuad;
-import widgets.Label;
-import widgets.Widget;
 
 class ChildrenPool<TAxis:Axis<TAxis>, T:IWidget<TAxis>> {
     var wc:WContainer<Placeholder<TAxis>>;
