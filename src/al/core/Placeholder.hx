@@ -24,3 +24,11 @@ class MultiparentPlaceholder<TAxis:Axis<TAxis>> implements Placeholder<TAxis> ex
         this.axisStates = axisStates;
     }
 }
+
+class PlaceholderUtils {
+    public static function addSibling<TAxis:Axis<TAxis>>(ph1:Placeholder<TAxis>, ph2:Placeholder<TAxis>) {
+        ph1.entity.addChild(ph2.entity);
+        for (a in ph1.axisStates.axes())
+            ph1.axisStates[a].addSibling(ph2.axisStates[a]);
+    }
+}
