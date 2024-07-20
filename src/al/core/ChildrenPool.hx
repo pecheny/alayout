@@ -13,7 +13,7 @@ class ChildrenPool<TAxis:Axis<TAxis>, T:IWidget<TAxis>> {
 
     public var pool(get, null):ReadOnlyArray<T>;
 
-    public function new(wc, fac:Void->T) {
+    public function new(wc, fac:Int->T) {
         this.wc = wc;
         this.factory = fac;
     }
@@ -22,7 +22,7 @@ class ChildrenPool<TAxis:Axis<TAxis>, T:IWidget<TAxis>> {
         return _pool;
     }
 
-    public dynamic function factory():T {
+    public dynamic function factory(id:Int):T {
         return null;
     }
 
@@ -51,6 +51,6 @@ class ChildrenPool<TAxis:Axis<TAxis>, T:IWidget<TAxis>> {
 
     inline function grantButtons(n) {
         for (i in _pool.length...n)
-            _pool.push(factory());
+            _pool.push(factory(i));
     }
 }
