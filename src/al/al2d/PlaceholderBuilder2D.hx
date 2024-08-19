@@ -5,8 +5,8 @@ import al.al2d.Placeholder2D;
 import al.core.AxisState;
 import al.layouts.data.LayoutData;
 import al.utils.PlaceholderBuilder;
-import fancy.ProxyWidgetTransform;
-import fancy.ScaleComponent;
+import al.al2d.ProxyWidgetTransform;
+import al.prop.ScaleComponent;
 import macros.AVConstructor;
 
 
