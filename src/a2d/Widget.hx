@@ -1,6 +1,6 @@
-package al.al2d;
+package a2d;
 
-import al.al2d.Placeholder2D;
+import a2d.Placeholder2D;
 import al.core.Placeholder;
 import al.ec.Entity;
 

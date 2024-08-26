@@ -1,7 +1,7 @@
 package al.utils;
 
 import Axis2D;
-import al.al2d.Placeholder2D;
+import a2d.Placeholder2D;
 import al.core.AxisState;
 import al.core.Placeholder.MultiparentPlaceholder;
 import al.core.Placeholder.PlainPlaceholder;

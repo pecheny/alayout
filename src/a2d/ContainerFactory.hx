@@ -1,8 +1,8 @@
-package al.al2d;
+package a2d;
 
 import al.appliers.ContainerRefresher;
 import macros.AVConstructor;
-import al.al2d.Placeholder2D;
+import a2d.Placeholder2D;
 import al.layouts.AxisLayout;
 import Axis2D.AVector2D;
 

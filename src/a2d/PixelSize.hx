@@ -1,4 +1,4 @@
-package al.al2d;
+package a2d;
 import a2d.Stage;
 import al.layouts.data.LayoutData.ISize;
 class PixelSize implements ISize {

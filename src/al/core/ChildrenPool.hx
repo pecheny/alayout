@@ -1,6 +1,6 @@
 package al.core;
 
-import al.al2d.Widget.IWidget;
+import a2d.Widget.IWidget;
 import al.core.WidgetContainer.WContainer;
 import haxe.ds.ReadOnlyArray;
 

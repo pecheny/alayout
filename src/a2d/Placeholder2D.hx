@@ -1,4 +1,4 @@
-package al.al2d;
+package a2d;
 import al.core.Placeholder;
 typedef Placeholder2D = Placeholder<Axis2D>;
 

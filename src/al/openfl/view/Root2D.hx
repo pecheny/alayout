@@ -1,7 +1,7 @@
 package al.openfl.view;
 import Axis2D;
-import al.al2d.Placeholder2D;
-import al.al2d.Widget2DContainer;
+import a2d.Placeholder2D;
+import a2d.Widget2DContainer;
 import al.appliers.ContainerRefresher;
 import al.layouts.WholefillLayout;
 import openfl.display.Stage;

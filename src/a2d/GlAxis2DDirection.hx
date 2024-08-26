@@ -1,4 +1,4 @@
-package al.al2d;
+package a2d;
 import Axis2D;
 class GlAxis2DDirection {
     public static function get(a:Axis2D):AxisDirection {

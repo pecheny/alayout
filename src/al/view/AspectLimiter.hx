@@ -2,8 +2,8 @@ package al.view;
 
 import Axis2D;
 import a2d.Boundbox;
-import al.al2d.Placeholder2D;
-import al.al2d.Widget;
+import a2d.Placeholder2D;
+import a2d.Widget;
 import al.core.AxisApplier;
 import macros.AVConstructor;
 

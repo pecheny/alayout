@@ -1,12 +1,12 @@
-package al.al2d;
+package a2d;
 import a2d.transform.LiquidTransformer;
 import Axis2D;
 import a2d.Stage;
-import al.al2d.Placeholder2D;
+import a2d.Placeholder2D;
 import al.core.AxisState;
 import al.layouts.data.LayoutData;
 import al.utils.PlaceholderBuilder;
-import al.al2d.ProxyWidgetTransform;
+import a2d.ProxyWidgetTransform;
 import al.prop.ScaleComponent;
 import macros.AVConstructor;
 

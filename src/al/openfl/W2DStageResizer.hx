@@ -1,6 +1,6 @@
 package al.openfl;
 import Axis2D;
-import al.al2d.Placeholder2D;
+import a2d.Placeholder2D;
 import openfl.events.Event;
 class W2DStageResizer {
     var target:Placeholder2D;
