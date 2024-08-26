@@ -1,4 +1,5 @@
 package al.al2d;
+import transform.LiquidTransformer;
 import Axis2D;
 import a2d.Stage;
 import al.al2d.Placeholder2D;
@@ -67,7 +68,7 @@ class PlaceholderBuilder2D extends PlaceholderBuilder<Axis2DStateFactory> {
         var _s = this.scale;
         var w = super.b(name);
         if (_l || addLIquid)
-            widgets.utils.Utils.withLiquidTransform(w, s.getAspectRatio());
+            LiquidTransformer.withLiquidTransform(w, s.getAspectRatio());
         if (_s != null) {
             var scale = ScaleComponent.getOrCreate(w.entity);
             scale.value = this.scale;
