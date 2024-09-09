@@ -80,7 +80,7 @@ class Builder {
         for (ch in children)
             addWidget(c, ch);
         c.refresh();
-        return c.widget();
+        return c.ph;
     }
 
     public static function addWidget(wc:Widget2DContainer, w:Placeholder2D) {

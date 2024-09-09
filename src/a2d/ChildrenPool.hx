@@ -1,6 +1,8 @@
 package a2d;
 
 import a2d.Widget;
+import al.core.TWidget.IWidget;
+
 
 typedef ChildrenPool<T:IWidget<Axis2D>> = al.core.ChildrenPool<Axis2D, T>;
 
