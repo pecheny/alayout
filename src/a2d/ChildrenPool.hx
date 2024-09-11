@@ -1,6 +1,6 @@
 package a2d;
 
-import a2d.Widget;
+import al.core.DataView;
 import al.core.TWidget.IWidget;
 
 
@@ -14,6 +14,3 @@ class DataChildrenPool<TData, TButton:IWidget<Axis2D> & DataView<TData>> extends
     }
 }
 
-interface DataView<TData> {
-    function initData(descr:TData):Void;
-}
