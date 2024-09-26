@@ -8,6 +8,7 @@ import al.core.AxisApplier;
 import al.prop.ScaleComponent;
 import macros.AVConstructor;
 
+@:build(ec.macros.Macros.buildGetOrCreate())
 class ProxyWidgetTransform extends Widget {
     public var target(default, null):Placeholder2D;
 
@@ -55,7 +56,21 @@ class ProxyWidgetTransform extends Widget {
             aa.apply(aa.getPos(), aa.getSize());
         }
     }
+
+    public static function getInnerPh(ph:Placeholder2D):Placeholder2D {
+        var instance = ph.entity.getComponent(ProxyWidgetTransform);
+        if (instance != null)
+            return instance.target;
+        return ph;
+    }
+
+    public static function grantInnerTransformPh(ph:Placeholder2D) {
+        ScaleComponent.getOrCreate(ph.entity);
+        var prtr = ProxyWidgetTransform.getOrCreate(ph.entity, ph);
+        return prtr.target;
+    }
 }
+
 
 class TransformAxisApplier implements AxisApplier {
     var target:AxisApplier;
