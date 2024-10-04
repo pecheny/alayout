@@ -8,15 +8,15 @@ package a2d.transform;
 **/
 import Axis2D;
 import a2d.AspectRatio;
-import macros.AVConstructor;
 
 class LineThicknessCalculator implements Resizable {
-    var lwBase:Float;
-    var _lineScales:AVector2D<Float> = AVConstructor.create(Axis2D, 1., 1.);
+    var scale:Float;
+    var _lineScales:AVector2D<Float> ;
     var aspectRatio:AspectRatio;
 
-    public function new(ar:AspectRatio, thickness = 0.05) {
-        lwBase = thickness;
+    public function new(ar:AspectRatio, target:AVector2D<Float>, scale = 1.) {
+        this.scale = scale;
+        _lineScales = target;
         this.aspectRatio = ar;
     }
 
@@ -27,11 +27,11 @@ class LineThicknessCalculator implements Resizable {
     public inline function resize(ww:Float, wh:Float) {
         if (aspectRatio[horizontal] < aspectRatio[vertical]) {
             var wAsp = ww / wh;
-            _lineScales[vertical] = lwBase / wh;
+            _lineScales[vertical] = scale / wh;
             _lineScales[horizontal] = _lineScales[vertical] / wAsp;
         } else {
             var wAsp = wh / ww;
-            _lineScales[horizontal] = lwBase / ww;
+            _lineScales[horizontal] = scale / ww;
             _lineScales[vertical] = _lineScales[horizontal] / wAsp;
         }
     }
