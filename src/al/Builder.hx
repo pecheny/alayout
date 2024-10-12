@@ -23,7 +23,7 @@ class Builder {
     public static inline function widget(hsize:ISize = null, vsize:ISize = null):Placeholder2D {
         var entity = new Entity();
         var w = ph(hsize, vsize);
-        entity.addComponent(w);
+        entity.addComponentByType(Placeholder2D, w);
         return w;
     }
 
