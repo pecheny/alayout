@@ -11,20 +11,22 @@ import utils.Mathu;
 }
 
 class AnimationPlaceholder implements Animatable extends PlainPlaceholder<TimeAxis> {
-	public var animations(default, null):Animations = new Animations();
+	public var channels:Array<Float->Void> = [];
 
 	public inline function setTime(time:Float) {
-		animations.setTime(time);
+		for (ach in channels) {
+			ach(time);
+		}
 	}
 
 	public function bindAnimation(id, handler:Float->Void) {
-		entity.getChildren()[id].getComponent(AnimationPlaceholder).animations.channels.push(handler);
+		entity.getChildren()[id].getComponent(AnimationPlaceholder).channels.push(handler);
 	}
 
 	public function bindDeep(path, handler:Float->Void) {
 		var trg = entity.getGrandchild(path);
 		if (trg != null)
-			trg.getComponent(AnimationPlaceholder).animations.channels.push(handler);
+			trg.getComponent(AnimationPlaceholder).channels.push(handler);
 	}
 }
 
@@ -32,7 +34,7 @@ class AnimContainer extends WidgetContainer<TimeAxis, AnimationPlaceholder> impl
 	var aph:AnimationPlaceholder;
 
 	public function new(w:AnimationPlaceholder) {
-        w.animations.channels.push(setTime);
+        w.channels.push(setTime);
 		super(w, 1);
 	}
 
@@ -43,18 +45,6 @@ class AnimContainer extends WidgetContainer<TimeAxis, AnimationPlaceholder> impl
 			var ltuc = (ptime - tax.getPos()) / tax.getSize();
 			var ltime = Mathu.clamp(ltuc, 0., 1.);
 			ch.setTime(ltime);
-		}
-	}
-}
-
-class Animations implements Animatable {
-	public var channels:Array<Float->Void> = [];
-
-	public function new() {}
-
-	public function setTime(t:Float):Void {
-		for (ach in channels) {
-			ach(t);
 		}
 	}
 }

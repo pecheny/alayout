@@ -39,7 +39,7 @@ class Animator extends Component {
         var animContainer = tree.entity.getComponent(AnimContainer);
         var anim = animationTreeBuilder.animationWidget(new Entity(), {});
         animationTreeBuilder.addChild(animContainer, anim);
-        anim.animations.channels.push(h);
+        anim.channels.push(h);
         animContainer.refresh();
     }
 }
