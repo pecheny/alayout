@@ -38,9 +38,14 @@ class AnimationTreeBuilder {
         ]
     }
 
-    public function addChild(wc:AnimContainer, w:AnimationPlaceholder) {
+    public static function addChild(wc:AnimContainer, w:AnimationPlaceholder) {
         wc.entity.addChild(w.entity);
         wc.addChild(w);
+    }
+
+    public static function removeChild(wc:AnimContainer, w:AnimationPlaceholder) {
+        wc.entity.removeChild(w.entity);
+        wc.removeChild(w);
     }
 
     var defaultSizeRec = {
