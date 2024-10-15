@@ -85,12 +85,12 @@ class AnimationPreset {
 
 class AnimationSlotSelectors {
     public static function pathSelector(path:Array<Int>, aph:AnimationPlaceholder) {
-        return aph.entity.getGrandchild(path).getComponent(AnimationPlaceholder);
+        return aph.entity.getGrandchild(path.copy()).getComponent(AnimationPlaceholder);
     }
-    
-    public static function pathMapper(path, aph, channel:Float->Void) {
+
+    public static function pathMapper(path:Array<Int>, aph:AnimationPlaceholder, channel:Float->Void) {
         pathSelector(path, aph).channels.push(channel);
     }
-    
+
     // public static function newChild( aph:AnimationPlaceholder) { }
 }
