@@ -24,9 +24,8 @@ class AnimationTreeComponent extends Component {
     override function init() {
         var preset = props.get(getId(target, alias));
         tree = builder.build(preset.treeDesc);
-        for (i in 0...target.channels.length)
-            preset.mapping[i](tree).channels.push(target.channels[i]);
-        new CtxWatcher(AnimationTreeBinder, entity);
+        bindToTree(tree, preset.mapping, target.channels);
+        // new CtxWatcher(AnimationTreeBinder, entity);
     }
 
     public function setTime(t):Void {
@@ -36,6 +35,11 @@ class AnimationTreeComponent extends Component {
 
     public static function getId(instance:Dynamic, alias = "") {
         return Entity.getComponentId(instance) + "_" + alias;
+    }
+    
+    public static function bindToTree(tree:AnimationPlaceholder, mapping:Array<Mapper>, channels:Array<Float->Void>) {
+        for (i in 0...channels.length)
+            mapping[i](tree, channels[i]);
     }
 }
 
@@ -64,6 +68,7 @@ class AnimationTreeBinder implements CtxBinder {
 }
 
 typedef Selector = AnimationPlaceholder->AnimationPlaceholder;
+typedef Mapper = (AnimationPlaceholder, Float->Void) -> Void;
 
 /**
     Description of animation tree and a way of binding animation channels of a component to the tree.
@@ -71,7 +76,7 @@ typedef Selector = AnimationPlaceholder->AnimationPlaceholder;
 **/
 class AnimationPreset {
     public var treeDesc(default, null):Dynamic; 
-    public var mapping(default, null):Array<Selector> = [];
+    public var mapping(default, null):Array<Mapper> = [];
 
     public function new(descr) {
         this.treeDesc = descr;
@@ -82,4 +87,10 @@ class AnimationSlotSelectors {
     public static function pathSelector(path:Array<Int>, aph:AnimationPlaceholder) {
         return aph.entity.getGrandchild(path).getComponent(AnimationPlaceholder);
     }
+    
+    public static function pathMapper(path, aph, channel:Float->Void) {
+        pathSelector(path, aph).channels.push(channel);
+    }
+    
+    // public static function newChild( aph:AnimationPlaceholder) { }
 }
