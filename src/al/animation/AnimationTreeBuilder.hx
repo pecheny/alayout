@@ -53,6 +53,7 @@ class AnimationTreeBuilder {
         value:1.
     }
     public function animationWidget(e:Entity, rec:AxisRec):AnimationPlaceholder {
+        e.name = rec.name;
         var sizeRec:SizeRec =
         if (rec.size == null) defaultSizeRec else rec.size;
 
@@ -103,7 +104,8 @@ typedef AnimationContainerRec = {
 
 typedef AxisRec = {
     ?size:SizeRec,
-    ?pos:PosRec
+    ?pos:PosRec,
+    ?name:String
 }
 
 typedef SizeRec = {
