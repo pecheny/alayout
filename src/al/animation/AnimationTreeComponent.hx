@@ -97,7 +97,15 @@ class AnimationTreeBinder implements CtxBinder {
 }
 
 typedef Selector = AnimationPlaceholder->AnimationPlaceholder;
-typedef Mapper = (AnimationPlaceholder, Float->Void) -> Void;
+
+/**
+    Incapsulates the way to put given cahannel into given tree.
+    The way may be:
+    - look for child node by some description line path or name
+    - create new node and bind into the tree
+    - await for upstream tree by listening e.onContext to find place there by criteria like in - 1
+**/
+typedef Mapper = (AnimationPlaceholder, Float->Void) -> (Void->Void);
 
 /**
     Description of animation tree and a way of binding animation channels of a component to the tree.
