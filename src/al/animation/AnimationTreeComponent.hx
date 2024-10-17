@@ -7,13 +7,43 @@ import ec.CtxWatcher;
 import ec.Entity;
 import fu.PropStorage;
 
-class AnimationTreeComponent extends Component {
-    public var tree(default, null):AnimationPlaceholder; 
+class TreeBindingComponent {
+    var mappers:Array<Mapper>;
+    var channels:Array<Float->Void>;
+    var unbinders:Array<Void->Void>;
 
+    public function new(mappers:Array<Mapper>, channels:Array<Float->Void>) {
+        this.mappers = mappers;
+        this.channels = channels;
+    }
+
+    public function bind(tree:AnimationPlaceholder) {
+        unbinders = bindToTree(tree, mappers, channels);
+    }
+
+    public function unbind() {
+        if (unbinders == null)
+            return;
+        for (u in unbinders)
+            u();
+        unbinders = null;
+    }
+
+    public static function bindToTree(tree:AnimationPlaceholder, mapping:Array<Mapper>, channels:Array<Float->Void>) {
+        return [
+            for (i in 0...channels.length)
+                mapping[i](tree, channels[i])
+        ];
+    }
+}
+
+class AnimationTreeComponent extends Component {
+    var tree(default, null):AnimationPlaceholder;
     var target:Channels;
     var alias:String;
     @:once var props:PropStorage<AnimationPreset>;
     @:once var builder:AnimationTreeBuilder;
+    @:once var binder:TreeBindingComponent;
 
     public function new(e, target, alias = "") {
         this.target = target;
@@ -24,8 +54,7 @@ class AnimationTreeComponent extends Component {
     override function init() {
         var preset = props.get(getId(target, alias));
         tree = builder.build(preset.treeDesc);
-        bindToTree(tree, preset.mapping, target.channels);
-        // new CtxWatcher(AnimationTreeBinder, entity);
+        binder.bind(tree);
     }
 
     public function setTime(t):Void {
