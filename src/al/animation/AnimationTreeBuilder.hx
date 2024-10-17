@@ -39,8 +39,8 @@ class AnimationTreeBuilder {
     }
 
     public static function addChild(wc:AnimContainer, w:AnimationPlaceholder) {
-        wc.entity.addChild(w.entity);
         wc.addChild(w);
+        wc.entity.addChild(w.entity);
     }
 
     public static function removeChild(wc:AnimContainer, w:AnimationPlaceholder) {
@@ -48,11 +48,11 @@ class AnimationTreeBuilder {
         wc.removeChild(w);
     }
 
-    var defaultSizeRec = {
+    static final defaultSizeRec = {
         type:SizeType.fraction,
         value:1.
     }
-    public function animationWidget(e:Entity, rec:AxisRec):AnimationPlaceholder {
+    public static function animationWidget(e:Entity, rec:AxisRec):AnimationPlaceholder {
         e.name = rec.name;
         var sizeRec:SizeRec =
         if (rec.size == null) defaultSizeRec else rec.size;
