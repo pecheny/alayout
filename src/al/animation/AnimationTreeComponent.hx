@@ -89,8 +89,71 @@ class AnimationSlotSelectors {
     }
 
     public static function pathMapper(path:Array<Int>, aph:AnimationPlaceholder, channel:Float->Void) {
-        pathSelector(path, aph).channels.push(channel);
+        var targetAph = pathSelector(path, aph);
+        targetAph.channels.push(channel);
+        return () -> targetAph.channels.remove(channel);
     }
 
-    // public static function newChild( aph:AnimationPlaceholder) { }
+    public static function nameSelector(name:String, aph:AnimationPlaceholder) {
+        return findFirstInside(aph.entity, e -> e.name == name)?.getComponent(AnimationPlaceholder);
+    }
+
+    public static function findFirstInside(e:Entity, matcher:Entity->Bool):Entity {
+        if (matcher(e))
+            return e;
+        for (ch in e.getChildren()) {
+            var r = findFirstInside(ch, matcher);
+            if (r != null)
+                return r;
+        }
+        return null;
+    }
+
+    public static function newChildSelector(aph:AnimationPlaceholder) {
+        var c = aph.entity.getComponent(AnimContainer);
+        if (c == null)
+            return null;
+        var aph = AnimationTreeBuilder.animationWidget(new Entity("auto-anim-child"), {});
+        AnimationTreeBuilder.addChild(c, aph);
+        return aph;
+    }
+
+    // не поддерживается случай, если селектор не смог найти места и нужно продолжать слушать контекст
+
+    /**
+        Looks for channel place to bind upward in the animation tree hierarcy.
+        @param aph - main component animation tree.
+        If aph has parent - it give a try to map instantly.
+        If not - aph.entity.onContext listener added and waits until first AnimationPlaceholder appears upward in the hierarchy, then tries to map here.
+    **/
+    public static function parentMapper(aph:AnimationPlaceholder, selector, channel) {
+        var parentAph = aph.entity.parent?.getComponentUpward(AnimationPlaceholder);
+        if (parentAph != null) {
+            return existingParentMapper(parentAph, selector, channel);
+        } else {
+            var parentAph:AnimationPlaceholder = null;
+            var parentUnbinder = null;
+            function onCtx(_) {
+                parentAph = aph.entity.parent?.getComponentUpward(AnimationPlaceholder);
+                if (parentAph == null)
+                    return;
+                aph.entity.onContext.remove(onCtx);
+                parentUnbinder = existingParentMapper(parentAph, selector, channel);
+            }
+
+            aph.entity.onContext.listen(onCtx);
+            function unbind() {
+                aph.entity.onContext.remove(onCtx);
+                if (parentUnbinder != null)
+                    parentUnbinder();
+            }
+            return unbind;
+        }
+    }
+
+    static function existingParentMapper(parentAph, selector, channel):Void->Void {
+        var target:AnimationPlaceholder = selector(parentAph);
+        target.channels.push(channel);
+        return () -> target.channels.remove(channel);
+    }
 }
