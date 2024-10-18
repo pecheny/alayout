@@ -1,27 +1,48 @@
 package al.animation;
 
+import ec.PropertyComponent;
 import al.animation.Animation;
 import al.animation.AnimationTreeBuilder;
 import ec.Component;
-import ec.CtxWatcher;
 import ec.Entity;
 import fu.PropStorage;
 
-class TreeBindingComponent {
-    var mappers:Array<Mapper>;
-    var channels:Array<Float->Void>;
+class AnimationTreeProp extends PropertyComponent<AnimationPlaceholder> {}
+
+/**
+    Listens for AnimationTreeProp changes and wires target channels with given animation tree according to rules defined in AnimationPreset for given target.
+**/
+class TreeMapperComponent extends Component {
+    @:once var props:PropStorage<AnimationPreset>;
+    var tree:AnimationTreeProp;
+    var target:Channels;
+    var alias:String;
     var unbinders:Array<Void->Void>;
+    var preset:AnimationPreset;
 
-    public function new(mappers:Array<Mapper>, channels:Array<Float->Void>) {
-        this.mappers = mappers;
-        this.channels = channels;
+    public function new(e, target, alias = "") {
+        this.target = target;
+        this.alias = alias;
+        super(e);
+        tree = AnimationTreeProp.getOrCreate(e);
     }
 
-    public function bind(tree:AnimationPlaceholder) {
-        unbinders = bindToTree(tree, mappers, channels);
+    override function init() {
+        preset = props.get(AnimationPreset.getId(target, alias));
+        if (preset == null)
+            throw 'animation preset for $target not defined.';
+        tree.onChange.listen(bind);
+        bind();
     }
 
-    public function unbind() {
+    function bind() {
+        if (unbinders != null)
+            unbind();
+        if (tree.value != null)
+            unbinders = bindToTree(tree.value, preset.mapping, target.channels);
+    }
+
+    function unbind() {
         if (unbinders == null)
             return;
         for (u in unbinders)
@@ -37,62 +58,27 @@ class TreeBindingComponent {
     }
 }
 
-class AnimationTreeComponent extends Component {
-    var tree(default, null):AnimationPlaceholder;
+/**
+    Creates animation tree according to description in animation preset for given target.
+    After creation tree will assigned to AnimationTreeProp value.
+**/
+class TreeBuilderComponent extends Component {
+    var tree:AnimationTreeProp;
     var target:Channels;
     var alias:String;
     @:once var props:PropStorage<AnimationPreset>;
     @:once var builder:AnimationTreeBuilder;
-    @:once var binder:TreeBindingComponent;
 
     public function new(e, target, alias = "") {
         this.target = target;
         this.alias = alias;
         super(e);
+        tree = AnimationTreeProp.getOrCreate(e);
     }
 
     override function init() {
-        var preset = props.get(getId(target, alias));
-        tree = builder.build(preset.treeDesc);
-        binder.bind(tree);
-    }
-
-    public function setTime(t):Void {
-        if (_inited)
-            tree.setTime(t);
-    }
-
-    public static function getId(instance:Dynamic, alias = "") {
-        return Entity.getComponentId(instance) + "_" + alias;
-    }
-    
-    public static function bindToTree(tree:AnimationPlaceholder, mapping:Array<Mapper>, channels:Array<Float->Void>) {
-        for (i in 0...channels.length)
-            mapping[i](tree, channels[i]);
-    }
-}
-
-class AnimationTreeBinder implements CtxBinder {
-    var container:AnimContainer;
-
-    public function new(container) {
-        this.container = container;
-    }
-
-    public function bind(e:Entity) {
-        var acomp = e.getComponent(AnimationTreeComponent);
-        if (acomp != null) {
-            AnimationTreeBuilder.addChild(container, acomp.tree);
-            container.refresh();
-        }
-    }
-
-    public function unbind(e:Entity) {
-        var acomp = e.getComponent(AnimationTreeComponent);
-        if (acomp != null) {
-            AnimationTreeBuilder.removeChild(container, acomp.tree);
-            container.refresh();
-        }
+        var preset = props.get(AnimationPreset.getId(target, alias));
+        tree.value = builder.build(preset.treeDesc);
     }
 }
 
@@ -112,11 +98,15 @@ typedef Mapper = (AnimationPlaceholder, Float->Void) -> (Void->Void);
     mapping is an array of functions which find place in animation tree to bind channel of given index to.
 **/
 class AnimationPreset {
-    public var treeDesc(default, null):Dynamic; 
+    public var treeDesc(default, null):Dynamic;
     public var mapping(default, null):Array<Mapper> = [];
 
     public function new(descr) {
         this.treeDesc = descr;
+    }
+
+    public static function getId(instance:Dynamic, alias = "") {
+        return Entity.getComponentId(instance) + "_" + alias;
     }
 }
 
