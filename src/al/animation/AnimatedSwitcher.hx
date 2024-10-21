@@ -8,7 +8,7 @@ import al.ec.WidgetSwitcher;
 import update.Updatable;
 
 class AnimatedSwitcher implements Updatable {
-    public var duration = 2.;
+    public var duration = 1.;
     var tree:AnimationPlaceholder;
     var time:Float = 0;
     var switcher:WidgetSwitcher<Axis2D>;
