@@ -1,5 +1,6 @@
 package al.animation;
 
+import utils.Mathu;
 import ec.PropertyComponent;
 import al.animation.Animation;
 import al.animation.AnimationTreeBuilder;
@@ -8,6 +9,19 @@ import ec.Entity;
 import fu.PropStorage;
 
 class AnimationTreeProp extends PropertyComponent<AnimationPlaceholder> {}
+
+/**
+    Represents an animated widget instance for handling its animation.
+    There are following usecases:
+    - common type for defining animation preset: certain Channels implementation type used as a key in ProspStorage.
+    - channells property is an array of channels i.e. anything that can be animated independable. 
+    - tree is a property holder of AnimationPlaceholder which used to put the widget animation into the parent animation tree (or handle it directly through setT()).
+    If the animation preset defines tree description for the widget, the tree is also a target for mapping widget's channels to.
+**/
+interface Channels {
+    var channels(default, null):Array<Float->Void>;
+    var tree(default, null):AnimationTreeProp;
+}
 
 /**
     Listens for AnimationTreeProp changes and wires target channels with given animation tree according to rules defined in AnimationPreset for given target.
@@ -52,7 +66,7 @@ class TreeMapperComponent extends Component {
 
     public static function bindToTree(tree:AnimationPlaceholder, mapping:Array<Mapper>, channels:Array<Float->Void>) {
         return [
-            for (i in 0...channels.length)
+            for (i in 0...Mathu.min(channels.length, mapping.length))
                 mapping[i](tree, channels[i])
         ];
     }
@@ -82,6 +96,64 @@ class TreeBuilderComponent extends Component {
     }
 }
 
+class TreeBinderComponent extends Component {
+    @:once var props:PropStorage<AnimationPreset>;
+    var target:Channels;
+    var alias:String;
+    var children:Array<Channels> = [];
+    var preset:AnimationPreset;
+
+    public function new(e, target, alias = "") {
+        this.target = target;
+        this.alias = alias;
+        super(e);
+    }
+
+    override function init() {
+        preset = props.get(AnimationPreset.getId(target, alias));
+        target.tree.onChange.listen(onTree);
+        if (target.tree.value != null)
+            onTree();
+    }
+
+    function onTree() {
+        for (ch in children)
+            bindChild(ch);
+    }
+
+    public function addChild(aph:Channels) {
+        children.push(aph);
+        if (target.tree?.value != null)
+            bindChild(aph);
+    }
+
+    function bindChild(child:Channels) {
+        if (!_inited)
+            return;
+        if (target.tree.value == null)
+            return;
+        var selector = preset.childrenSelectors.get(AnimationPreset.getId(child, ""));
+        var parentAph = selector(target.tree.value);
+        // check / wait for child tree value
+        var ac =parentAph.entity.getComponent(AnimContainer);
+        function addToCont() {
+            if (child.tree.value != null){
+                AnimationTreeBuilder.addChild(ac, child.tree.value);
+                ac.refresh();
+                child.tree.onChange.remove(addToCont);
+            }
+        }
+        if (child.tree.value != null)
+            AnimationTreeBuilder.addChild(ac, child.tree.value);
+        else
+            child.tree.onChange.listen(addToCont);
+    }
+
+    function bindChildren() {}
+
+    function unbindChildren() {}
+}
+
 typedef Selector = AnimationPlaceholder->AnimationPlaceholder;
 
 /**
@@ -93,16 +165,23 @@ typedef Selector = AnimationPlaceholder->AnimationPlaceholder;
 **/
 typedef Mapper = (AnimationPlaceholder, Float->Void) -> (Void->Void);
 
+// typedef Binder = (AnimationPlaceholder, AnimationPlaceholder) -> (Void->Void);
+
 /**
     Description of animation tree and a way of binding animation channels of a component to the tree.
     mapping is an array of functions which find place in animation tree to bind channel of given index to.
 **/
 class AnimationPreset {
-    public var treeDesc(default, null):Dynamic;
+    public var treeDesc(default, null):AnimationContainerRec;
     public var mapping(default, null):Array<Mapper> = [];
+    public var childrenSelectors(default, null):Map<String, Selector> = new Map();
 
     public function new(descr) {
         this.treeDesc = descr;
+    }
+
+    public function addChildBinder<T>(childClass:Class<T>, alias:String, selector:Selector) {
+        childrenSelectors.set(getId(childClass, alias), selector);
     }
 
     public static function getId(instance:Dynamic, alias = "") {
@@ -120,6 +199,13 @@ class AnimationSlotSelectors {
         targetAph.channels.push(channel);
         return () -> targetAph.channels.remove(channel);
     }
+    
+    public static function mapper(selector:Selector, aph:AnimationPlaceholder, channel:Float->Void) {
+        var targetAph = selector(aph);
+        targetAph.channels.push(channel);
+        return () -> targetAph.channels.remove(channel);
+    }
+
 
     public static function nameSelector(name:String, aph:AnimationPlaceholder) {
         return findFirstInside(aph.entity, e -> e.name == name)?.getComponent(AnimationPlaceholder);

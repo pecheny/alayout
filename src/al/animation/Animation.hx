@@ -1,5 +1,6 @@
 package al.animation;
 
+import al.animation.AnimationTree.AnimationTreeProp;
 import al.core.AxisState;
 import al.core.Placeholder;
 import al.core.WidgetContainer;
@@ -10,7 +11,7 @@ import utils.Mathu;
     var time = 0;
 }
 
-class AnimationPlaceholder implements Animatable implements Channels extends PlainPlaceholder<TimeAxis> {
+class AnimationPlaceholder implements Animatable extends PlainPlaceholder<TimeAxis> {
     public var channels(default, null):Array<Float->Void> = [];
 
     public inline function setTime(time:Float) {
@@ -59,8 +60,4 @@ class AnimContainer extends WidgetContainer<TimeAxis, AnimationPlaceholder> impl
 
 interface Animatable {
     function setTime(t:Float):Void;
-}
-
-interface Channels {
-    var channels(default, null):Array<Float->Void>;
 }
