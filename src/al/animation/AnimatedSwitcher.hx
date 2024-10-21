@@ -1,5 +1,6 @@
 package al.animation;
 
+import al.animation.AnimationTree;
 import a2d.Placeholder2D;
 import al.animation.Animation.AnimationPlaceholder;
 import al.animation.AnimationTreeBuilder;
@@ -12,15 +13,16 @@ class AnimatedSwitcher implements Updatable {
     var time:Float = 0;
     var switcher:WidgetSwitcher<Axis2D>;
     var prev:Placeholder2D;
-    var prevAnim:Animator;
+    var prevAnim:AnimationTreeProp;
     var current:Placeholder2D;
-    var curAnim:Animator;
+    var curAnim:AnimationTreeProp;
     var builder:AnimationTreeBuilder = new AnimationTreeBuilder();
 
     public function new(switcher) {
         this.switcher = switcher;
         setTree({
             layout: "portion",
+            name:"switcher",
             children: [{size: {value: 1.}}, {size: {value: 1.}},]
         });
     }
@@ -28,12 +30,12 @@ class AnimatedSwitcher implements Updatable {
     public function setTree(desc) {
         tree = builder.build(desc);
         tree.bindAnimation(0, t -> {
-            if (prevAnim != null)
-                prevAnim.setT(1 - t);
+            if (prevAnim?.value != null)
+                prevAnim.value.setTime(1 - t);
         });
         tree.bindAnimation(1, t -> {
-            if (curAnim != null)
-                curAnim.setT(t);
+            if (curAnim?.value != null)
+                curAnim.value.setTime(t);
         });
     }
 
@@ -42,7 +44,7 @@ class AnimatedSwitcher implements Updatable {
         prev = current;
         prevAnim = curAnim;
         current = ph;
-        curAnim = current.entity.getComponent(Animator);
+        curAnim = current.entity.getComponent(AnimationTreeProp);
         switcher.bind(ph);
     }
 
