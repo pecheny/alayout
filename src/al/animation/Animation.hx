@@ -34,15 +34,23 @@ class AnimContainer extends WidgetContainer<TimeAxis, AnimationPlaceholder> impl
     var aph:AnimationPlaceholder;
 
     public function new(w:AnimationPlaceholder) {
+        this.aph = w;
         w.channels.push(setTime);
         super(w, 1);
     }
 
     public function setTime(t:Float) {
         var ptime = t;
+        var pst = aph.axisStates[time];
         for (ch in getChildren()) {
             var tax:AxisState = ch.axisStates[TimeAxis.time];
-            var ltuc = (ptime - tax.getPos()) / tax.getSize();
+            // positons stored in global space, but t should be calculated in internal normalized
+            // so we should get 
+            // 1. beginning of child relative to parent
+            // 2. parent time relative to child's beginning
+            // 3. scale the result to be normalized within child's' space
+            // Since t in both child and parent space is normalized the multiplier is relation of child and parent size.
+            var ltuc = (ptime - tax.getPos() + pst.getPos()) / (tax.getSize() / pst.getSize());
             var ltime = Mathu.clamp(ltuc, 0., 1.);
             ch.setTime(ltime);
         }
