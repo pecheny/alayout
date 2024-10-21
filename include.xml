@@ -3,4 +3,5 @@
 <project>
    <haxelib name="slec"/>
    <haxelib name="taxis"/>
+   <haxelib name="fucore"/>
 </project>

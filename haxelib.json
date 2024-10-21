@@ -16,7 +16,8 @@
   ],
   "dependencies": {
     "slec": "git:https://github.com/pecheny/slec",
-    "taxis": "git:https://github.com/pecheny/taxis"
+    "taxis": "git:https://github.com/pecheny/taxis",
+    "fucore": "git:https://github.com/pecheny/fucore"
   }
 }
  
