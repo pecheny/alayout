@@ -46,11 +46,11 @@ class TreeMapperComponent extends Component {
         preset = props.get(AnimationPreset.getId(target, alias));
         if (preset == null)
             throw 'animation preset for $target not defined.';
-        tree.onChange.listen(bind);
-        bind();
+        tree.onChange.listen(rebind);
+        rebind();
     }
 
-    function bind() {
+    public function rebind() {
         if (unbinders != null)
             unbind();
         if (tree.value != null)
@@ -120,24 +120,37 @@ class TreeBinderComponent extends Component {
     }
 
     function onTree() {
+        if (targetTree.value == null)
+            return;
+        targetTree.onChange.remove(onTree);
         for (ch in children)
             bindChild(ch);
     }
 
     public function addChild(aph:Channels) {
         children.push(aph);
-        if (targetTree?.value != null)
+        if (_inited && targetTree?.value != null)
             bindChild(aph);
     }
 
+    // not tested for now
+    public function removeChild(ch:Channels) {
+        var aph = ch.entity.getComponent(AnimationTreeProp)?.value;
+        if (aph == null)
+            return;
+        var parent = aph.entity.parent;
+        if (parent == null)
+            return;
+        var ac = parent.getComponent(AnimContainer);
+        if (ac == null)
+            return;
+        AnimationTreeBuilder.removeChild(ac, aph);
+        aph.entity.getComponent(TreeMapperComponent)?.rebind();
+    }
+
     function bindChild(child:Channels) {
-        if (!_inited)
-            return;
-        if (targetTree.value == null)
-            return;
         var selector = preset.childrenSelectors.get(AnimationPreset.getId(child, ""));
         var parentAph = selector(targetTree.value);
-        // check / wait for child tree value
         var ac = parentAph.entity.getComponent(AnimContainer);
         var childTree = AnimationTreeProp.getOrCreate(child.entity);
         function addToCont() {
@@ -152,10 +165,6 @@ class TreeBinderComponent extends Component {
         else
             childTree.onChange.listen(addToCont);
     }
-
-    function bindChildren() {}
-
-    function unbindChildren() {}
 }
 
 typedef Selector = AnimationPlaceholder->AnimationPlaceholder;
