@@ -1,5 +1,6 @@
 package al.animation;
 
+import ec.IComponent;
 import utils.Mathu;
 import ec.PropertyComponent;
 import al.animation.Animation;
@@ -20,7 +21,7 @@ class AnimationTreeProp extends PropertyComponent<AnimationPlaceholder> {}
 **/
 interface Channels {
     var channels(default, null):Array<Float->Void>;
-    var tree(default, null):AnimationTreeProp;
+    var entity(get, null):Entity;
 }
 
 /**
@@ -99,20 +100,22 @@ class TreeBuilderComponent extends Component {
 class TreeBinderComponent extends Component {
     @:once var props:PropStorage<AnimationPreset>;
     var target:Channels;
+    var targetTree:AnimationTreeProp;
     var alias:String;
     var children:Array<Channels> = [];
     var preset:AnimationPreset;
 
     public function new(e, target, alias = "") {
         this.target = target;
+        this.targetTree = AnimationTreeProp.getOrCreate(e);
         this.alias = alias;
         super(e);
     }
 
     override function init() {
         preset = props.get(AnimationPreset.getId(target, alias));
-        target.tree.onChange.listen(onTree);
-        if (target.tree.value != null)
+        targetTree.onChange.listen(onTree);
+        if (targetTree.value != null)
             onTree();
     }
 
@@ -123,30 +126,31 @@ class TreeBinderComponent extends Component {
 
     public function addChild(aph:Channels) {
         children.push(aph);
-        if (target.tree?.value != null)
+        if (targetTree?.value != null)
             bindChild(aph);
     }
 
     function bindChild(child:Channels) {
         if (!_inited)
             return;
-        if (target.tree.value == null)
+        if (targetTree.value == null)
             return;
         var selector = preset.childrenSelectors.get(AnimationPreset.getId(child, ""));
-        var parentAph = selector(target.tree.value);
+        var parentAph = selector(targetTree.value);
         // check / wait for child tree value
-        var ac =parentAph.entity.getComponent(AnimContainer);
+        var ac = parentAph.entity.getComponent(AnimContainer);
+        var childTree = AnimationTreeProp.getOrCreate(child.entity);
         function addToCont() {
-            if (child.tree.value != null){
-                AnimationTreeBuilder.addChild(ac, child.tree.value);
+            if (childTree.value != null) {
+                AnimationTreeBuilder.addChild(ac, childTree.value);
                 ac.refresh();
-                child.tree.onChange.remove(addToCont);
+                childTree.onChange.remove(addToCont);
             }
         }
-        if (child.tree.value != null)
-            AnimationTreeBuilder.addChild(ac, child.tree.value);
+        if (childTree.value != null)
+            AnimationTreeBuilder.addChild(ac, childTree.value);
         else
-            child.tree.onChange.listen(addToCont);
+            childTree.onChange.listen(addToCont);
     }
 
     function bindChildren() {}
@@ -199,13 +203,12 @@ class AnimationSlotSelectors {
         targetAph.channels.push(channel);
         return () -> targetAph.channels.remove(channel);
     }
-    
+
     public static function mapper(selector:Selector, aph:AnimationPlaceholder, channel:Float->Void) {
         var targetAph = selector(aph);
         targetAph.channels.push(channel);
         return () -> targetAph.channels.remove(channel);
     }
-
 
     public static function nameSelector(name:String, aph:AnimationPlaceholder) {
         return findFirstInside(aph.entity, e -> e.name == name)?.getComponent(AnimationPlaceholder);
