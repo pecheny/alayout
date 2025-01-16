@@ -28,7 +28,7 @@ interface Channels {
     Listens for AnimationTreeProp changes and wires target channels with given animation tree according to rules defined in AnimationPreset for given target.
 **/
 class TreeMapperComponent extends Component {
-    @:once var props:PropStorage<AnimationPreset>;
+    @:once(gen) var props:PropStorage<AnimationPreset>;
     var tree:AnimationTreeProp;
     var target:Channels;
     var alias:String;
@@ -81,7 +81,7 @@ class TreeBuilderComponent extends Component {
     var tree:AnimationTreeProp;
     var target:Channels;
     var alias:String;
-    @:once var props:PropStorage<AnimationPreset>;
+    @:once(gen) var props:PropStorage<AnimationPreset>;
     @:once var builder:AnimationTreeBuilder;
 
     public function new(e, target, alias = "") {
@@ -98,7 +98,7 @@ class TreeBuilderComponent extends Component {
 }
 
 class TreeBinderComponent extends Component {
-    @:once var props:PropStorage<AnimationPreset>;
+    @:once(gen) var props:PropStorage<AnimationPreset>;
     var target:Channels;
     var targetTree:AnimationTreeProp;
     var alias:String;
