@@ -45,6 +45,9 @@ class PlaceholderBuilder2D extends PlaceholderBuilder<Axis2DStateFactory> {
         return this;
     }
 
+    /**
+        Add LiquidTransform
+    **/
     public function l() {
         _l = true;
         return this;
@@ -57,7 +60,10 @@ class PlaceholderBuilder2D extends PlaceholderBuilder<Axis2DStateFactory> {
         for (k in Axis2D)
             factories[k].reset();
     }
-
+    
+    /**
+        Add transform prop
+    **/
     public function t(s:Float = 1) {
         scale = s;
         return this;
