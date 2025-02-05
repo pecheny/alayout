@@ -17,6 +17,8 @@ class ContainerStyler {
     }
 
     public function stylize(wc:Widget2DContainer, style:String) {
+        if (!hlayouts.exists(style))
+            throw 'Style $style is not registerd in the ContainerStyler';
         wc.setLayout(horizontal, hlayouts[style]);
         wc.setLayout(vertical, vlayouts[style]);
     }
