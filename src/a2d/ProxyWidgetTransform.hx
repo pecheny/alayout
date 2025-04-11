@@ -65,7 +65,8 @@ class ProxyWidgetTransform extends Widget {
     }
 
     public static function grantInnerTransformPh(ph:Placeholder2D) {
-        ScaleComponent.getOrCreate(ph.entity);
+        var scale = ScaleComponent.getOrCreate(ph.entity);
+        scale.value = 1.;
         var prtr = ProxyWidgetTransform.getOrCreate(ph.entity, ph);
         return prtr.target;
     }
