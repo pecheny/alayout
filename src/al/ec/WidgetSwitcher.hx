@@ -1,8 +1,21 @@
 package al.ec;
+
 import al.core.Placeholder;
+
 class WidgetSwitcher<T:Axis<T>> {
     var root:Placeholder<T>;
     var current:Placeholder<T>;
+
+    public var ph(get, null):Placeholder<T>;
+    public var entity(get, null):Entity;
+
+    public function get_entity():Entity {
+        return root.entity;
+    }
+
+    public function get_ph():Placeholder<T> {
+        return root;
+    }
 
     public function new(root:Placeholder<T>) {
         this.root = root;
@@ -39,7 +52,7 @@ class WidgetSwitcher<T:Axis<T>> {
         root.entity.removeChild(target.entity);
     }
 
-    public function widget() {
+    @:deprecated public function widget() {
         return root;
     }
 }
