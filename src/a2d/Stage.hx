@@ -1,3 +1,3 @@
 package a2d;
-interface Stage extends AspectRatioProvider extends WindowSizeProvider {
-}
+
+interface Stage extends AspectRatioProvider extends WindowSizeProvider {}

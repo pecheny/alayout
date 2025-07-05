@@ -46,7 +46,7 @@ class AnimContainer extends WidgetContainer<TimeAxis, AnimationPlaceholder> impl
         for (ch in getChildren()) {
             var tax:AxisState = ch.axisStates[TimeAxis.time];
             // positons stored in global space, but t should be calculated in internal normalized
-            // so we should get 
+            // so we should get
             // 1. beginning of child relative to parent
             // 2. parent time relative to child's beginning
             // 3. scale the result to be normalized within child's' space

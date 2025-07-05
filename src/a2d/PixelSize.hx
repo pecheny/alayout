@@ -1,9 +1,12 @@
 package a2d;
+
 import a2d.Stage;
 import al.layouts.data.LayoutData.ISize;
+
 class PixelSize implements ISize {
     var screen:Stage;
     var a:Axis2D;
+
     public var value:Float = 0;
 
     public function new(a, s, v) {

@@ -1,4 +1,5 @@
 package a2d.transform;
+
 import a2d.Placeholder2D;
 import Axis2D;
 import a2d.Boundbox;
@@ -8,9 +9,7 @@ using a2d.transform.LiquidTransformer.BoundboxConverters;
 class LiquidTransformer extends TransformerBase {
     override public function transformValue(c:Axis2D, input:Float) {
         var sign = c == horizontal ? 1 : -1;
-        return
-            sign *
-            ((pos[c] + bounds.localToGlobal(c, input) * size[c]) / aspects[c] - 1) ;
+        return sign * ((pos[c] + bounds.localToGlobal(c, input) * size[c]) / aspects[c] - 1);
     }
 
     public static function withLiquidTransform(w:Placeholder2D, aspectRatio) {
@@ -35,5 +34,3 @@ class BoundboxConverters {
         return value * bb.size[a] - bb.pos[a];
     }
 }
-
-

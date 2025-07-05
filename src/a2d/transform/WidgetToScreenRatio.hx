@@ -19,6 +19,7 @@ class WidgetToScreenRatio extends Widget {
     @:once var ratioProvider:AspectRatioProvider;
     var targetRatio = AVConstructor.create(Axis2D, 1., 1.);
     var scale:Float;
+
     function new(ph, scale) {
         this.scale = scale;
         super(ph);
@@ -35,7 +36,6 @@ class WidgetToScreenRatio extends Widget {
         return targetRatio;
     }
 }
-
 
 class Axis2DApplier {
     public var appliers(default, null):ReadOnlyAVector2D<StorageAxisApplier>;

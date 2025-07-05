@@ -1,4 +1,5 @@
 package al.animation;
+
 import macros.AVConstructor;
 import al.layouts.data.LayoutData;
 import al.appliers.ContainerRefresher;
@@ -9,21 +10,22 @@ import al.layouts.PortionLayout;
 import al.layouts.WholefillLayout;
 import al.animation.Animation;
 import ec.Entity;
+
 class AnimationTreeBuilder {
-    public function new() {
-    }
+    public function new() {}
 
     public function build(rec:AnimationContainerRec) {
         var w = animationWidget(new Entity(), rec);
         switch rec {
-            case {layout:l, children:children}  if (l != null && children != null): {
-//                trace(rec  + " " + l);
-                var con = animationContainer(w, getLayout(l));
-                for (ch in children) {
-                    addChild(con, build(ch));
-                }
-                con.refresh();
-            };
+            case {layout: l, children: children} if (l != null && children != null):
+                {
+                    //                trace(rec  + " " + l);
+                    var con = animationContainer(w, getLayout(l));
+                    for (ch in children) {
+                        addChild(con, build(ch));
+                    }
+                    con.refresh();
+                };
             case _:
         }
         return w;
@@ -49,22 +51,21 @@ class AnimationTreeBuilder {
     }
 
     static final defaultSizeRec = {
-        type:SizeType.fraction,
-        value:1.
+        type: SizeType.fraction,
+        value: 1.
     }
+
     public static function animationWidget(e:Entity, rec:AxisRec):AnimationPlaceholder {
         e.name = rec.name;
-        var sizeRec:SizeRec =
-        if (rec.size == null) defaultSizeRec else rec.size;
+        var sizeRec:SizeRec = if (rec.size == null) defaultSizeRec else rec.size;
 
         if (sizeRec.type == null)
             sizeRec.type = fraction;
 
-
         var size = switch sizeRec.type {
-            case fixed: new FixedSize(sizeRec.value); //todo /2 its fixed size in units of the parent
+            case fixed: new FixedSize(sizeRec.value); // todo /2 its fixed size in units of the parent
             case fraction: new FractionSize(sizeRec.value);
-//            case px: new PixelSize(axis, screen, value);
+            // case px: new PixelSize(axis, screen, value);
         }
         var timeAxis = new AxisState(new Position(), size);
         var animationWidget = new AnimationPlaceholder(AVConstructor.create(timeAxis));
@@ -84,7 +85,7 @@ class AnimationTreeBuilder {
     function getLayout(name) {
         if (!layouts.exists(name))
             throw 'there is no $name layout';
-        return layouts[name] ;
+        return layouts[name];
     }
 
     function animationContainer(aw:AnimationPlaceholder, l):AnimContainer {
@@ -97,7 +98,7 @@ class AnimationTreeBuilder {
 }
 
 typedef AnimationContainerRec = {
-    >AxisRec,
+    > AxisRec,
     ?layout:String,
     ?children:Array<AnimationContainerRec>
 }
@@ -112,12 +113,13 @@ typedef SizeRec = {
     ?type:SizeType,
     value:Float
 }
+
 typedef PosRec = {
     ?type:PositionType,
     value:Float
 }
-@:enum abstract SizeType(Int){
+
+@:enum abstract SizeType(Int) {
     var fraction;
     var fixed;
 }
-

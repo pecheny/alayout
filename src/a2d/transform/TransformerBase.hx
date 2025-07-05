@@ -1,28 +1,29 @@
 package a2d.transform;
+
 import a2d.transform.Resizable;
 import Axis2D;
 import a2d.Boundbox;
 import macros.AVConstructor;
 import utils.Signal;
-/**
-* Transformer provide a function to translate normalized coordinates (i.e. lacated in [0,1] range) into widget bounds.
-**/
 
+/**
+ * Transformer provide a function to translate normalized coordinates (i.e. lacated in [0,1] range) into widget bounds.
+**/
 class TransformerBase implements Resizable {
     // var appliers:AVector2D<TransformatorAxisApplier>;
-
     @:isVar public var aspects(get, null):ReadOnlyAVector2D<Float> = AVConstructor.create(Axis2D, 1., 1.).readonly();
+
     var _size = AVConstructor.create(Axis2D, 1., 1.);
     var _pos = AVConstructor.create(Axis2D, 0., 0.);
-    public var size(get,null):ReadOnlyAVector2D<Float>;
-    public var pos(get,null):ReadOnlyAVector2D<Float>;
-    public var changed(default, null):Signal<Void -> Void> = new Signal();
+
+    public var size(get, null):ReadOnlyAVector2D<Float>;
+    public var pos(get, null):ReadOnlyAVector2D<Float>;
+    public var changed(default, null):Signal<Void->Void> = new Signal();
 
     // public function getAxisApplier(a:Axis2D):AxisApplier {
     //     return appliers[a];
     // }
-
-//todo make own boundbox, exclude al dependency
+    // todo make own boundbox, exclude al dependency
     var bounds:Boundbox = new Boundbox();
 
     public function new(aspects:ReadOnlyAVector2D<Float>) {
@@ -36,9 +37,10 @@ class TransformerBase implements Resizable {
 
     public function invalidate() {}
 
-    public function transformValue(c:Axis2D, input:Float):Float {throw "N/A";}
+    public function transformValue(c:Axis2D, input:Float):Float {
+        throw "N/A";
+    }
 
-    
     public function resize(w:Float, h:Float):Void {
         _size[horizontal] = w;
         _size[vertical] = h;
@@ -67,7 +69,7 @@ class TransformerBase implements Resizable {
         return _pos;
     }
 
-    function get_aspects(){
+    function get_aspects() {
         return aspects;
     }
 }

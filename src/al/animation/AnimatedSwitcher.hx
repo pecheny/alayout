@@ -9,6 +9,7 @@ import update.Updatable;
 
 class AnimatedSwitcher implements Updatable {
     public var duration = 1.;
+
     var tree:AnimationPlaceholder;
     var time:Float = 0;
     var switcher:WidgetSwitcher<Axis2D>;
@@ -22,11 +23,11 @@ class AnimatedSwitcher implements Updatable {
         this.switcher = switcher;
         setTree({
             layout: "portion",
-            name:"switcher",
+            name: "switcher",
             children: [{size: {value: 1.}}, {size: {value: 1.}},]
         });
     }
-    
+
     public function setTree(desc) {
         tree = builder.build(desc);
         tree.bindAnimation(0, t -> {

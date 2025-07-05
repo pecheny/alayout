@@ -1,14 +1,17 @@
 package al.core;
-import al.layouts.data.LayoutData;
-/**
-*  Stores logic layout state for item and provides access to apply calculated value to target
-**/
 
+import al.layouts.data.LayoutData;
+
+/**
+ *  Stores logic layout state for item and provides access to apply calculated value to target
+**/
 class AxisState implements AxisApplier {
     var sizeVal:Float = 1;
     var posVal:Float = 0;
+
     public var size(default, null):ISize;
     public var position(default, null):Position;
+
     var siblings:Array<AxisApplier> = [];
 
     public function new(p, s) {
@@ -46,5 +49,3 @@ class AxisState implements AxisApplier {
         return position.type == managed;
     }
 }
-
-

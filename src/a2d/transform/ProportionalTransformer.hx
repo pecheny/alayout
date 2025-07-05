@@ -1,5 +1,7 @@
 package a2d.transform;
+
 import Axis2D;
+
 class ProportionalTransformer extends TransformerBase {
     var localScale = 1.;
 
@@ -7,10 +9,8 @@ class ProportionalTransformer extends TransformerBase {
         var sign = a == 0 ? 1 : -1;
         var free = size[a] - bounds.size[a] * localScale;
         var lp = (input - bounds.pos[a]) * localScale + free / 2;
-        return
-            ((pos[a] + lp) / aspects[a] - 1) * sign;
+        return ((pos[a] + lp) / aspects[a] - 1) * sign;
     }
-
 
     override public function invalidate() {
         localScale = 9999.;
@@ -21,6 +21,3 @@ class ProportionalTransformer extends TransformerBase {
         }
     }
 }
-
-
-

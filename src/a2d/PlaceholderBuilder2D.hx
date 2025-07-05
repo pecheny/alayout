@@ -1,4 +1,5 @@
 package a2d;
+
 import a2d.transform.LiquidTransformer;
 import Axis2D;
 import a2d.Stage;
@@ -9,7 +10,6 @@ import al.utils.PlaceholderBuilder;
 import a2d.ProxyWidgetTransform;
 import al.prop.ScaleComponent;
 import macros.AVConstructor;
-
 
 class PlaceholderBuilder2D extends PlaceholderBuilder<Axis2DStateFactory> {
     var s:Stage;
@@ -60,7 +60,7 @@ class PlaceholderBuilder2D extends PlaceholderBuilder<Axis2DStateFactory> {
         for (k in Axis2D)
             factories[k].reset();
     }
-    
+
     /**
         Add transform prop
     **/

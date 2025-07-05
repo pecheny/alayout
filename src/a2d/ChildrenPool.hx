@@ -3,7 +3,6 @@ package a2d;
 import al.core.DataView;
 import al.core.TWidget.IWidget;
 
-
 typedef ChildrenPool<T:IWidget<Axis2D>> = al.core.ChildrenPool<Axis2D, T>;
 
 class DataChildrenPool<TData, TButton:IWidget<Axis2D> & DataView<TData>> extends ChildrenPool<TButton> {
@@ -13,4 +12,3 @@ class DataChildrenPool<TData, TButton:IWidget<Axis2D> & DataView<TData>> extends
             pool[i].initData(data[i]);
     }
 }
-

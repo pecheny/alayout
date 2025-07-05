@@ -72,7 +72,6 @@ class ProxyWidgetTransform extends Widget {
     }
 }
 
-
 class TransformAxisApplier implements AxisApplier {
     var target:AxisApplier;
 

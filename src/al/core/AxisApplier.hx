@@ -1,5 +1,7 @@
 package al.core;
+
 import al.appliers.PropertyAccessors.FloatPropertyWriter;
+
 interface AxisApplier {
     function apply(pos:Float, size:Float):Void;
 }
@@ -7,6 +9,7 @@ interface AxisApplier {
 class SimpleAxisApplier implements AxisApplier {
     var pos:FloatPropertyWriter;
     var size:FloatPropertyWriter;
+
     public function new(pos:FloatPropertyWriter, size:FloatPropertyWriter) {
         this.pos = pos;
         this.size = size;
@@ -18,14 +21,14 @@ class SimpleAxisApplier implements AxisApplier {
     }
 }
 
-class StorageAxisApplier implements AxisApplier{
+class StorageAxisApplier implements AxisApplier {
     public var pos:Float;
     public var size:Float;
-    public function new(){}
+
+    public function new() {}
 
     public function apply(pos:Float, size:Float):Void {
         this.pos = pos;
         this.size = size;
     }
 }
-

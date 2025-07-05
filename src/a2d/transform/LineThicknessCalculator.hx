@@ -11,7 +11,7 @@ import a2d.AspectRatio;
 
 class LineThicknessCalculator implements Resizable {
     var scale:Float;
-    var _lineScales:AVector2D<Float> ;
+    var _lineScales:AVector2D<Float>;
     var aspectRatio:AspectRatio;
 
     public function new(ar:AspectRatio, target:AVector2D<Float>, scale = 1.) {

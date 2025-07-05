@@ -21,6 +21,7 @@ class TWidget<TAxis:Axis<TAxis>> implements IWidget<TAxis> {
         return ph.entity;
     }
 }
+
 #if (!macro && !completion && !display)
 @:autoBuild(ec.macros.InitMacro.build())
 #end

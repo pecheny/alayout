@@ -10,113 +10,113 @@ using Lambda;
 using al.core.WidgetContainer.Utils;
 
 interface WContainer<T> {
-	function addChild(ch:T):Void;
-	function removeChild(ch:T):Void;
-	public function refresh():Void;
-	public function getChildren():ReadOnlyArray<T>;
+    function addChild(ch:T):Void;
+    function removeChild(ch:T):Void;
+    public function refresh():Void;
+    public function getChildren():ReadOnlyArray<T>;
     public var entity(get, null):Entity;
 }
 
 @:generic
 class WidgetContainer<TAxis:Axis<TAxis>, TChild:Placeholder<TAxis>> extends TWidget<TAxis> implements Refreshable implements ResizableWidget<TAxis>
-		implements WContainer<TChild> {
-	var children:Array<TChild> = [];
-	var layoutMap:AVector<TAxis, AxisLayout>;
-	var childrenAxisStates:AVector<TAxis, Array<AxisState>>;
-	var contentSize:AVector<TAxis, Null<Float>>;
+        implements WContainer<TChild> {
+    var children:Array<TChild> = [];
+    var layoutMap:AVector<TAxis, AxisLayout>;
+    var childrenAxisStates:AVector<TAxis, Array<AxisState>>;
+    var contentSize:AVector<TAxis, Null<Float>>;
 
-	public var contentSizeChanged(default, null) = new Signal<TAxis->Void>();
+    public var contentSizeChanged(default, null) = new Signal<TAxis->Void>();
 
-	public var refreshOnChildrenChanged = false;
-	@:isVar public var refreshOnContext(get, set):Bool;
+    public var refreshOnChildrenChanged = false;
+    @:isVar public var refreshOnContext(get, set):Bool;
 
-	function get_refreshOnContext():Bool {
-		return refreshOnContext;
-	}
+    function get_refreshOnContext():Bool {
+        return refreshOnContext;
+    }
 
-	@:keep
-	function onContext(_:Entity) {
-		refresh();
-	}
+    @:keep
+    function onContext(_:Entity) {
+        refresh();
+    }
 
-	function set_refreshOnContext(value:Bool):Bool {
-		if (value && !refreshOnContext)
-			entity.onContext.listen(onContext);
-		if (!value)
-			entity.onContext.remove(onContext);
-		return value;
-	}
+    function set_refreshOnContext(value:Bool):Bool {
+        if (value && !refreshOnContext)
+            entity.onContext.listen(onContext);
+        if (!value)
+            entity.onContext.remove(onContext);
+        return value;
+    }
 
-	public function new(holder, n) {
-		super(holder);
-		layoutMap = AVConstructor.empty(n);
-		childrenAxisStates = AVConstructor.empty(n);
-		// todo add support of Null<T> as value in AVConstructor
-		contentSize = cast new haxe.ds.Vector<Null<Float>>(n); // AVConstructor.factoryCreate(TAxis, a -> cast null, n);
-	}
+    public function new(holder, n) {
+        super(holder);
+        layoutMap = AVConstructor.empty(n);
+        childrenAxisStates = AVConstructor.empty(n);
+        // todo add support of Null<T> as value in AVConstructor
+        contentSize = cast new haxe.ds.Vector<Null<Float>>(n); // AVConstructor.factoryCreate(TAxis, a -> cast null, n);
+    }
 
-	public function setLayout(axis:TAxis, layout:AxisLayout) {
-		layoutMap[axis] = layout;
-		if (!childrenAxisStates.hasValueFor(axis))
-			childrenAxisStates[axis] = [];
-		return this;
-	}
+    public function setLayout(axis:TAxis, layout:AxisLayout) {
+        layoutMap[axis] = layout;
+        if (!childrenAxisStates.hasValueFor(axis))
+            childrenAxisStates[axis] = [];
+        return this;
+    }
 
-	public function addChild(child:TChild) {
-		if (children.indexOf(child) > -1)
-			throw "Already child";
-		children.push(child);
-		for (axis in layoutMap.axes()) {
-			var a:TAxis = axis;
-			childrenAxisStates[axis].push(child.axisStates[axis]);
-		}
-		if (refreshOnChildrenChanged) {
-			refresh();
-		}
-	}
+    public function addChild(child:TChild) {
+        if (children.indexOf(child) > -1)
+            throw "Already child";
+        children.push(child);
+        for (axis in layoutMap.axes()) {
+            var a:TAxis = axis;
+            childrenAxisStates[axis].push(child.axisStates[axis]);
+        }
+        if (refreshOnChildrenChanged) {
+            refresh();
+        }
+    }
 
-	public function removeChild(child:TChild) {
-		if (children.indexOf(child) < 0)
-			throw "not a child";
-		children.remove(child);
-		for (axis in layoutMap.axes()) {
-			var a:TAxis = axis;
-			childrenAxisStates[axis].remove(child.axisStates[axis]);
-		}
-		if (refreshOnChildrenChanged) {
-			refresh();
-		}
-	}
+    public function removeChild(child:TChild) {
+        if (children.indexOf(child) < 0)
+            throw "not a child";
+        children.remove(child);
+        for (axis in layoutMap.axes()) {
+            var a:TAxis = axis;
+            childrenAxisStates[axis].remove(child.axisStates[axis]);
+        }
+        if (refreshOnChildrenChanged) {
+            refresh();
+        }
+    }
 
-	public function getChildren():ReadOnlyArray<TChild> {
-		return children;
-	}
+    public function getChildren():ReadOnlyArray<TChild> {
+        return children;
+    }
 
-	public function getContentSize(a:TAxis):Float {
-		if (contentSize.hasValueFor(a))
-			return contentSize[a];
-		return 0;
-	}
+    public function getContentSize(a:TAxis):Float {
+        if (contentSize.hasValueFor(a))
+            return contentSize[a];
+        return 0;
+    }
 
-	public function refresh() {
-		for (axis in layoutMap.axes()) {
-			if (layoutMap[axis] == null)
-				continue;
-			var parent = ph.axisStates[axis];
-			var oldSize = if (contentSize.hasValueFor(axis)) contentSize[axis] else -1;
-			contentSize[axis] = layoutMap[axis].arrange(parent.getPos(), parent.getSize(), childrenAxisStates[axis]);
-			if (contentSize[axis] != oldSize)
-				contentSizeChanged.dispatch(axis);
-		}
-	}
+    public function refresh() {
+        for (axis in layoutMap.axes()) {
+            if (layoutMap[axis] == null)
+                continue;
+            var parent = ph.axisStates[axis];
+            var oldSize = if (contentSize.hasValueFor(axis)) contentSize[axis] else -1;
+            contentSize[axis] = layoutMap[axis].arrange(parent.getPos(), parent.getSize(), childrenAxisStates[axis]);
+            if (contentSize[axis] != oldSize)
+                contentSizeChanged.dispatch(axis);
+        }
+    }
 }
 
 class Utils {
-	public static function hasValueFor<TAxis:Axis<TAxis>, TVal>(av:AVector<TAxis, TVal>, a:TAxis) {
-		return av[a] != null;
-	}
+    public static function hasValueFor<TAxis:Axis<TAxis>, TVal>(av:AVector<TAxis, TVal>, a:TAxis) {
+        return av[a] != null;
+    }
 }
 
 interface Refreshable {
-	function refresh():Void;
+    function refresh():Void;
 }
