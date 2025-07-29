@@ -34,13 +34,13 @@ class WidgetSwitcher<T:Axis<T>> {
     }
 
     public function bind(target:Placeholder<T>) {
+        root.entity.addChild(target.entity);
         for (a in root.axisStates.axes()) {
             var state = root.axisStates[a];
             var chState = target.axisStates[a];
             state.addSibling(chState);
             chState.apply(state.getPos(), state.getSize());
         }
-        root.entity.addChild(target.entity);
     }
 
     public function unbind(target:Placeholder<T>) {
