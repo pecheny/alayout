@@ -105,6 +105,8 @@ class PortionLayout implements AxisLayout {
 
                     var coord = pos;
                     var offset = (totalValue - calculatedTotalSize) / 2;
+                    if (offset < 0)
+                        offset = 0;
                     coord += offset;
 
                     arrangePart(0, coord, positive);
