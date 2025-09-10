@@ -14,7 +14,7 @@ class Padding implements AxisLayout {
     }
 
     public function arrange(pos:Float, size:Float, children:Array<AxisState>) {
-        var paddingValue = Math.max(padding.getFixed(), padding.getPortion() * size);
+        var paddingValue = padding.getFixed();//Math.max(padding.getFixed(), padding.getPortion() * size);
         var contSize = size - paddingValue * 2;
         var max = size;
         var pos = pos + paddingValue;
