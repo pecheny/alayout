@@ -135,16 +135,21 @@ class TreeBinderComponent extends Component {
 
     // not tested for now
     public function removeChild(ch:Channels) {
+        children.remove(ch);
         var aph = ch.entity.getComponent(AnimationTreeProp)?.value;
         if (aph == null)
             return;
         var parent = aph.entity.parent;
         if (parent == null)
             return;
-        var ac = parent.getComponent(AnimContainer);
-        if (ac == null)
-            return;
-        AnimationTreeBuilder.removeChild(ac, aph);
+        if (@:privateAccess targetTree.value.siblings.indexOf(aph) > -1) {
+            targetTree.value.removeSibling(aph);
+        } else {
+            var ac = parent.getComponent(AnimContainer);
+            if (ac == null)
+                return;
+            AnimationTreeBuilder.removeChild(ac, aph);
+        }
         aph.entity.getComponent(TreeMapperComponent)?.rebind();
     }
 
@@ -153,17 +158,30 @@ class TreeBinderComponent extends Component {
         var parentAph = selector(targetTree.value);
         var ac = parentAph.entity.getComponent(AnimContainer);
         var childTree = AnimationTreeProp.getOrCreate(child.entity);
-        function addToCont() {
-            if (childTree.value != null) {
-                AnimationTreeBuilder.addChild(ac, childTree.value);
-                ac.refresh();
-                childTree.onChange.remove(addToCont);
+        if (ac != null) {
+            function addToCont() {
+                if (childTree.value != null) {
+                    AnimationTreeBuilder.addChild(ac, childTree.value);
+                    ac.refresh();
+                    childTree.onChange.remove(addToCont);
+                }
             }
+            if (childTree.value != null)
+                AnimationTreeBuilder.addChild(ac, childTree.value);
+            else
+                childTree.onChange.listen(addToCont);
+        } else {
+            function addToCont() {
+                if (childTree.value != null) {
+                    parentAph.addSibling(childTree.value);
+                    childTree.onChange.remove(addToCont);
+                }
+            }
+            if (childTree.value != null) {
+                parentAph.addSibling(childTree.value);
+            } else
+                childTree.onChange.listen(addToCont);
         }
-        if (childTree.value != null)
-            AnimationTreeBuilder.addChild(ac, childTree.value);
-        else
-            childTree.onChange.listen(addToCont);
     }
 }
 
