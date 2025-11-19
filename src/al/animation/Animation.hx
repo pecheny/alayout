@@ -14,10 +14,14 @@ import utils.Mathu;
 class AnimationPlaceholder implements Animatable extends PlainPlaceholder<TimeAxis> {
     public var channels(default, null):Array<Float->Void> = [];
 
+    var siblings:Array<AnimationPlaceholder> = [];
+
     public inline function setTime(time:Float) {
         for (ach in channels) {
             ach(time);
         }
+        for (s in siblings)
+            s.setTime(time);
     }
 
     public function bindAnimation(id, handler:Float->Void) {
@@ -28,6 +32,16 @@ class AnimationPlaceholder implements Animatable extends PlainPlaceholder<TimeAx
         var trg = entity.getGrandchild(path);
         if (trg != null)
             trg.getComponent(AnimationPlaceholder).channels.push(handler);
+    }
+
+    public function addSibling(aph) {
+        siblings.push(aph);
+        PlaceholderUtils.addSibling(this, aph);
+    }
+
+    public function removeSibling(aph) {
+        siblings.remove(aph);
+        PlaceholderUtils.removeSibling(this, aph);
     }
 }
 
