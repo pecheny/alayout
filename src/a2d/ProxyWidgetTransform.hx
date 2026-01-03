@@ -8,8 +8,15 @@ import al.core.AxisApplier;
 import al.prop.ScaleComponent;
 import macros.AVConstructor;
 
+enum abstract ProxyWidgetTransformScaleMode(Int) {
+    var scale;
+    var paddings;
+}
+
 @:build(ec.macros.Macros.buildGetOrCreate())
 class ProxyWidgetTransform extends Widget {
+    public var mode:ProxyWidgetTransformScaleMode = ProxyWidgetTransformScaleMode.scale;
+
     public var target(default, null):Placeholder2D;
 
     var transform:AVector2D<TransformAxisApplier> = AVConstructor.empty();
@@ -45,9 +52,20 @@ class ProxyWidgetTransform extends Widget {
     }
 
     function onScale() {
-        var h = ph.axisStates[vertical].getSize();
-        var padding = (h - h * scale.value) / 2;
-        setPadding(padding);
+        switch mode {
+            case paddings:
+                var h = ph.axisStates[vertical].getSize();
+                var padding = (h - h * scale.value) / 2;
+                setPadding(padding);
+            case scale:
+                for (a in Axis2D) {
+                    var size = ph.axisStates[a].getSize();
+                    var padding = - (size * this.scale.value - size) / 2;
+                    transform[a].padding = padding;
+                    var aa = super.ph.axisStates[a];
+                    aa.apply(aa.getPos(), aa.getSize());
+                }
+        }
     }
 
     function applyAxis() {
