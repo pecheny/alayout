@@ -77,7 +77,7 @@ class PlaceholderBuilder2D extends PlaceholderBuilder<Axis2DStateFactory> {
             LiquidTransformer.withLiquidTransform(w, s.getAspectRatio());
         if (_s != null) {
             var scale = ScaleComponent.getOrCreate(w.entity);
-            scale.value = this.scale;
+            scale.value = _s;
             var trans = new ProxyWidgetTransform(w);
             w.entity.addComponent(trans);
         }
