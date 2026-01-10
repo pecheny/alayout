@@ -6,6 +6,7 @@ import a2d.Placeholder2D;
 import a2d.Widget;
 import al.core.AxisApplier;
 import al.prop.ScaleComponent;
+import al.prop.TransformComponent;
 import macros.AVConstructor;
 
 enum abstract ProxyWidgetTransformScaleMode(Int) {
@@ -62,6 +63,7 @@ class ProxyWidgetTransform extends Widget {
                     var size = ph.axisStates[a].getSize();
                     var padding = - (size * this.scale.value - size) / 2;
                     transform[a].padding = padding;
+                    transform[a].offset = this.scale.offset[a];
                     var aa = super.ph.axisStates[a];
                     aa.apply(aa.getPos(), aa.getSize());
                 }

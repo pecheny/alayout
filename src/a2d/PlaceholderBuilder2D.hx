@@ -1,5 +1,6 @@
 package a2d;
 
+import al.prop.TransformComponent;
 import a2d.transform.LiquidTransformer;
 import Axis2D;
 import a2d.Stage;
@@ -76,7 +77,7 @@ class PlaceholderBuilder2D extends PlaceholderBuilder<Axis2DStateFactory> {
         if (_l || addLIquid)
             LiquidTransformer.withLiquidTransform(w, s.getAspectRatio());
         if (_s != null) {
-            var scale = ScaleComponent.getOrCreate(w.entity);
+            var scale = TransformComponent.getOrCreate(w.entity);
             scale.value = _s;
             var trans = new ProxyWidgetTransform(w);
             w.entity.addComponent(trans);
