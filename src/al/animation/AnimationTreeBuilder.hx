@@ -68,7 +68,7 @@ class AnimationTreeBuilder {
             // case px: new PixelSize(axis, screen, value);
         }
         var timeAxis = new AxisState(new Position(), size);
-        var animationWidget = new AnimationPlaceholder(AVConstructor.create(timeAxis));
+        var animationWidget = new AnimationPlaceholder(timeAxis);
         e.addComponent(animationWidget);
         return animationWidget;
     }

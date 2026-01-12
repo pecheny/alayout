@@ -1,5 +1,6 @@
 package al.animation;
 
+import macros.AVConstructor;
 import al.animation.AnimationTree.AnimationTreeProp;
 import al.core.AxisState;
 import al.core.Placeholder;
@@ -15,6 +16,11 @@ class AnimationPlaceholder implements Animatable extends PlainPlaceholder<TimeAx
     public var channels(default, null):Array<Float->Void> = [];
 
     var siblings:Array<AnimationPlaceholder> = [];
+
+    public function new(axis:AxisState) {
+        var as:AVector<TimeAxis, AxisState> = AVConstructor.create(TimeAxis, axis);
+        super(as);
+    }
 
     public inline function setTime(time:Float) {
         for (ach in channels) {
