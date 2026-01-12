@@ -1,5 +1,6 @@
 package al.animation;
 
+import update.Updatable;
 import macros.AVConstructor;
 import al.animation.AnimationTree.AnimationTreeProp;
 import al.core.AxisState;
@@ -75,6 +76,33 @@ class AnimContainer extends WidgetContainer<TimeAxis, AnimationPlaceholder> impl
             var ltime = Mathu.clamp(ltuc, 0., 1.);
             ch.setTime(ltime);
         }
+    }
+}
+
+class AnimationController implements Updatable {
+    public var duration:Float = 1;
+    public var time:Float = 0;
+    public var loops:Int = -1;
+    public var target:Float->Void;
+
+    public function new(target) {
+        this.target = target;
+    }
+
+    public function update(dt:Float) {
+        if (loops == 0)
+            return;
+        time += dt/duration;
+        if (time >= 1) {
+            time = 1;
+            loops--;
+        }
+        target(time);
+    }
+    
+    public function start(?loops = 1) {
+        this.loops = loops;
+        time = 0;
     }
 }
 
