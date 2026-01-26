@@ -79,8 +79,7 @@ class PlaceholderBuilder2D extends PlaceholderBuilder<Axis2DStateFactory> {
         if (_s != null) {
             var scale = TransformComponent.getOrCreate(w.entity);
             scale.value = _s;
-            var trans = new ProxyWidgetTransform(w);
-            w.entity.addComponent(trans);
+            var trans = ProxyWidgetTransform.getOrCreate(w.entity, w);
         }
         return w;
     }
