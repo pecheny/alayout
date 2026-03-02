@@ -24,7 +24,7 @@ class OverlapLayout implements AxisLayout {
             return sparceLayouter.arrange(pos, size, children);
         var toDistribute = size - children[children.length - 1].getSize();
         var offset = toDistribute / (children.length - 1);
-        var coord = 0.;
+        var coord = pos;
         for (ch in children) {
             ch.apply(coord, ch.size.getFixed());
             coord += offset;
