@@ -100,4 +100,12 @@ class Builder {
         w.entity.addChild(s.entity);
         return s;
     }
+    
+    public static function addSibling(w:Placeholder2D, s:Placeholder2D) {
+        for (a in Axis2D)
+            w.axisStates[a].addSibling(s.axisStates[a]);
+        w.entity.addChild(s.entity);
+        return s;
+    }
+
 }
