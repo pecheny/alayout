@@ -32,3 +32,15 @@ class StorageAxisApplier implements AxisApplier {
         this.size = size;
     }
 }
+
+class DynApp implements AxisApplier {
+    var h:Void->Void;
+
+    public function new(h) {
+        this.h = h;
+    }
+
+    public function apply(pos:Float, size:Float) {
+        h();
+    }
+}
