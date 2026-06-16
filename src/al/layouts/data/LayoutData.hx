@@ -4,7 +4,10 @@ class Position {
     public var type:PositionType = managed;
     public var value:Float = 0;
 
-    public function new() {}
+    public function new(type:PositionType = managed, value = 0.) {
+        this.type = type;
+        this.value = value;
+    }
 }
 
 @:enum abstract PositionType(String) from String to String {

@@ -35,6 +35,17 @@ class PlaceholderBuilder2D extends PlaceholderBuilder<Axis2DStateFactory> {
         return this;
     }
 
+    public function hp(t:PositionType, val:Float) {
+        var custom = switch t {
+            case managed:
+                null;
+            case fixed, percent:
+                new Position(t, val);
+        }
+        factories[horizontal].customPos = custom;
+        return this;
+    }
+
     public function v(t:ScreenMeasureUnit, v:Float) {
         factories[vertical].type = t;
         factories[vertical].value = v;
@@ -43,6 +54,17 @@ class PlaceholderBuilder2D extends PlaceholderBuilder<Axis2DStateFactory> {
 
     public function cv(custom:ISize) {
         factories[vertical].customSize = custom;
+        return this;
+    }
+
+    public function vp(t:PositionType, val:Float) {
+        var custom = switch t {
+            case managed:
+                null;
+            case fixed, percent:
+                new Position(t, val);
+        }
+        factories[vertical].customPos = custom;
         return this;
     }
 
@@ -90,6 +112,7 @@ class Axis2DStateFactory implements AxisFactory {
     public var value:Float;
     // todo ulcertain compat with keepStateAfterBuild
     public var customSize:ISize = null;
+    public var customPos:Position = null;
 
     var screen:Stage;
     var axis:Axis2D;
@@ -107,12 +130,13 @@ class Axis2DStateFactory implements AxisFactory {
             case px: new PixelSize(axis, screen, value);
         }
         customSize = null;
-        return new AxisState(new Position(), size);
+        return new AxisState(customPos ?? new Position(), size);
     }
 
     public function reset() {
         type = pfr;
         value = 1;
         customSize = null;
+        customPos = null;
     }
 }
