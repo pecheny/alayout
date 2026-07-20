@@ -17,11 +17,14 @@ interface WContainer<T> {
     public var entity(get, null):Entity;
 }
 
+// (pos:Float, size:Float,  children:Array<AxisState>)
+typedef ArrangeFunction = (Float, Float, Array<AxisState>) -> Float;
+
 @:generic
 class WidgetContainer<TAxis:Axis<TAxis>, TChild:Placeholder<TAxis>> extends TWidget<TAxis> implements Refreshable implements ResizableWidget<TAxis>
         implements WContainer<TChild> {
     var children:Array<TChild> = [];
-    var layoutMap:AVector<TAxis, AxisLayout>;
+    var layoutMap:AVector<TAxis, ArrangeFunction>;
     var childrenAxisStates:AVector<TAxis, Array<AxisState>>;
     var contentSize:AVector<TAxis, Null<Float>>;
 
@@ -56,7 +59,11 @@ class WidgetContainer<TAxis:Axis<TAxis>, TChild:Placeholder<TAxis>> extends TWid
     }
 
     public function setLayout(axis:TAxis, layout:AxisLayout) {
-        layoutMap[axis] = layout;
+        setLayoutFunc(axis, layout.arrange);
+    }
+
+    public function setLayoutFunc(axis:TAxis, arrange:ArrangeFunction) {
+        layoutMap[axis] = arrange;
         if (!childrenAxisStates.hasValueFor(axis))
             childrenAxisStates[axis] = [];
         return this;
@@ -104,7 +111,7 @@ class WidgetContainer<TAxis:Axis<TAxis>, TChild:Placeholder<TAxis>> extends TWid
                 continue;
             var parent = ph.axisStates[axis];
             var oldSize = if (contentSize.hasValueFor(axis)) contentSize[axis] else -1;
-            contentSize[axis] = layoutMap[axis].arrange(parent.getPos(), parent.getSize(), childrenAxisStates[axis]);
+            contentSize[axis] = layoutMap[axis](parent.getPos(), parent.getSize(), childrenAxisStates[axis]);
             if (contentSize[axis] != oldSize)
                 contentSizeChanged.dispatch(axis);
         }
