@@ -6,5 +6,5 @@
     <source path="."/>
     <haxelib name="openfl"/>
     <haxelib name="alayout"/>
-    <library path="fingers.swf" preload="true"/>
+    <library path="fingers.swf" preload="true" generate="true" />
 </project>

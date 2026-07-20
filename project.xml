@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+    <include path="include.xml" />
+    <include path="example/project.xml" />
+
+    <haxeflag name="-D" value="dump=pretty" />
+    <haxedef name="disable_exception_interception" value="true"/>
+</project>
